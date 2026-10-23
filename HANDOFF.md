@@ -84,7 +84,24 @@
 
 ---
 
-## 📞 6. ข้อมูลติดต่อและผู้ดูแลระบบ
+## 📡 7. สถาปัตยกรรม Real-Time Sync ระหว่าง PC & Mobile (Technical Blueprint)
+
+> รายละเอียดฉบับเต็มและไดอะแกรมสถาปัตยกรรม: ดูได้ที่ [`docs/03_Realtime_Sync_Architecture_Blueprint.md`](./docs/03_Realtime_Sync_Architecture_Blueprint.md)
+
+### สรุปสาระสำคัญและจุดตัดสินใจ:
+1. **ปัญหาปัจจุบัน:** ข้อมูลบน PC ดึงสดจาก SharePoint ในโรงงานได้ แต่บนมือถือ (Cloudflare Workers) เป็น Snapshot ข้อมูลตอน Deploy จึงยังไม่ Real-time ทันทีที่มีการบันทึก Excel กะใหม่
+2. **การรักษาความเสถียรและความเร็วของ Mobile App (ขนาดข้อมูล ~3.8 MB):**
+   - **ห้าม** ให้มือถือโหลดไฟล์ 3.8 MB ใหม่ทั้งก้อนทุกครั้ง (จะเปลืองเน็ตและหน่วง)
+   - **แนวทางที่ถูกต้อง:** ใช้เทคนิค **Delta Sync (Split Chunks)** โดยแยกข้อมูล 8 เดือนแรก (`logbook_archive.json`) โหลดเก็บใน IndexedDB ในมือถือครั้งเดียวถาวร และคอยโหลดซิงค์เฉพาะ **เดือนปัจจุบัน (`logbook_current.json` ~300 KB)** เมื่อค่า Metadata (`logbook_meta.json` ~300 bytes) มีการเปลี่ยนแปลง
+3. **3 แนวทางรอพี่ A ตัดสินใจ:**
+   - **แนวทาง A (⭐ แนะนำ):** Cloudflare D1 / KV Database API (เสถียรสุด เบา ไม่กินแรมมือถือ ฟรี 5M reads/วัน)
+   - **แนวทาง B:** Firebase Firestore Real-Time Listener (เร็วระดับวินาที WebSocket)
+   - **แนวทาง C:** Auto-Push Deploy ผ่าน Watcher บน PC (ง่ายที่สุด ไม่ต้องตั้งฐานข้อมูลเพิ่ม)
+4. **ข้อจำกัดจริง:** ต้องมี PC ในห้องคอนโทรลอย่างน้อย 1 เครื่องเปิดรัน Watcher ทิ้งไว้เพื่อเป็นสะพานส่งข้อมูลจาก SharePoint ภายในองค์กรขึ้นสู่ Cloudflare
+
+---
+
+## 📞 8. ข้อมูลติดต่อและผู้ดูแลระบบ
 - **เจ้าของระบบ:** ศุภสิทธิ์ อุทัย (พี่ A · รหัส 26007294 · โทรศัพท์/LINE: ภายในโรงงาน)
 - **ตำแหน่ง:** Boardman PTA Unit 1 / Production Engineer
 - **หน่วยงาน:** Production Section PE1, GC-M PTA (เครือ PTTGC), นิคมฯ มาบตาพุด จ.ระยอง

@@ -17,12 +17,19 @@ import path from 'path';
 import zlib from 'zlib';
 import { LogbookParser } from '../src/modules/logbook-parser.js';
 
+const args = process.argv.slice(2);
+const dirArgIdx = args.findIndex((a) => a === '--dir' || a === '-d');
+const customDir = dirArgIdx !== -1 && args[dirArgIdx + 1] ? path.resolve(args[dirArgIdx + 1]) : process.env.LOGBOOK_DIR;
+
 const WORKSPACE_DIR = process.cwd();
-const LOGBOOKS_DIR = fs.existsSync(path.join(WORKSPACE_DIR, 'logbooks'))
-  ? path.join(WORKSPACE_DIR, 'logbooks')
-  : WORKSPACE_DIR;
+const LOGBOOKS_DIR = customDir && fs.existsSync(customDir)
+  ? customDir
+  : fs.existsSync(path.join(WORKSPACE_DIR, 'logbooks'))
+    ? path.join(WORKSPACE_DIR, 'logbooks')
+    : WORKSPACE_DIR;
 const OUTPUT_DIR = path.join(WORKSPACE_DIR, 'public', 'data');
 const OUTPUT_JSON = path.join(OUTPUT_DIR, 'logbook_2026.json');
+const OUTPUT_META = path.join(OUTPUT_DIR, 'logbook_meta.json');
 
 const MONTH_FILE_PATTERNS = [
   { monthKey: '2026-01', label: 'ม.ค. 2026', prefix: '01.Jan' },
@@ -890,6 +897,17 @@ function main() {
   };
 
   fs.writeFileSync(OUTPUT_JSON, JSON.stringify(payload, null, 2), 'utf8');
+  try {
+    const metaPayload = {
+      generatedAt: payload.generatedAt,
+      lastChangedFile: allMonths[allMonths.length - 1]?.fileName || 'logbook',
+      syncMode: 'extract-cli',
+      targetDir: LOGBOOKS_DIR
+    };
+    fs.writeFileSync(OUTPUT_META, JSON.stringify(metaPayload, null, 2), 'utf8');
+  } catch (err) {
+    // Ignore meta write error
+  }
   const totalMs = Date.now() - startTime;
   console.log(
     `\n🎉 Comprehensive Extraction complete in ${totalMs} ms!\n` +

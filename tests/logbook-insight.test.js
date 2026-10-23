@@ -395,4 +395,31 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
       expect(byValue[0].id).toBe('rw-2026-10-17-31');
     });
   });
+
+  describe('9. Auto-Sync & Watcher Helpers (isIgnoredLogbookFile, isNewerTimestamp)', () => {
+    it('ignores temporary Excel lock files (~$*.xlsx), temp files, and system files', () => {
+      expect(LogbookParser.isIgnoredLogbookFile('~$01_Log_Sheet_Jan_2026.xlsx')).toBe(true);
+      expect(LogbookParser.isIgnoredLogbookFile('~$10_Log_Sheet_Oct_2026.xlsm')).toBe(true);
+      expect(LogbookParser.isIgnoredLogbookFile('cache.tmp')).toBe(true);
+      expect(LogbookParser.isIgnoredLogbookFile('Thumbs.db')).toBe(true);
+      expect(LogbookParser.isIgnoredLogbookFile('.DS_Store')).toBe(true);
+
+      // Legitimate Logbook files
+      expect(LogbookParser.isIgnoredLogbookFile('01_Log_Sheet_Jan_2026.xlsx')).toBe(false);
+      expect(LogbookParser.isIgnoredLogbookFile('02_Log_Sheet_Feb_2026.xlsm')).toBe(false);
+      expect(LogbookParser.isIgnoredLogbookFile('10_Log_Sheet_Oct_2026.xlsx')).toBe(false);
+    });
+
+    it('correctly compares ISO timestamps to detect incoming newer data', () => {
+      const cur = '2026-10-23T05:00:00.000Z';
+      const newer = '2026-10-23T06:00:00.000Z';
+      const older = '2026-10-23T04:00:00.000Z';
+
+      expect(LogbookParser.isNewerTimestamp(cur, newer)).toBe(true);
+      expect(LogbookParser.isNewerTimestamp(cur, older)).toBe(false);
+      expect(LogbookParser.isNewerTimestamp(cur, cur)).toBe(false);
+      expect(LogbookParser.isNewerTimestamp(null, newer)).toBe(true);
+      expect(LogbookParser.isNewerTimestamp(cur, null)).toBe(false);
+    });
+  });
 });

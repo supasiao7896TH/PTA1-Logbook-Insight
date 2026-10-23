@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "extract": "node scripts/extract-logbooks.mjs",
+    "sync:watch": "node scripts/watch-logbooks.mjs",
     "check": "vitest run && vite build"
   },
   "devDependencies": {

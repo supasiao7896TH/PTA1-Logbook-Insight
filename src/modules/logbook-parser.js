@@ -286,6 +286,38 @@ export const LogbookParser = {
   },
 
   /**
+   * Checks whether a filename should be ignored by the Logbook sync watcher
+   * (e.g. temporary Excel lock files "~$*.xlsx", temp files, hidden OS files).
+   * @param {string} filename
+   * @returns {boolean}
+   */
+  isIgnoredLogbookFile(filename) {
+    if (!filename || typeof filename !== 'string') return true;
+    const base = filename.trim().split(/[\\/]/).pop();
+    if (!base) return true;
+    if (base.startsWith('~$')) return true; // Excel temporary lock file
+    if (base.startsWith('.')) return true; // Hidden files (.DS_Store, etc.)
+    if (base.endsWith('.tmp') || base.endsWith('.crdownload') || base === 'Thumbs.db') return true;
+    return false;
+  },
+
+  /**
+   * Compares two ISO timestamps to determine if incomingTimestamp is strictly newer than currentTimestamp.
+   * @param {string|null} currentTimestamp
+   * @param {string|null} incomingTimestamp
+   * @returns {boolean}
+   */
+  isNewerTimestamp(currentTimestamp, incomingTimestamp) {
+    if (!incomingTimestamp) return false;
+    if (!currentTimestamp) return true;
+    const tCur = new Date(currentTimestamp).getTime();
+    const tInc = new Date(incomingTimestamp).getTime();
+    if (Number.isNaN(tInc)) return false;
+    if (Number.isNaN(tCur)) return true;
+    return tInc > tCur;
+  },
+
+  /**
    * Calculates duration in minutes between start time and end time (handling midnight crossing).
    * @param {string} startTime e.g. "13:40"
    * @param {string} endTime e.g. "15:44"

@@ -10,6 +10,7 @@ export const AppConfig = {
   DB_VERSION: 1,
   DEFAULT_BM: 'C ศุภสิทธิ์',
   DATA_URL: './data/logbook_2026.json',
+  META_URL: './data/logbook_meta.json',
   GEMINI_MODEL: 'gemini-2.5-flash',
   TARGETS: {
     CBA_MAX: 15.0,

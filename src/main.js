@@ -56,11 +56,15 @@ const handlers = {
   }
 };
 
+let lastLoadedTimestamp = null;
+let syncCheckTimer = null;
+
 async function loadInitialData() {
   try {
     const res = await fetch(AppConfig.DATA_URL);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const baseData = await res.json();
+    lastLoadedTimestamp = baseData.generatedAt || new Date().toISOString();
 
     const customMonths = await StorageEngine.getAllCustomMonths();
     const monthsMap = new Map();
@@ -473,11 +477,40 @@ function wireEvents() {
   });
 }
 
+async function checkSharePointDataSync() {
+  try {
+    const metaUrl = `${AppConfig.META_URL}?t=${Date.now()}`;
+    const res = await fetch(metaUrl, { cache: 'no-store' });
+    if (!res.ok) return;
+    const meta = await res.json();
+    if (meta?.generatedAt && LogbookParser.isNewerTimestamp(lastLoadedTimestamp, meta.generatedAt)) {
+      lastLoadedTimestamp = meta.generatedAt;
+      await loadInitialData();
+      const fileName = meta.lastChangedFile ? ` (${meta.lastChangedFile})` : '';
+      UIRenderer.showToast(`🔄 ข้อมูล Logbook ซิงค์ล่าสุดจาก SharePoint${fileName} เรียบร้อยแล้วค่ะ!`, 'success');
+    }
+  } catch {
+    // Silent on network error or offline mode
+  }
+}
+
+function startBackgroundSyncDetector() {
+  if (syncCheckTimer) clearInterval(syncCheckTimer);
+  // Periodic poll every 30 seconds
+  syncCheckTimer = setInterval(checkSharePointDataSync, 30000);
+
+  // Check immediately whenever the window/tab regains focus
+  window.addEventListener('focus', () => {
+    checkSharePointDataSync();
+  });
+}
+
 async function init() {
   const savedTheme = await StorageEngine.getSetting('theme', 'light');
   document.documentElement.setAttribute('data-theme', savedTheme);
   wireEvents();
   await loadInitialData();
+  startBackgroundSyncDetector();
 }
 
 if (typeof window !== 'undefined') {

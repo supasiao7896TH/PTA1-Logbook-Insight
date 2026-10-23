@@ -89,6 +89,7 @@ Store: settings
 | 🔧 สถิติอุปกรณ์เสียซ้ำ | ✅ Done | Top 30 Chronic Equipment Tags พร้อมตัวอย่างบันทึกและปุ่มกาง Timeline |
 | 📋 สตูดิโอร่าง IPS & Kaizen | ✅ Done | 4 เคสเด่น, คำนวณผลตอบแทนข้อ 1.1 (`1+2-4-5`), ปุ่ม Copy วาง HCL Notes |
 | 📥 นำเข้าไฟล์ .xlsm/.xlsx หน้าเว็บ | ✅ Done | แตก XML ผ่าน DecompressionStream บนเบราว์เซอร์ ไม่เปลือง RAM |
+| 🔄 SharePoint Auto-Sync Watcher | ✅ Done | สคริปต์เฝ้าตรวจจับโฟลเดอร์ SharePoint / OneDrive ด้วย Debounce 8s และกรองไฟล์ล็อก `~$*`, พร้อม Live Polling Meta ใน Web App ทุก 30s |
 | ⚙️ Gemini AI Key (BYOK) | ✅ Done | เข้ารหัส AES-GCM 256-bit เก็บในเครื่อง |
 
 ---
@@ -115,12 +116,14 @@ PTA1-Logbook-Insight/
 │       ├── ui-renderer.js       ← UI_RENDERER Safe DOM & Templates
 │       └── debug-module.js      ← DEBUG_MODULE Audit logger
 ├── scripts/
-│   └── extract-logbooks.mjs     ← Node.js CLI Extractor สำหรับอ่าน 9 เดือนจากโฟลเดอร์ logbooks/
+│   ├── extract-logbooks.mjs     ← Node.js CLI Extractor สำหรับอ่าน 9 เดือนจากโฟลเดอร์ logbooks/
+│   └── watch-logbooks.mjs       ← Auto-Sync Watcher เฝ้าโฟลเดอร์ SharePoint/OneDrive ด้วย Debounce 8s
 ├── tests/
-│   └── logbook-insight.test.js  ← Vitest Unit Tests (TDD Coverage)
+│   └── logbook-insight.test.js  ← Vitest Unit Tests (TDD Coverage 15 tests)
 ├── public/
 │   └── data/
-│       └── logbook_2026.json    ← ฐานข้อมูลสกัดแล้ว 9 เดือน (4,541 บันทึก, 87 Regular Work, 113 Washing, 1,128 Silo, 139 SAP)
+│       ├── logbook_2026.json    ← ฐานข้อมูลสกัดแล้ว 9 เดือน (4,541 บันทึก, 87 Regular Work, 113 Washing, 1,128 Silo, 139 SAP)
+│       └── logbook_meta.json    ← Lightweight metadata (<200 B) สำหรับ Web App Live Sync Polling
 ├── context.md                   ← ไฟล์นี้
 ├── agents.md                    ← กฎสำหรับ AI Agent
 ├── CLAUDE.md                    ← สรุปคำสั่งและสถาปัตยกรรม

@@ -93,7 +93,7 @@
     /* Layout Structure */
     .app-shell {
       display: grid;
-      grid-template-columns: 270px 1fr;
+      grid-template-columns: 280px 1fr;
       min-height: 100vh;
     }
 
@@ -132,7 +132,17 @@
       padding: 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.15rem;
+    }
+
+    @media (min-width: 961px) {
+      .app-sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        max-height: 100vh;
+        overflow-y: auto;
+      }
     }
 
     .brand-header {
@@ -634,15 +644,17 @@
        Supasit.A Branding System (A(i)CODER Studio)
        ========================================================================== */
     .sidebar-brand-dock {
-      margin-top: auto;
-      padding: 0.65rem 0.75rem;
+      margin-top: 0.35rem;
+      padding: 0.65rem 0.65rem 0.5rem;
       border-radius: 13px;
       border: 1px solid var(--line-border);
       background-color: var(--bg-subtle);
       cursor: pointer;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 0.35rem;
       transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
       text-decoration: none;
     }
@@ -656,6 +668,29 @@
     .sidebar-brand-dock:focus-visible {
       outline: 2px solid var(--brand-ink);
       outline-offset: 2px;
+    }
+
+    .sidebar-neon-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .sidebar-neon-mark {
+      width: 100%;
+      max-width: 245px;
+      height: auto;
+      display: block;
+    }
+
+    .sidebar-brand-sub {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      text-align: center;
     }
 
     .studio-mark {
@@ -866,10 +901,13 @@
         <div id="sidebar-months-list" class="month-list-scroll"></div>
       </div>
 
-      <!-- Studio Brand Dock (Clean Studio Badge) -->
-      <div id="btn-open-about" class="sidebar-brand-dock" role="button" tabindex="0" title="คลิกเพื่อดูข้อมูล A(i)CODER Studio &amp; ข้อมูลระบบ" aria-label="A(i)CODER Studio by Supasit.A">
-        <img class="studio-mark studio-mark-light" src="/assets/branding/studio-badge-light.svg" alt="A(i)CODER by Supasit.A" width="300" height="64" />
-        <img class="studio-mark studio-mark-dark" src="/assets/branding/studio-badge-dark.svg" alt="A(i)CODER by Supasit.A" width="300" height="64" />
+      <!-- Neon Arcade Live Dock (แบบ B ต่อจากรายการเดือน) -->
+      <div id="btn-open-about" class="sidebar-brand-dock" role="button" tabindex="0" title="คลิกเพื่อดูข้อมูล A(i)CODER Studio &amp; ข้อมูลระบบ" aria-label="A(i)CODER 2026 by Supasit.A">
+        <div class="sidebar-neon-wrap">
+          <img class="sidebar-neon-mark neon-mark-light" src="/assets/branding/d1-neon-arcade-bare.svg" alt="A(i)CODER 2026 by Supasit.A" width="1320" height="420" />
+          <img class="sidebar-neon-mark neon-mark-dark" src="/assets/branding/d2-crt-night-bare.svg" alt="A(i)CODER 2026 by Supasit.A" width="1320" height="420" />
+        </div>
+        <div class="sidebar-brand-sub">GC-M PTA Unit 1 · Studio Suite</div>
       </div>
     </aside>
 

@@ -3,12 +3,13 @@
  */
 
 const _state = {
-  activeTab: 'search', // 'search' | 'silo' | 'sap' | 'overview' | 'equipment' | 'ips'
+  activeTab: 'search', // 'search' | 'silo' | 'washing' | 'sap' | 'overview' | 'equipment' | 'ips'
   theme: 'light',
   months: [],
   daysSummary: [],
   entries: [],
   siloOperations: [],
+  washingRoutines: [],
   sapMemos: [],
   regularWork: [],
   filters: {
@@ -21,6 +22,12 @@ const _state = {
   },
   siloFilters: {
     silo: 'ALL',
+    monthKey: 'ALL',
+    query: ''
+  },
+  washingFilters: {
+    equipment: 'ALL',
+    washNo: 'ALL',
     monthKey: 'ALL',
     query: ''
   },
@@ -63,6 +70,11 @@ export const StateStore = {
   updateSiloFilters(partial) {
     const next = { ..._state.siloFilters, ...partial };
     this.set('siloFilters', next);
+  },
+
+  updateWashingFilters(partial) {
+    const next = { ..._state.washingFilters, ...partial };
+    this.set('washingFilters', next);
   },
 
   updateSapFilters(partial) {

@@ -5,4 +5,5 @@ dist/
 *.xlsm
 logbooks/*.xlsx
 logbooks/*.xlsm
+scratch/
 .DS_Store

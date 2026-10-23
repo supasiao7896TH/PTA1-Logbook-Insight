@@ -26,6 +26,11 @@ const handlers = {
     UIRenderer.renderAll(handlers);
   },
 
+  onWashingFilterChange(partial) {
+    StateStore.updateWashingFilters(partial);
+    UIRenderer.renderAll(handlers);
+  },
+
   onSapFilterChange(partial) {
     StateStore.updateSapFilters(partial);
     UIRenderer.renderAll(handlers);
@@ -75,6 +80,7 @@ async function loadInitialData() {
     StateStore.set('daysSummary', daysSummary);
     StateStore.set('entries', entries);
     StateStore.set('siloOperations', baseData.siloOperations || []);
+    StateStore.set('washingRoutines', baseData.washingRoutines || []);
     StateStore.set('sapMemos', baseData.sapMemos || []);
     StateStore.set('regularWork', baseData.regularWork || []);
 
@@ -111,7 +117,7 @@ function wireEvents() {
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       StateStore.updateFilters({ query: e.target.value });
-      if (StateStore.get('activeTab') !== 'search' && StateStore.get('activeTab') !== 'silo' && StateStore.get('activeTab') !== 'sap') {
+      if (!['search', 'silo', 'washing', 'sap'].includes(StateStore.get('activeTab'))) {
         StateStore.set('activeTab', 'search');
       }
       UIRenderer.renderAll(handlers);
@@ -166,6 +172,7 @@ function wireEvents() {
         query: ''
       });
       StateStore.set('siloFilters', { silo: 'ALL', monthKey: 'ALL', query: '' });
+      StateStore.set('washingFilters', { equipment: 'ALL', washNo: 'ALL', monthKey: 'ALL', query: '' });
       StateStore.set('sapFilters', { status: 'ALL', monthKey: 'ALL', query: '' });
       UIRenderer.renderAll(handlers);
       UIRenderer.showToast('ล้างตัวกรองทั้งหมดเรียบร้อยค่ะ');
@@ -191,6 +198,36 @@ function wireEvents() {
   if (siloSearchInput) {
     siloSearchInput.addEventListener('input', (e) => {
       handlers.onSiloFilterChange({ query: e.target.value });
+    });
+  }
+
+  // Washing routine filters
+  document.querySelectorAll('#quick-wash-chips [data-wash-chip]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const chipVal = btn.getAttribute('data-wash-chip');
+      const cur = StateStore.get('washingFilters').equipment;
+      handlers.onWashingFilterChange({ equipment: cur === chipVal ? 'ALL' : chipVal });
+    });
+  });
+
+  const washNoSelect = document.getElementById('filter-wash-no');
+  if (washNoSelect) {
+    washNoSelect.addEventListener('change', (e) => {
+      handlers.onWashingFilterChange({ washNo: e.target.value });
+    });
+  }
+
+  const washMonthSelect = document.getElementById('filter-wash-month');
+  if (washMonthSelect) {
+    washMonthSelect.addEventListener('change', (e) => {
+      handlers.onWashingFilterChange({ monthKey: e.target.value });
+    });
+  }
+
+  const washSearchInput = document.getElementById('search-wash-input');
+  if (washSearchInput) {
+    washSearchInput.addEventListener('input', (e) => {
+      handlers.onWashingFilterChange({ query: e.target.value });
     });
   }
 

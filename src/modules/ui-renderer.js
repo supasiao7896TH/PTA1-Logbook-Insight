@@ -72,6 +72,8 @@ export const UIRenderer = {
       this.renderSearchTimeline(handlers);
     } else if (activeTab === 'silo') {
       this.renderSiloView(handlers);
+    } else if (activeTab === 'washing') {
+      this.renderWashingView(handlers);
     } else if (activeTab === 'sap') {
       this.renderSapView(handlers);
     } else if (activeTab === 'overview') {
@@ -665,6 +667,195 @@ export const UIRenderer = {
       }
 
       card.append(head, bodyText);
+      listEl.appendChild(card);
+    }
+  },
+
+  renderWashingView(handlers) {
+    const listEl = document.getElementById('washing-timeline-list');
+    const countEl = document.getElementById('wash-results-count');
+    if (!listEl) return;
+    listEl.textContent = '';
+
+    const allWashing = StateStore.get('washingRoutines') || [];
+    const washFilters = StateStore.get('washingFilters') || {};
+    const filtered = LogbookParser.filterWashingRoutines(allWashing, washFilters);
+
+    // Sync month select
+    const monthSelect = document.getElementById('filter-wash-month');
+    const months = StateStore.get('months') || [];
+    if (monthSelect && monthSelect.options.length !== months.length + 1) {
+      monthSelect.textContent = '';
+      monthSelect.appendChild(new Option('📅 เดือน: ทั้งหมด', 'ALL'));
+      for (const m of months) {
+        monthSelect.appendChild(new Option(`${m.label} (${m.washingCount || 0})`, m.monthKey));
+      }
+    }
+    if (monthSelect) monthSelect.value = washFilters.monthKey || 'ALL';
+
+    // Sync washNo select
+    const washNoSelect = document.getElementById('filter-wash-no');
+    if (washNoSelect) washNoSelect.value = washFilters.washNo || 'ALL';
+
+    // Sync search input
+    const searchInput = document.getElementById('search-wash-input');
+    if (searchInput && document.activeElement !== searchInput) {
+      searchInput.value = washFilters.query || '';
+    }
+
+    // Sync quick filter chips
+    const activeChip = washFilters.equipment || 'ALL';
+    document.querySelectorAll('#quick-wash-chips [data-wash-chip]').forEach((btn) => {
+      const chipVal = btn.getAttribute('data-wash-chip');
+      btn.classList.toggle('sa-chip-active', chipVal === activeChip);
+    });
+
+    if (countEl) {
+      countEl.textContent = `พบ ${filtered.length.toLocaleString('en-US')} รายการ (จากทั้งหมด ${allWashing.length.toLocaleString('en-US')} ครั้ง)`;
+    }
+
+    if (filtered.length === 0) {
+      const empty = el(
+        'div',
+        'sa-card p-8 text-center',
+        'ไม่พบประวัติการล้างเครื่องจักรตามเงื่อนไขที่เลือกค่ะ ลองกดปุ่ม "ทั้งหมด (All)" เพื่อดูข้อมูลทั้งหมดนะคะ'
+      );
+      listEl.appendChild(empty);
+      return;
+    }
+
+    // Sort newest date first, then shift (Night after Day)
+    const sorted = [...filtered].sort((a, b) => b.date.localeCompare(a.date) || b.shift.localeCompare(a.shift));
+
+    for (const item of sorted) {
+      const card = el('article', 'sa-card log-entry-card');
+      const head = el('div', 'log-entry-header');
+      const leftMeta = el('div', 'log-entry-meta');
+
+      const dateBadge = el('span', 'badge-date', `📅 ${item.date}`);
+      const shiftBadge = el(
+        'span',
+        `badge-shift ${item.shift === 'Night' ? 'badge-night' : 'badge-day'}`,
+        item.shift === 'Night' ? '🌙 Night' : '☀️ Day'
+      );
+      const isSupasit = (item.bm || '').includes('ศุภสิทธิ์');
+      const bmBadge = el(
+        'button',
+        `badge-person ${isSupasit ? 'badge-person-highlight' : ''}`,
+        `BM: ${item.bm || '-'}`
+      );
+      bmBadge.type = 'button';
+      bmBadge.title = 'คลิกเพื่อกรองกะของ Boardman ท่านนี้';
+      bmBadge.addEventListener('click', () => {
+        handlers.onWashingFilterChange({ query: washFilters.query === item.bm ? '' : item.bm });
+      });
+
+      const fmBadge = el('span', 'badge-person-muted', `FM: ${item.fm || '-'}`);
+
+      leftMeta.append(dateBadge, shiftBadge, bmBadge, fmBadge);
+
+      const draftBtn = el('button', 'btn-pill-secondary', '✨ ร่าง IPS จากเคสนี้');
+      draftBtn.type = 'button';
+      draftBtn.addEventListener('click', () => {
+        handlers.onCreateDraftFromEntry({
+          id: item.id,
+          date: item.date,
+          shift: item.shift,
+          bm: item.bm,
+          fm: item.fm,
+          tags: ['PM-901', 'WASHING', item.pp404Target !== '-' ? item.pp404Target : 'PP-404'],
+          text: `Routine ล้างเครื่องจักร ${item.washNo} (${item.batchCount != null ? `${item.batchCount} Batch` : '-'}): High Pressure @ ${item.hpTime || '-'}, ล้าง ${item.pp404Target !== '-' ? item.pp404Target : 'PP-404'}${item.pp404Time ? ` @ ${item.pp404Time}` : ''}, ล้าง PJ-404: ${item.naohPj404 || '-'}, ล้าง PM-901: ${item.naohPm901Time || '-'}, Start: ${item.pm901StartTime || '-'} (รอบหยุดล้างรวม ${LogbookParser.formatDurationMinutes(item.durationMin)})`
+        });
+      });
+
+      head.append(leftMeta, draftBtn);
+
+      // Body layout: Key metrics & Timeline sequence
+      const bodyWrap = el('div', 'flex flex-col gap-2 mt-2');
+
+      // Key Badges Row
+      const badgeRow = el('div', 'flex flex-wrap items-center gap-2');
+
+      // Wash No Badge
+      const washNoBadge = el(
+        'span',
+        'c-ref-tag font-bold',
+        `🔄 ${item.washNo || '-'}`
+      );
+      badgeRow.appendChild(washNoBadge);
+
+      // Batch Count Badge (highlight if >= 30)
+      if (item.batchCount != null) {
+        const isHighBatch = item.batchCount >= 30;
+        const batchBadge = el(
+          'span',
+          `badge-metric ${isHighBatch ? 'badge-metric-warn' : ''}`,
+          `🔢 ${item.batchCount} Batch${isHighBatch ? ' ⚠️ (≥30)' : ''}`
+        );
+        badgeRow.appendChild(batchBadge);
+      }
+
+      // Duration Badge
+      if (item.durationMin > 0) {
+        const durBadge = el(
+          'span',
+          'badge-metric',
+          `⏳ หยุดล้าง: ${LogbookParser.formatDurationMinutes(item.durationMin)}`
+        );
+        badgeRow.appendChild(durBadge);
+      }
+
+      // PP-404 Target Badge
+      if (item.pp404Target && item.pp404Target !== '-') {
+        const ppBadge = el(
+          'span',
+          'c-ref-tag font-semibold',
+          `🎯 ล้าง ${item.pp404Target}${item.pp404Time ? ` @ ${item.pp404Time}` : ''}`
+        );
+        badgeRow.appendChild(ppBadge);
+      }
+
+      bodyWrap.appendChild(badgeRow);
+
+      // Detailed Timeline Step Strip
+      const timelineStrip = el('div', 'timeline-step-strip flex flex-wrap items-center gap-2 text-sm mt-1');
+
+      const createStep = (icon, label, val) => {
+        const step = el('div', 'flex items-center gap-1');
+        const iconSpan = el('span', '', icon);
+        const lbl = el('span', 'text-xs text-muted font-medium', label);
+        const v = el('strong', 'tabular-nums', val);
+        step.append(iconSpan, lbl, v);
+        return step;
+      };
+
+      if (item.hpTime) {
+        timelineStrip.appendChild(createStep('⏱️', 'HP PM-901:', item.hpTime));
+      }
+      if (item.naohPj404 && item.naohPj404 !== 'No' && item.naohPj404 !== '-') {
+        timelineStrip.appendChild(createStep('🌀', 'ล้าง PJ-404:', item.naohPj404));
+      }
+      if (item.naohMlLine && item.naohMlLine !== 'No' && item.naohMlLine !== '-') {
+        timelineStrip.appendChild(createStep('🧪', 'ล้าง ML Line:', item.naohMlLine));
+      }
+      if (item.naohPm901Time) {
+        timelineStrip.appendChild(createStep('⚙️', 'ล้าง PM-901:', item.naohPm901Time));
+      }
+      if (item.pm901StartTime) {
+        timelineStrip.appendChild(createStep('▶️', 'Start PM-901:', item.pm901StartTime));
+      }
+      if (item.naohLi2901) {
+        const liStep = el('span', 'badge-metric', '🚿 Flushing LI-2901');
+        timelineStrip.appendChild(liStep);
+      }
+      if (item.requestCta && item.requestCta !== 'No') {
+        const ctaStep = el('span', 'badge-metric badge-metric-warn', 'Request CTA 4% NaOH: Yes');
+        timelineStrip.appendChild(ctaStep);
+      }
+
+      bodyWrap.appendChild(timelineStrip);
+
+      card.append(head, bodyWrap);
       listEl.appendChild(card);
     }
   },

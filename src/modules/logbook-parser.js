@@ -199,6 +199,97 @@ export const LogbookParser = {
   },
 
   /**
+   * Filters PM-901 High Pressure & Chemical Washing Routine events.
+   * @param {Array<Object>} washingRoutines
+   * @param {Object} filters
+   * @returns {Array<Object>}
+   */
+  filterWashingRoutines(washingRoutines, filters = {}) {
+    if (!Array.isArray(washingRoutines)) return [];
+    const { equipment = 'ALL', washNo = 'ALL', monthKey = 'ALL', query = '' } = filters;
+    const q = query.trim().toLowerCase();
+
+    return washingRoutines.filter((item) => {
+      if (monthKey && monthKey !== 'ALL' && item.monthKey !== monthKey) return false;
+
+      // Filter by washNo (e.g. "No. 2" or "2")
+      if (washNo && washNo !== 'ALL') {
+        const targetNo = String(washNo).replace(/[^0-9]/g, '');
+        const itemNo = String(item.washNo || '').replace(/[^0-9]/g, '');
+        if (targetNo !== itemNo) return false;
+      }
+
+      // Filter by equipment (PP-404A, PP-404B, PJ-404, PM-901, LI-2901)
+      if (equipment && equipment !== 'ALL') {
+        const eq = equipment.toUpperCase();
+        if (eq === 'PP-404A') {
+          const target = (item.pp404Target || '').toUpperCase();
+          if (!target.includes('PP-404A') && target !== 'A') return false;
+        } else if (eq === 'PP-404B') {
+          const target = (item.pp404Target || '').toUpperCase();
+          if (!target.includes('PP-404B') && target !== 'B') return false;
+        } else if (eq === 'PJ-404') {
+          if (!item.naohPj404 || item.naohPj404 === '-' || item.naohPj404 === 'No') return false;
+        } else if (eq === 'PM-901') {
+          if (!item.hpTime && !item.naohPm901Time && !item.pm901StartTime) return false;
+        } else if (eq === 'LI-2901') {
+          if (!item.naohLi2901) return false;
+        }
+      }
+
+      // Text query search
+      if (q) {
+        const matchBm = (item.bm || '').toLowerCase().includes(q);
+        const matchFm = (item.fm || '').toLowerCase().includes(q);
+        const matchBatch = item.batchCount != null && String(item.batchCount).includes(q);
+        const matchDate = (item.date || '').toLowerCase().includes(q);
+        const matchWashNo = (item.washNo || '').toLowerCase().includes(q);
+        const matchPp404 = (item.pp404Target || '').toLowerCase().includes(q);
+        if (!matchBm && !matchFm && !matchBatch && !matchDate && !matchWashNo && !matchPp404) return false;
+      }
+
+      return true;
+    });
+  },
+
+  /**
+   * Calculates duration in minutes between start time and end time (handling midnight crossing).
+   * @param {string} startTime e.g. "13:40"
+   * @param {string} endTime e.g. "15:44"
+   * @returns {number} duration in minutes
+   */
+  calculateWashingDuration(startTime, endTime) {
+    if (!startTime || !endTime) return 0;
+    const parseM = (t) => {
+      const parts = String(t).trim().split(/[:.]/);
+      if (parts.length < 2) return null;
+      const h = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10);
+      return Number.isFinite(h) && Number.isFinite(m) ? h * 60 + m : null;
+    };
+    const s = parseM(startTime);
+    const e = parseM(endTime);
+    if (s === null || e === null) return 0;
+    let diff = e - s;
+    if (diff < 0) diff += 24 * 60; // crossed midnight!
+    return diff;
+  },
+
+  /**
+   * Formats duration in minutes into a Thai friendly string (e.g. "2 ชม. 4 นาที").
+   * @param {number} totalMinutes
+   * @returns {string}
+   */
+  formatDurationMinutes(totalMinutes) {
+    if (!totalMinutes || totalMinutes <= 0) return '-';
+    const hrs = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+    if (hrs > 0 && mins > 0) return `${hrs} ชม. ${mins} นาที`;
+    if (hrs > 0) return `${hrs} ชม.`;
+    return `${mins} นาที`;
+  },
+
+  /**
    * Computes statistical insights from filtered entries and daily summary metrics.
    * @param {Array<Object>} entries
    * @param {Array<Object>} daysSummary

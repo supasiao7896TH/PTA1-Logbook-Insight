@@ -634,6 +634,9 @@
         <button type="button" class="nav-pill-btn" data-tab-btn="silo" role="tab" aria-selected="false">
           🌾 Silo &amp; โลจิสติกส์ขนส่ง
         </button>
+        <button type="button" class="nav-pill-btn" data-tab-btn="washing" role="tab" aria-selected="false">
+          🧼 PM-901 &amp; ล้างเครื่องจักร
+        </button>
         <button type="button" class="nav-pill-btn" data-tab-btn="sap" role="tab" aria-selected="false">
           🛠️ งานซ่อม SAP &amp; Memo
         </button>
@@ -765,6 +768,49 @@
             </div>
           </div>
           <div id="silo-timeline-list" class="timeline-stack"></div>
+        </section>
+
+        <!-- VIEW WASHING: PM-901 HIGH PRESSURE & CHEMICAL WASHING ROUTINE -->
+        <section data-view-panel="washing" hidden aria-label="PM-901 High Pressure &amp; Routine ล้างสารเคมี">
+          <div class="sa-card" style="margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h2 style="font-size: 1.1rem;">🧼 Routine ล้างเครื่องจักร PM-901, PP-404 &amp; PJ-404 (High Pressure &amp; Chemical Washing)</h2>
+              <span id="wash-results-count" class="kpi-label"></span>
+            </div>
+            <p class="kpi-sub" style="margin-bottom: 0.85rem;">
+              ติดตามประวัติรอบการทำ PM-901 High Pressure, จำนวน Batch สะสม, ล้างปั๊ม PP-404A/B, PJ-404, Flushing LI-2901 และรอบเวลาการหยุดล้างย้อนหลัง 9 เดือน (รวม 113 เหตุการณ์)
+            </p>
+            <div class="kpi-label" style="margin-bottom: 0.4rem;">🎯 กดเลือกอุปกรณ์ที่ต้องการกรองอย่างรวดเร็ว:</div>
+            <div id="quick-wash-chips" class="tag-chips-bar" style="margin-bottom: 0.85rem;">
+              <button type="button" class="sa-chip-btn sa-chip-active" data-wash-chip="ALL">ทั้งหมด (All)</button>
+              <button type="button" class="sa-chip-btn" data-wash-chip="PP-404A">🎯 PP-404A</button>
+              <button type="button" class="sa-chip-btn" data-wash-chip="PP-404B">🎯 PP-404B</button>
+              <button type="button" class="sa-chip-btn" data-wash-chip="PJ-404">🌀 PJ-404</button>
+              <button type="button" class="sa-chip-btn" data-wash-chip="PM-901">⚙️ PM-901</button>
+              <button type="button" class="sa-chip-btn" data-wash-chip="LI-2901">🚿 LI-2901</button>
+            </div>
+            <div class="filter-toolbar">
+              <select id="filter-wash-no" class="sa-select" aria-label="เลือกรอบการล้าง (Wash No.)">
+                <option value="ALL">🔄 รอบการล้าง: ทั้งหมด</option>
+                <option value="1">No. 1</option>
+                <option value="2">No. 2</option>
+                <option value="3">No. 3</option>
+                <option value="4">No. 4</option>
+                <option value="5">No. 5</option>
+                <option value="6">No. 6</option>
+              </select>
+              <select id="filter-wash-month" class="sa-select" aria-label="เลือกเดือน"></select>
+              <input
+                id="search-wash-input"
+                type="search"
+                class="sa-input sa-search-pill"
+                style="flex: 1 1 240px;"
+                placeholder="🔍 ค้นหา Boardman (เช่น ศุภสิทธิ์), Batch สะสม, หรือเวลา..."
+                aria-label="ค้นหาข้อมูลการล้างเครื่องจักร"
+              />
+            </div>
+          </div>
+          <div id="washing-timeline-list" class="timeline-stack"></div>
         </section>
 
         <!-- VIEW SAP: MAINTENANCE & HANDOVER MEMOS -->

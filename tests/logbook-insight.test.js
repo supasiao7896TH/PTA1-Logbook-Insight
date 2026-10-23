@@ -211,4 +211,110 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
       expect(completed[0].sapNo).toBe('10045621');
     });
   });
+
+  describe('7. PM-901 High Pressure & Chemical Washing Routine (filterWashingRoutines)', () => {
+    const sampleWash = [
+      {
+        id: 'wash-2026-10-01-D',
+        date: '2026-10-01',
+        monthKey: '2026-10',
+        shift: 'Day',
+        bm: 'D เพชร',
+        fm: 'B โสภณ',
+        hpTime: '13:40',
+        washNo: 'No. 2',
+        washNoNum: 2,
+        batchCount: 28,
+        pp404Target: 'PP-404B',
+        pp404Time: '13:43',
+        naohPj404: 'Yes',
+        naohMlLine: '',
+        naohLi2901: true,
+        naohPm901Time: '14:13',
+        pm901StartTime: '15:44',
+        durationMin: 124,
+        requestCta: 'No'
+      },
+      {
+        id: 'wash-2026-10-03-D',
+        date: '2026-10-03',
+        monthKey: '2026-10',
+        shift: 'Day',
+        bm: 'B ฐาณันตร์',
+        fm: 'A กฤษณะ',
+        hpTime: '09:17',
+        washNo: 'No. 3',
+        washNoNum: 3,
+        batchCount: 30,
+        pp404Target: 'PP-404A',
+        pp404Time: '10:00',
+        naohPj404: '09:25',
+        naohMlLine: '09:20',
+        naohLi2901: false,
+        naohPm901Time: '10:08',
+        pm901StartTime: '11:40',
+        durationMin: 143,
+        requestCta: 'No'
+      },
+      {
+        id: 'wash-2026-10-04-N',
+        date: '2026-10-04',
+        monthKey: '2026-10',
+        shift: 'Night',
+        bm: 'C ศุภสิทธิ์',
+        fm: 'A กฤษณะ',
+        hpTime: '00:30',
+        washNo: 'No. 4',
+        washNoNum: 4,
+        batchCount: 27,
+        pp404Target: 'PP-404B',
+        pp404Time: '00:36',
+        naohPj404: 'Yes',
+        naohMlLine: '',
+        naohLi2901: false,
+        naohPm901Time: '01:03',
+        pm901StartTime: '02:35',
+        durationMin: 125,
+        requestCta: 'No'
+      }
+    ];
+
+    it('filters washing routines by equipment (PP-404A, PP-404B, PJ-404, PM-901, LI-2901)', () => {
+      const pp404b = LogbookParser.filterWashingRoutines(sampleWash, { equipment: 'PP-404B' });
+      expect(pp404b).toHaveLength(2);
+
+      const pp404a = LogbookParser.filterWashingRoutines(sampleWash, { equipment: 'PP-404A' });
+      expect(pp404a).toHaveLength(1);
+      expect(pp404a[0].date).toBe('2026-10-03');
+
+      const li2901 = LogbookParser.filterWashingRoutines(sampleWash, { equipment: 'LI-2901' });
+      expect(li2901).toHaveLength(1);
+      expect(li2901[0].id).toBe('wash-2026-10-01-D');
+    });
+
+    it('filters by washNo, monthKey, and search query (e.g. Boardman name or batch)', () => {
+      const byWashNo = LogbookParser.filterWashingRoutines(sampleWash, { washNo: 'No. 4' });
+      expect(byWashNo).toHaveLength(1);
+      expect(byWashNo[0].bm).toBe('C ศุภสิทธิ์');
+
+      const byBmQuery = LogbookParser.filterWashingRoutines(sampleWash, { query: 'ศุภสิทธิ์' });
+      expect(byBmQuery).toHaveLength(1);
+      expect(byBmQuery[0].batchCount).toBe(27);
+
+      const byBatchCount = LogbookParser.filterWashingRoutines(sampleWash, { query: '30' });
+      expect(byBatchCount).toHaveLength(1);
+      expect(byBatchCount[0].date).toBe('2026-10-03');
+    });
+
+    it('correctly calculates washing duration in minutes and formats human time', () => {
+      const duration = LogbookParser.calculateWashingDuration('13:40', '15:44');
+      expect(duration).toBe(124);
+
+      const crossMidnight = LogbookParser.calculateWashingDuration('23:10', '00:45');
+      expect(crossMidnight).toBe(95);
+
+      const text = LogbookParser.formatDurationMinutes(124);
+      expect(text).toBe('2 ชม. 4 นาที');
+    });
+  });
 });

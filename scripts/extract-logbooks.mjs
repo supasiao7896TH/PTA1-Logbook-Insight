@@ -153,6 +153,7 @@ function parseWorkbookFile(filePath, monthMeta) {
   const siloOperations = [];
   const sapMemos = [];
   const regularWorkList = [];
+  const washingRoutines = [];
 
   const CELL_RE = /<c r="([A-Z]+)(\d+)"([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g;
 
@@ -471,6 +472,213 @@ function parseWorkbookFile(filePath, monthMeta) {
       });
     }
 
+    // 7. 🧼 PM-901 High Pressure & Chemical Washing Routine (Day: 100..130, Night: 140..170)
+    const extractShiftWashing = (startRow, endRow, meta) => {
+      let pm901Row = -1;
+      for (let r = startRow; r <= endRow; r++) {
+        const txt = cells[`L${r}`] || '';
+        if (txt.includes('PM-901 high pressure')) {
+          pm901Row = r;
+          break;
+        }
+      }
+      if (pm901Row === -1) return null;
+
+      const rawHp = cells[`L${pm901Row}`] || '';
+      let hpTime = '';
+      const hpMatch = rawHp.match(/(\d{1,2}[:.]\d{2})/);
+      if (hpMatch) hpTime = hpMatch[1].replace('.', ':');
+
+      let rawBatch = '';
+      for (let r = pm901Row + 1; r <= pm901Row + 3; r++) {
+        const txt = cells[`L${r}`] || '';
+        if (txt.includes('Batch') || txt.includes('Total #')) {
+          rawBatch = txt;
+          break;
+        }
+      }
+
+      let washNo = '';
+      const suffixNoMatch = rawBatch.match(/No\.?\s*(\d+)/i);
+      const prefixNoMatch = rawBatch.match(/^\s*(\d+)\s+Total/i);
+      if (suffixNoMatch && suffixNoMatch[1]) washNo = suffixNoMatch[1];
+      else if (prefixNoMatch && prefixNoMatch[1]) washNo = prefixNoMatch[1];
+
+      let batchCount = null;
+      const batchMatch = rawBatch.match(/Total\s*#\s*[_ ]*(\d+)[_ ]*;?\s*Batch/i) || rawBatch.match(/[_ ]*(\d+)[_ ]*;?\s*Batch/i);
+      if (batchMatch && batchMatch[1]) {
+        batchCount = parseInt(batchMatch[1], 10);
+      }
+
+      let naohMlLine = '';
+      let naohPj404 = '';
+      let pp404Target = '';
+      let pp404Time = '';
+      let naohPm901Time = '';
+      let pm901StartTime = '';
+      let naohLi2901 = false;
+      let requestCta = '';
+
+      for (let r = pm901Row + 1; r <= endRow; r++) {
+        const lVal = cells[`L${r}`] || '';
+        const oVal = cells[`O${r}`] || '';
+        const pVal = cells[`P${r}`] || '';
+
+        if (lVal.includes('ML line to PD-403')) {
+          const tMatch = lVal.match(/(\d{1,2}[:.]\d{2})/);
+          naohMlLine = tMatch ? tMatch[1].replace('.', ':') : 'Yes';
+        }
+        if (lVal.includes('PJ-404')) {
+          const tMatch = lVal.match(/(\d{1,2}[:.]\d{2})/);
+          naohPj404 = tMatch ? tMatch[1].replace('.', ':') : (oVal.includes('Yes') ? 'Yes' : '');
+        }
+        if (lVal.includes('PP-404 to PW-901') || lVal.includes('@ PP-404')) {
+          const tMatch = lVal.match(/(\d{1,2}[:.]\d{2})/);
+          if (tMatch && !pp404Time) pp404Time = tMatch[1].replace('.', ':');
+          const targetMatch = lVal.match(/PP-404\s*["']?([AB])["']?/i);
+          if (targetMatch) pp404Target = `PP-404${targetMatch[1].toUpperCase()}`;
+        }
+        if (lVal.includes('LI-2901')) {
+          if (lVal.match(/\d{1,2}[:.]\d{2}/) || oVal.includes('Yes')) naohLi2901 = true;
+        }
+        if (lVal.includes('NaOH washing PM-901')) {
+          const tMatch = lVal.match(/(\d{1,2}[:.]\d{2})/);
+          if (tMatch) naohPm901Time = tMatch[1].replace('.', ':');
+        }
+        if (lVal.includes('Start PM-901 operation')) {
+          const tMatch = lVal.match(/(\d{1,2}[:.]\d{2})/);
+          if (tMatch) pm901StartTime = tMatch[1].replace('.', ':');
+        }
+        if (lVal.includes('Request CTA unit prepare 4% NaOH')) {
+          requestCta = (pVal && pVal.toLowerCase() === 'no') ? 'No' : (oVal && oVal.toLowerCase() === 'yes' ? 'Yes' : '');
+        }
+      }
+
+      const hasWashing = Boolean(hpTime || washNo || batchCount != null || pp404Target || naohPm901Time || pm901StartTime);
+      if (!hasWashing) return null;
+
+      const durationMin = LogbookParser.calculateWashingDuration(hpTime || naohPm901Time, pm901StartTime);
+
+      return {
+        ...meta,
+        hpTime,
+        washNo: washNo ? `No. ${washNo}` : '-',
+        washNoNum: washNo ? parseInt(washNo, 10) : null,
+        batchCount,
+        naohMlLine,
+        naohPj404,
+        pp404Target: pp404Target || '-',
+        pp404Time,
+        naohPm901Time,
+        pm901StartTime,
+        durationMin,
+        naohLi2901,
+        requestCta
+      };
+    };
+
+    // Day Shift Washing Routine
+    const dayWash = extractShiftWashing(100, 130, {
+      id: `wash-${monthMeta.monthKey}-${day}-D`,
+      monthKey: monthMeta.monthKey,
+      date: `${monthMeta.monthKey}-${day}`,
+      day,
+      shift: 'Day',
+      bm: dayBm,
+      fm: dayFm
+    });
+    if (dayWash) {
+      washingRoutines.push(dayWash);
+      const summaryText = [
+        `[🧼 Routine ล้าง PM-901 & สารเคมี]`,
+        dayWash.washNo !== '-' ? `รอบ ${dayWash.washNo}` : '',
+        dayWash.batchCount != null ? `(${dayWash.batchCount} Batch)` : '',
+        dayWash.hpTime ? `High Pressure @ ${dayWash.hpTime}` : '',
+        dayWash.pp404Target !== '-' ? `ล้าง ${dayWash.pp404Target}${dayWash.pp404Time ? ` @ ${dayWash.pp404Time}` : ''}` : '',
+        dayWash.naohPj404 ? `ล้าง PJ-404 ${dayWash.naohPj404}` : '',
+        dayWash.naohPm901Time ? `ล้าง PM-901 @ ${dayWash.naohPm901Time}` : '',
+        dayWash.pm901StartTime ? `Start PM-901 @ ${dayWash.pm901StartTime}` : '',
+        dayWash.durationMin > 0 ? `(รวมหยุด ${LogbookParser.formatDurationMinutes(dayWash.durationMin)})` : ''
+      ].filter(Boolean).join(' ');
+
+      const washTags = ['PM-901', 'WASHING'];
+      if (dayWash.pp404Target !== '-') washTags.push(dayWash.pp404Target);
+      if (dayWash.naohPj404) washTags.push('PJ-404');
+      if (dayWash.naohLi2901) washTags.push('LI-2901');
+
+      entries.push({
+        id: `${monthMeta.monthKey}-${day}-D-WASH`,
+        monthKey: monthMeta.monthKey,
+        monthLabel: monthMeta.label,
+        date: `${monthMeta.monthKey}-${day}`,
+        day,
+        shift: 'Day',
+        fm: dayFm,
+        bm: dayBm,
+        cba: dayCba,
+        pta: dayPta,
+        load: dayLoad,
+        prod,
+        dp2500,
+        category: 'WASH',
+        row: 108,
+        time: dayWash.hpTime || dayWash.naohPm901Time || '',
+        text: summaryText,
+        tags: washTags
+      });
+    }
+
+    // Night Shift Washing Routine
+    const nightWash = extractShiftWashing(140, 170, {
+      id: `wash-${monthMeta.monthKey}-${day}-N`,
+      monthKey: monthMeta.monthKey,
+      date: `${monthMeta.monthKey}-${day}`,
+      day,
+      shift: 'Night',
+      bm: nightBm,
+      fm: nightFm
+    });
+    if (nightWash) {
+      washingRoutines.push(nightWash);
+      const summaryText = [
+        `[🧼 Routine ล้าง PM-901 & สารเคมี]`,
+        nightWash.washNo !== '-' ? `รอบ ${nightWash.washNo}` : '',
+        nightWash.batchCount != null ? `(${nightWash.batchCount} Batch)` : '',
+        nightWash.hpTime ? `High Pressure @ ${nightWash.hpTime}` : '',
+        nightWash.pp404Target !== '-' ? `ล้าง ${nightWash.pp404Target}${nightWash.pp404Time ? ` @ ${nightWash.pp404Time}` : ''}` : '',
+        nightWash.naohPj404 ? `ล้าง PJ-404 ${nightWash.naohPj404}` : '',
+        nightWash.naohPm901Time ? `ล้าง PM-901 @ ${nightWash.naohPm901Time}` : '',
+        nightWash.pm901StartTime ? `Start PM-901 @ ${nightWash.pm901StartTime}` : '',
+        nightWash.durationMin > 0 ? `(รวมหยุด ${LogbookParser.formatDurationMinutes(nightWash.durationMin)})` : ''
+      ].filter(Boolean).join(' ');
+
+      const washTags = ['PM-901', 'WASHING'];
+      if (nightWash.pp404Target !== '-') washTags.push(nightWash.pp404Target);
+      if (nightWash.naohPj404) washTags.push('PJ-404');
+      if (nightWash.naohLi2901) washTags.push('LI-2901');
+
+      entries.push({
+        id: `${monthMeta.monthKey}-${day}-N-WASH`,
+        monthKey: monthMeta.monthKey,
+        monthLabel: monthMeta.label,
+        date: `${monthMeta.monthKey}-${day}`,
+        day,
+        shift: 'Night',
+        fm: nightFm,
+        bm: nightBm,
+        cba: nightCba,
+        pta: nightPta,
+        load: nightLoad,
+        prod,
+        dp2500,
+        category: 'WASH',
+        row: 149,
+        time: nightWash.hpTime || nightWash.naohPm901Time || '',
+        text: summaryText,
+        tags: washTags
+      });
+    }
+
     // Days summary record
     daysSummary.push({
       monthKey: monthMeta.monthKey,
@@ -502,7 +710,7 @@ function parseWorkbookFile(filePath, monthMeta) {
     });
   }
 
-  return { daysSummary, entries, siloOperations, sapMemos, regularWorkList };
+  return { daysSummary, entries, siloOperations, sapMemos, regularWorkList, washingRoutines };
 }
 
 function main() {
@@ -517,6 +725,7 @@ function main() {
   const allSiloOperations = [];
   const allSapMemos = [];
   const allRegularWork = [];
+  const allWashingRoutines = [];
 
   for (const meta of MONTH_FILE_PATTERNS) {
     const matchedFile = searchFiles.find(
@@ -529,10 +738,10 @@ function main() {
       : path.join(WORKSPACE_DIR, matchedFile);
     const t0 = Date.now();
     try {
-      const { daysSummary, entries, siloOperations, sapMemos, regularWorkList } = parseWorkbookFile(fullPath, meta);
+      const { daysSummary, entries, siloOperations, sapMemos, regularWorkList, washingRoutines } = parseWorkbookFile(fullPath, meta);
       const elapsed = Date.now() - t0;
       console.log(
-        `✅ [${meta.monthKey}] ${matchedFile} -> ${daysSummary.length} วัน, ${entries.length} บันทึก, Silo: ${siloOperations.length}, SAP: ${sapMemos.length} (${elapsed} ms)`
+        `✅ [${meta.monthKey}] ${matchedFile} -> ${daysSummary.length} วัน, ${entries.length} บันทึก, Silo: ${siloOperations.length}, SAP: ${sapMemos.length}, ล้าง: ${washingRoutines.length} (${elapsed} ms)`
       );
       allMonths.push({
         monthKey: meta.monthKey,
@@ -541,13 +750,15 @@ function main() {
         daysCount: daysSummary.length,
         entriesCount: entries.length,
         siloCount: siloOperations.length,
-        sapCount: sapMemos.length
+        sapCount: sapMemos.length,
+        washingCount: washingRoutines.length
       });
       allDaysSummary.push(...daysSummary);
       allEntries.push(...entries);
       allSiloOperations.push(...siloOperations);
       allSapMemos.push(...sapMemos);
       allRegularWork.push(...regularWorkList);
+      allWashingRoutines.push(...washingRoutines);
     } catch (err) {
       console.error(`❌ Failed to parse ${matchedFile}:`, err.message);
     }
@@ -562,12 +773,14 @@ function main() {
     totalSiloOperations: allSiloOperations.length,
     totalSapMemos: allSapMemos.length,
     totalRegularWork: allRegularWork.length,
+    totalWashingRoutines: allWashingRoutines.length,
     months: allMonths,
     daysSummary: allDaysSummary,
     entries: allEntries,
     siloOperations: allSiloOperations,
     sapMemos: allSapMemos,
-    regularWork: allRegularWork
+    regularWork: allRegularWork,
+    washingRoutines: allWashingRoutines
   };
 
   fs.writeFileSync(OUTPUT_JSON, JSON.stringify(payload, null, 2), 'utf8');
@@ -577,6 +790,7 @@ function main() {
     `• รวม ${allMonths.length} เดือน (${allDaysSummary.length} วันทำการ)\n` +
     `• รายการบันทึกหน้างานทั้งหมด: ${allEntries.length.toLocaleString('en-US')} รายการ\n` +
     `• 🌾 ข้อมูล Silo Switching & Logistics: ${allSiloOperations.length.toLocaleString('en-US')} รายการ\n` +
+    `• 🧼 ข้อมูล Routine ล้าง PM-901 & สารเคมี: ${allWashingRoutines.length.toLocaleString('en-US')} รายการ\n` +
     `• 🛠️ ข้อมูลงานแจ้งซ่อม SAP & Memo ค้างส่งเวร: ${allSapMemos.length.toLocaleString('en-US')} รายการ\n` +
     `• 📋 งานตรวจเช็ก Regular Work / PM: ${allRegularWork.length.toLocaleString('en-US')} รายการ\n` +
     `บันทึกสู่ public/data/logbook_2026.json เรียบร้อยค่ะ!`

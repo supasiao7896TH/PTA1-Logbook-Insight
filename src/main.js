@@ -664,18 +664,43 @@ function wireEvents() {
     });
   }
 
-  // AI Key modal
+  // Settings & About Studio modal
   const modal = document.getElementById('ai-key-modal');
-  document.getElementById('btn-open-settings')?.addEventListener('click', async () => {
+  const openSettingsModal = async () => {
     if (!modal) return;
     const keyInput = document.getElementById('gemini-api-key-input');
     if (keyInput) keyInput.value = await StorageEngine.getDecryptedApiKey();
     modal.hidden = false;
-  });
+  };
+
+  document.getElementById('btn-open-settings')?.addEventListener('click', openSettingsModal);
+
+  const btnOpenAbout = document.getElementById('btn-open-about');
+  if (btnOpenAbout) {
+    btnOpenAbout.addEventListener('click', openSettingsModal);
+    btnOpenAbout.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openSettingsModal();
+      }
+    });
+  }
 
   document.getElementById('btn-close-settings')?.addEventListener('click', () => {
     if (modal) modal.hidden = true;
   });
+
+  document.getElementById('btn-modal-close-x')?.addEventListener('click', () => {
+    if (modal) modal.hidden = true;
+  });
+
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.hidden = true;
+      }
+    });
+  }
 
   document.getElementById('btn-save-api-key')?.addEventListener('click', async () => {
     const val = document.getElementById('gemini-api-key-input')?.value || '';

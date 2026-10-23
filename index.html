@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="PTA1 Logbook" />
   <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" type="image/svg+xml" href="/icons/icon-192.svg" />
+  <link rel="icon" type="image/svg+xml" href="/assets/branding/studio-icon.svg" />
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
   <title>PTA1 Logbook Insight &amp; IPS/Kaizen Studio | Supasit.A</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -626,10 +626,147 @@
     }
 
     .modal-dialog {
-      max-width: 480px;
+      max-width: 540px;
       width: 100%;
     }
 
+    /* ==========================================================================
+       Supasit.A Branding System (A(i)CODER Studio)
+       ========================================================================== */
+    .sidebar-brand-dock {
+      margin-top: auto;
+      padding: 0.65rem 0.75rem;
+      border-radius: 13px;
+      border: 1px solid var(--line-border);
+      background-color: var(--bg-subtle);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+      text-decoration: none;
+    }
+
+    .sidebar-brand-dock:hover {
+      border-color: var(--brand-ink);
+      background-color: var(--bg-surface);
+      box-shadow: var(--card-shadow);
+    }
+
+    .sidebar-brand-dock:focus-visible {
+      outline: 2px solid var(--brand-ink);
+      outline-offset: 2px;
+    }
+
+    .studio-mark {
+      width: 100%;
+      max-width: 220px;
+      height: auto;
+      display: block;
+    }
+
+    /* Light/Dark Mark Toggling */
+    .studio-mark-dark,
+    .neon-mark-dark {
+      display: none !important;
+    }
+
+    .studio-mark-light,
+    .neon-mark-light {
+      display: block !important;
+    }
+
+    [data-theme="dark"] .studio-mark-light,
+    [data-theme="dark"] .neon-mark-light {
+      display: none !important;
+    }
+
+    [data-theme="dark"] .studio-mark-dark,
+    [data-theme="dark"] .neon-mark-dark {
+      display: block !important;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .studio-mark-light,
+      :root:not([data-theme="light"]) .neon-mark-light {
+        display: none !important;
+      }
+      :root:not([data-theme="light"]) .studio-mark-dark,
+      :root:not([data-theme="light"]) .neon-mark-dark {
+        display: block !important;
+      }
+    }
+
+    /* Studio About Card inside Modal */
+    .studio-about-card {
+      margin-bottom: 1.15rem;
+      padding: 0.95rem;
+      border-radius: 13px;
+      border: 1px solid var(--line-border);
+      background-color: var(--bg-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .studio-neon-wrap {
+      width: 100%;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--line-border);
+      border-radius: 9px;
+      padding: 0.5rem 0.75rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .neon-mark {
+      width: 100%;
+      max-width: 360px;
+      height: auto;
+      display: block;
+    }
+
+    .studio-info-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .studio-badge-pill {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 0.2rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--brand-ink);
+      background-color: var(--brand-ink-soft);
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+    }
+
+    .studio-title-text {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .studio-desc-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .studio-links-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Footer Lockup */
     .app-footer {
       margin-top: auto;
       padding: 1rem 1.5rem;
@@ -638,6 +775,45 @@
       font-size: 0.82rem;
       color: var(--text-muted);
       background-color: var(--bg-surface);
+    }
+
+    .footer-brand-lockup {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      line-height: 1.5;
+    }
+
+    .footer-studio-icon {
+      border-radius: 5px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .footer-brand-title {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .footer-motto {
+      color: var(--ref-amber);
+      font-weight: 600;
+    }
+
+    .footer-author {
+      font-weight: 600;
+      color: var(--brand-ink);
+    }
+
+    .footer-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .footer-divider {
+      color: var(--line-border);
     }
   </style>
 </head>
@@ -688,6 +864,12 @@
       <div>
         <div class="kpi-label" style="margin-bottom: 0.5rem;">📂 เลือกเดือนในฐานข้อมูล (2026)</div>
         <div id="sidebar-months-list" class="month-list-scroll"></div>
+      </div>
+
+      <!-- Studio Brand Dock (Clean Studio Badge) -->
+      <div id="btn-open-about" class="sidebar-brand-dock" role="button" tabindex="0" title="คลิกเพื่อดูข้อมูล A(i)CODER Studio &amp; ข้อมูลระบบ" aria-label="A(i)CODER Studio by Supasit.A">
+        <img class="studio-mark studio-mark-light" src="/assets/branding/studio-badge-light.svg" alt="A(i)CODER by Supasit.A" width="300" height="64" />
+        <img class="studio-mark studio-mark-dark" src="/assets/branding/studio-badge-dark.svg" alt="A(i)CODER by Supasit.A" width="300" height="64" />
       </div>
     </aside>
 
@@ -1262,7 +1444,15 @@
       </main>
 
       <footer class="app-footer">
-        A-Class WebCraft • Code • Share • Inspire • by Supasit.A (GC-M PTA Unit 1 Logbook Insight Studio)
+        <div class="footer-brand-lockup">
+          <img src="/assets/branding/studio-icon.svg" alt="A(i)CODER Icon" width="20" height="20" class="footer-studio-icon" />
+          <span class="footer-brand-title">A(i)CODER | A-Class WebCraft</span>
+          <span class="footer-divider">•</span>
+          <span class="footer-motto">Code · Share · Inspire</span>
+          <span class="footer-divider">•</span>
+          <span class="footer-author">by Supasit.A</span>
+          <span class="footer-note">(GC-M PTA Unit 1 Logbook Insight &amp; IPS Kaizen Studio)</span>
+        </div>
       </footer>
     </div>
   </div>
@@ -1270,7 +1460,40 @@
   <!-- Settings & Migration Modal -->
   <div id="ai-key-modal" class="modal-backdrop" hidden>
     <div class="sa-card modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-ai-title">
-      <h2 id="modal-ai-title" style="font-size: 1.05rem; margin-bottom: 0.5rem;">⚙️ ตั้งค่าระบบ &amp; สำรองข้อมูลย้ายเครื่อง</h2>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem;">
+        <h2 id="modal-ai-title" style="font-size: 1.05rem; margin: 0;">⚙️ ตั้งค่าระบบ &amp; ข้อมูลสตูดิโอ</h2>
+        <button id="btn-modal-close-x" type="button" class="btn-pill-secondary" aria-label="ปิดหน้าต่าง" style="min-height: 32px; height: 32px; width: 32px; padding: 0;">✕</button>
+      </div>
+
+      <!-- Studio Identity Card with Live Neon Banner -->
+      <div class="studio-about-card">
+        <div class="studio-neon-wrap">
+          <img class="neon-mark neon-mark-light" src="/assets/branding/d1-neon-arcade-bare.svg" alt="A(i)CODER 2026 by Supasit.A" width="1320" height="420" />
+          <img class="neon-mark neon-mark-dark" src="/assets/branding/d2-crt-night-bare.svg" alt="A(i)CODER 2026 by Supasit.A" width="1320" height="420" />
+        </div>
+        <div class="studio-info-meta">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+            <span class="studio-badge-pill">A-Class WebCraft</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">v1.0 · PWA Ready</span>
+          </div>
+          <div class="studio-title-text">A(i)CODER • Code · Share · Inspire</div>
+          <p class="studio-desc-text">
+            สร้างและพัฒนาโดย <strong>พี่ A (ศุภสิทธิ์ อุทัย · Supasit.A)</strong><br />
+            Boardman PTA Unit 1 · ฝ่ายการผลิต PE1 · บริษัท GC-M PTA (เครือ PTTGC)<br />
+            <span style="color: var(--text-muted); font-size: 0.78rem;">ระบบจัดการและสกัดสารสนเทศ Logbook อัตโนมัติ (Multi-File Vite + Cloudflare Workers)</span>
+          </p>
+          <div class="studio-links-row">
+            <a href="https://github.com/supasiao7896TH/PTA1-Logbook-Insight" target="_blank" rel="noopener noreferrer" class="btn-pill-secondary" style="font-size: 0.8rem; min-height: 36px; padding: 0.35rem 0.75rem; text-decoration: none;">
+              <span>⭐ GitHub Repository</span>
+            </a>
+            <a href="https://pta1-logbook-insight.supasiao.workers.dev" target="_blank" rel="noopener noreferrer" class="btn-pill-secondary" style="font-size: 0.8rem; min-height: 36px; padding: 0.35rem 0.75rem; text-decoration: none;">
+              <span>🌐 Production Web App</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 0.95rem; margin-bottom: 0.35rem;">🤖 Gemini AI API Key (เข้ารหัสปลอดภัยในเครื่อง)</h3>
       <p class="kpi-sub" style="margin-bottom: 0.85rem;">
         คีย์ของพี่ A จะถูกเข้ารหัสด้วย Web Crypto AES-GCM 256-bit เก็บไว้ในเครื่องนี้เท่านั้น (หากไม่ใส่คีย์ ระบบร่าง IPS อัตโนมัติแบบ Offline ก็ทำงานได้ปกติ 100% ค่ะ)
       </p>

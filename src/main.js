@@ -294,6 +294,38 @@ function wireEvents() {
     });
   }
 
+  // One-Click Live SharePoint Sync button
+  const btnSyncLive = document.getElementById('btn-sync-live');
+  const btnSyncIcon = document.getElementById('btn-sync-live-icon');
+  const btnSyncText = document.getElementById('btn-sync-live-text');
+
+  if (btnSyncLive) {
+    btnSyncLive.addEventListener('click', async () => {
+      if (btnSyncLive.disabled) return;
+
+      btnSyncLive.disabled = true;
+      if (btnSyncIcon) btnSyncIcon.textContent = '⏳';
+      if (btnSyncText) btnSyncText.textContent = 'กำลังดึงข้อมูลสด...';
+      UIRenderer.showToast('กำลังสั่งดึงข้อมูลสดจากโฟลเดอร์ SharePoint เข้าสู่ Web App ค่ะ...');
+
+      try {
+        const res = await fetch('/api/sync-live', { method: 'POST' });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `HTTP ${res.status}`);
+        }
+        await loadInitialData();
+        UIRenderer.showToast('✨ ซิงค์ข้อมูล Logbook สดจาก SharePoint สำเร็จเรียบร้อยแล้วค่ะ!', 'success');
+      } catch (err) {
+        UIRenderer.showToast(`ซิงค์ข้อมูลไม่สำเร็จ: ${err.message}`, 'error');
+      } finally {
+        btnSyncLive.disabled = false;
+        if (btnSyncIcon) btnSyncIcon.textContent = '⚡';
+        if (btnSyncText) btnSyncText.textContent = 'ซิงค์สดจาก SharePoint';
+      }
+    });
+  }
+
   // Excel (.xlsx / .xlsm) File Upload
   const fileInput = document.getElementById('excel-upload-input');
   if (fileInput) {

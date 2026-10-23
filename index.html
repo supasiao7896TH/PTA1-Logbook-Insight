@@ -660,7 +660,17 @@
       </div>
 
       <div style="margin-top: auto; display: flex; flex-direction: column; gap: 0.5rem;">
-        <label for="excel-upload-input" class="btn-pill-primary" style="cursor: pointer; text-align: center;">
+        <button
+          id="btn-sync-live"
+          type="button"
+          class="btn-pill-primary"
+          style="background-color: var(--brand-ink); display: flex; align-items: center; justify-content: center; gap: 0.4rem;"
+          title="ดึงข้อมูล Logbook ล่าสุดจากโฟลเดอร์ SharePoint จริงของ PTA1"
+        >
+          <span id="btn-sync-live-icon">⚡</span>
+          <span id="btn-sync-live-text">ซิงค์สดจาก SharePoint</span>
+        </button>
+        <label for="excel-upload-input" class="btn-pill-secondary" style="cursor: pointer; text-align: center;">
           📥 อัปโหลดไฟล์ .xlsm / .xlsx เพิ่ม
         </label>
         <input id="excel-upload-input" type="file" accept=".xlsx,.xlsm" hidden />

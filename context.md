@@ -90,6 +90,7 @@ Store: settings
 | 📋 สตูดิโอร่าง IPS & Kaizen | ✅ Done | 4 เคสเด่น, คำนวณผลตอบแทนข้อ 1.1 (`1+2-4-5`), ปุ่ม Copy วาง HCL Notes |
 | 📥 นำเข้าไฟล์ .xlsm/.xlsx หน้าเว็บ | ✅ Done | แตก XML ผ่าน DecompressionStream บนเบราว์เซอร์ ไม่เปลือง RAM |
 | 🔄 SharePoint Auto-Sync Watcher | ✅ Done | สคริปต์เฝ้าตรวจจับโฟลเดอร์ SharePoint / OneDrive ด้วย Debounce 8s และกรองไฟล์ล็อก `~$*`, พร้อม Live Polling Meta ใน Web App ทุก 30s |
+| ⚡ ปุ่มคลิกซิงค์สด (One-Click Live Sync) | ✅ Done | ปุ่ม `⚡ ซิงค์สดจาก SharePoint` บนหน้าเว็บ สั่งสกัดข้อมูลจากโฟลเดอร์จริงผ่าน `/api/sync-live` Middleware อัปเดตหน้าจอทันที |
 | ⚙️ Gemini AI Key (BYOK) | ✅ Done | เข้ารหัส AES-GCM 256-bit เก็บในเครื่อง |
 
 ---

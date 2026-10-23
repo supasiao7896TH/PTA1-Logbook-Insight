@@ -1001,12 +1001,48 @@
           </div>
         </section>
 
-        <!-- VIEW 3: CHRONIC EQUIPMENT TRACKER -->
-        <section data-view-panel="equipment" hidden aria-label="สถิติอุปกรณ์เสียซ้ำ">
-          <div class="sa-card" style="margin-bottom: 1rem;">
-            <h2 style="font-size: 1.1rem; margin-bottom: 0.25rem;">🔧 จัดอันดับ 30 อุปกรณ์/Tag ที่ถูกบันทึกปัญหาบ่อยที่สุด</h2>
-            <p class="kpi-sub">คลิกปุ่ม "ดูประวัติ" ในการ์ดใดก็ได้เพื่อกาง Timeline การแก้ไขปัญหาของอุปกรณ์นั้นย้อนหลังทุกเดือนค่ะ</p>
+        <!-- VIEW 3: CHRONIC EQUIPMENT & PARETO BAD ACTORS -->
+        <section data-view-panel="equipment" hidden aria-label="สถิติเครื่องจักรตัวร้ายและวิเคราะห์ Pareto 80/20">
+          <!-- Pareto 80/20 Summary Banner -->
+          <div class="sa-card" style="margin-bottom: 1rem; border-left: 4px solid var(--ref-amber-border);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+              <h2 style="font-size: 1.15rem; display: flex; align-items: center; gap: 0.4rem;">
+                <span>📊</span>
+                <span>วิเคราะห์เครื่องจักรตัวร้าย (Bad Actor Pareto 80/20 &amp; Reliability Intelligence)</span>
+              </h2>
+              <span id="badactor-summary-badge" class="c-ref-tag font-bold">กำลังประมวลผล...</span>
+            </div>
+            <p id="badactor-summary-text" class="kpi-sub" style="margin-bottom: 0.85rem;">
+              ประมวลผลความถี่ ปัญหาวิกฤต 80% แรกของโรงงาน PTA1 ระยะห่างการเสียเฉลี่ย (MTBF Proxy) และความเชื่อมโยงกับใบแจ้งซ่อม SAP
+            </p>
+            <div class="filter-toolbar">
+              <select id="filter-badactor-unit" class="sa-select" aria-label="เลือกหน่วยผลิต">
+                <option value="ALL">🏭 ทุกหน่วยผลิต (All Units)</option>
+                <option value="Reaction">🌀 Reaction &amp; Oxidation</option>
+                <option value="Purification">🧪 Purification &amp; Finishing</option>
+                <option value="Silo">🌾 Silo &amp; Powder Logistics</option>
+                <option value="Utilities">⚡ Utilities &amp; Offsite</option>
+                <option value="Other">📦 อุปกรณ์อื่นๆ</option>
+              </select>
+              <select id="filter-badactor-min" class="sa-select" aria-label="ความถี่ขั้นต่ำ">
+                <option value="2">⚠️ พบตั้งแต่ 2 ครั้งขึ้นไป (แนะนำ)</option>
+                <option value="3">🔥 พบตั้งแต่ 3 ครั้งขึ้นไป</option>
+                <option value="5">🚨 เสียซ้ำสูงมาก (≥5 ครั้ง)</option>
+                <option value="1">📋 แสดงทั้งหมด (≥1 ครั้ง)</option>
+              </select>
+              <select id="filter-badactor-month" class="sa-select" aria-label="เลือกรอบเดือน"></select>
+              <input
+                id="search-badactor-input"
+                type="search"
+                class="sa-input sa-search-pill"
+                style="flex: 1 1 240px;"
+                placeholder="🔍 ค้นหา Tag อุปกรณ์ หรืออาการ (เช่น LCV-2302, PP-404A, valve, leak)..."
+                aria-label="ค้นหา Tag อุปกรณ์"
+              />
+            </div>
           </div>
+
+          <!-- Bad Actor Cards Grid -->
           <div id="equipment-chronic-grid" class="chronic-grid"></div>
         </section>
 

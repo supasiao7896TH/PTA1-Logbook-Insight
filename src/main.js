@@ -41,6 +41,50 @@ const handlers = {
     UIRenderer.renderAll(handlers);
   },
 
+  onBadActorFilterChange(partial) {
+    StateStore.updateBadActorFilters(partial);
+    UIRenderer.renderEquipmentChronic(handlers);
+  },
+
+  async onCreateDraftFromBadActor(badActorItem) {
+    const allEntries = StateStore.get('entries') || [];
+    const relatedEntries = allEntries.filter((e) => Array.isArray(e.tags) && e.tags.includes(badActorItem.tag));
+    const latestEntry = relatedEntries[relatedEntries.length - 1] || {};
+
+    const newDraft = {
+      id: `ips-badactor-${badActorItem.tag.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}`,
+      jobName: `ปรับปรุงความเสถียรและลดการขัดข้องของ ${badActorItem.tag} (${badActorItem.unit} Unit)`,
+      caseName: `ลดปัญหาชำรุดซ้ำซากของ ${badActorItem.tag}`,
+      tags: [badActorItem.tag, badActorItem.unit.toUpperCase()],
+      date: badActorItem.lastSeen || latestEntry.date || '2026-10-23',
+      objective: `เพื่อเพิ่ม MTBF และลด Downtime ของ ${badActorItem.tag} ในหน่วย ${badActorItem.unit}`,
+      kaizenWay: `วิเคราะห์ Root Cause และปรับปรุงการบำรุงรักษาเชิงป้องกัน (PM) หรือปรับจูน Control Parameter`,
+      beforeText: `อุปกรณ์ ${badActorItem.tag} (${badActorItem.unit}) เกิดปัญหาขัดข้องและถูกบันทึกใน Logbook รวม ${badActorItem.count} ครั้ง ในรอบ 9 เดือน (ม.ค. - ต.ค. 2026) โดยมีระยะห่างการเสียเฉลี่ยทุกๆ ${badActorItem.avgDaysBetween} วัน ${badActorItem.relatedSapCount > 0 ? `และมีประวัติแจ้งซ่อม SAP จำนวน ${badActorItem.relatedSapCount} รายการ` : ''} ส่งผลให้ Boardman ต้องคอยแก้ไขหน้างานและกระทบต่อเสถียรภาพการเดินเครื่อง PTA Unit 1`,
+      afterText: `ดำเนินการปรับปรุงทางวิศวกรรม/เปลี่ยนวัสดุอุปกรณ์ที่ทนทานขึ้น หรือตั้งรอบ PM ให้เร็วกว่ารอบการเสีย (${badActorItem.avgDaysBetween} วัน) เพื่อป้องกันการขัดข้องแบบฉุกเฉิน ยืดอายุการใช้งาน และลด Man-Hour ของ Boardman ในการแก้ปัญหาเฉพาะหน้า`,
+      effectText: `ลดความถี่การเกิดปัญหาของ ${badActorItem.tag} จากเดิมเฉลี่ยทุกๆ ${badActorItem.avgDaysBetween} วัน ให้ทำงานต่อเนื่องได้ยาวนานขึ้น เพิ่มความพร้อมใช้งาน (Availability) ของหน่วยผลิต`,
+      rootCauseText: `1. Why: ${badActorItem.tag} ขัดข้องบ่อยครั้ง (${badActorItem.count} ครั้ง)\n2. Why: มีชิ้นส่วนสึกหรอหรือมีสารเคมี/ของแข็งเกาะติดตามรอบการเดินเครื่อง\n3. Why: รอบการตรวจสอบ PM เดิมยังไม่ครอบคลุมช่วงระยะการเสื่อมสภาพจริง\n4. Why: ขาดการแจ้งเตือน Predictive Maintenance ตามสถิติ MTBF\n5. Why: ยังไม่ได้นำข้อมูลประวัติ Logbook มาวิเคราะห์หารอบเสื่อมสภาพที่แท้จริง`,
+      benefitCalc: {
+        costSaving: 5000,
+        manHours: 4,
+        hourlyRate: 350,
+        oppLossTons: 0,
+        tonRate: 0,
+        investYear: 0,
+        extraCost: 0
+      }
+    };
+
+    const currentDrafts = StateStore.get('ipsDrafts') || [];
+    const nextDrafts = [newDraft, ...currentDrafts];
+    StateStore.set('ipsDrafts', nextDrafts);
+    StateStore.set('selectedDraftId', newDraft.id);
+    await StorageEngine.saveIpsDraft(newDraft);
+
+    StateStore.set('activeTab', 'ips');
+    UIRenderer.renderAll(handlers);
+    UIRenderer.showToast(`สร้างร่าง IPS/Kaizen จาก Bad Actor "${badActorItem.tag}" (${badActorItem.count} ครั้ง) เรียบร้อยค่ะ!`, 'success');
+  },
+
   async onCreateDraftFromEntry(entry) {
     const allEntries = StateStore.get('entries') || [];
     const newDraft = LogbookParser.createDraftFromEntry(entry, allEntries);
@@ -315,6 +359,39 @@ function wireEvents() {
   if (sapSearchInput) {
     sapSearchInput.addEventListener('input', (e) => {
       handlers.onSapFilterChange({ query: e.target.value });
+    });
+  }
+
+  // Bad Actor & Pareto Filters
+  const baUnitSelect = document.getElementById('filter-badactor-unit');
+  if (baUnitSelect) {
+    baUnitSelect.addEventListener('change', (e) => {
+      handlers.onBadActorFilterChange({ unit: e.target.value });
+    });
+  }
+
+  const baMinSelect = document.getElementById('filter-badactor-min');
+  if (baMinSelect) {
+    baMinSelect.addEventListener('change', (e) => {
+      handlers.onBadActorFilterChange({ minIncidents: Number(e.target.value) || 1 });
+    });
+  }
+
+  const baMonthSelect = document.getElementById('filter-badactor-month');
+  if (baMonthSelect) {
+    baMonthSelect.addEventListener('change', (e) => {
+      handlers.onBadActorFilterChange({ monthKey: e.target.value });
+    });
+  }
+
+  let badActorSearchTimer = null;
+  const baSearchInput = document.getElementById('search-badactor-input');
+  if (baSearchInput) {
+    baSearchInput.addEventListener('input', (e) => {
+      clearTimeout(badActorSearchTimer);
+      badActorSearchTimer = setTimeout(() => {
+        handlers.onBadActorFilterChange({ query: e.target.value });
+      }, 250);
     });
   }
 

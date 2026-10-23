@@ -491,4 +491,83 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
       expect(Array.isArray(parsed.ipsDrafts)).toBe(true);
     });
   });
+
+  describe('12. Bad Actor Pareto & Reliability Intelligence (computeParetoBadActors)', () => {
+    const mockEntries = [
+      { id: '1', date: '2026-10-01', tags: ['LCV-2302'], text: 'LCV-2302 passing 10%' },
+      { id: '2', date: '2026-10-05', tags: ['LCV-2302'], text: 'LCV-2302 valve hunt' },
+      { id: '3', date: '2026-10-10', tags: ['LCV-2302'], text: 'LCV-2302 check gland' },
+      { id: '4', date: '2026-10-15', tags: ['LCV-2302'], text: 'LCV-2302 auto trip' },
+      { id: '5', date: '2026-10-02', tags: ['PP-404A'], text: 'PP-404A high vibration' },
+      { id: '6', date: '2026-10-08', tags: ['PP-404A'], text: 'PP-404A switch to B' },
+      { id: '7', date: '2026-10-14', tags: ['PP-404A'], text: 'PP-404A mech seal leak' },
+      { id: '8', date: '2026-10-03', tags: ['PM-500B'], text: 'PM-500B filter dirty' },
+      { id: '9', date: '2026-10-11', tags: ['PM-500B'], text: 'PM-500B high dp' },
+      { id: '10', date: '2026-10-04', tags: ['TTK-400'], text: 'TTK-400 full high level' }
+    ];
+
+    const mockSapMemos = [
+      { id: 'sap-1', sapNo: '1001', detail: 'LCV-2302 gland packing leak', status: 'REL' },
+      { id: 'sap-2', sapNo: '1002', detail: 'PP-404A bearing replacement', status: 'Completed' }
+    ];
+
+    it('calculates Pareto 80/20 distribution, cumulative percentage, and MTBF intervals correctly', () => {
+      const result = LogbookParser.computeParetoBadActors(mockEntries, {
+        sapMemos: mockSapMemos,
+        referenceDate: '2026-10-20'
+      });
+
+      expect(result.totalIncidents).toBe(10);
+      expect(result.items).toHaveLength(4);
+
+      // Top 1: LCV-2302 with 4 incidents (40%)
+      const top1 = result.items[0];
+      expect(top1.tag).toBe('LCV-2302');
+      expect(top1.count).toBe(4);
+      expect(top1.percentage).toBe(40);
+      expect(top1.cumulativePercentage).toBe(40);
+      expect(top1.isPareto80).toBe(true);
+      expect(top1.unit).toBe('Purification');
+      expect(top1.firstSeen).toBe('2026-10-01');
+      expect(top1.lastSeen).toBe('2026-10-15');
+      expect(top1.avgDaysBetween).toBe(4.7); // (14 days) / (3 intervals) = 4.67 -> 4.7
+      expect(top1.daysSinceLast).toBe(5); // 2026-10-20 - 2026-10-15 = 5
+      expect(top1.relatedSapCount).toBe(1);
+      expect(top1.relatedSapMemos[0].sapNo).toBe('1001');
+
+      // Top 2: PP-404A with 3 incidents (30%) -> Cumulative 70%
+      const top2 = result.items[1];
+      expect(top2.tag).toBe('PP-404A');
+      expect(top2.count).toBe(3);
+      expect(top2.cumulativePercentage).toBe(70);
+      expect(top2.isPareto80).toBe(true);
+      expect(top2.unit).toBe('Reaction');
+
+      // Top 3: PM-500B with 2 incidents (20%) -> Cumulative 90% (Crosses 80% cutoff)
+      const top3 = result.items[2];
+      expect(top3.tag).toBe('PM-500B');
+      expect(top3.cumulativePercentage).toBe(90);
+      expect(top3.isPareto80).toBe(true); // included as the critical cutoff boundary
+
+      // Top 4: TTK-400 with 1 incident (10%) -> Cumulative 100%
+      const top4 = result.items[3];
+      expect(top4.tag).toBe('TTK-400');
+      expect(top4.isPareto80).toBe(false);
+      expect(top4.unit).toBe('Silo');
+    });
+
+    it('filters bad actors by unit and minIncidents', () => {
+      const reactionOnly = LogbookParser.computeParetoBadActors(mockEntries, {
+        unitFilter: 'Reaction'
+      });
+      expect(reactionOnly.items).toHaveLength(1);
+      expect(reactionOnly.items[0].tag).toBe('PP-404A');
+
+      const min3Incidents = LogbookParser.computeParetoBadActors(mockEntries, {
+        minIncidents: 3
+      });
+      expect(min3Incidents.items).toHaveLength(2);
+      expect(min3Incidents.items.map((x) => x.tag)).toEqual(['LCV-2302', 'PP-404A']);
+    });
+  });
 });

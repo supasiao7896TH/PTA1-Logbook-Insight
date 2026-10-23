@@ -941,5 +941,171 @@ export const LogbookParser = {
       daysSummary,
       entries
     };
+  },
+
+  detectPlantUnit(tag) {
+    const t = (tag || '').toUpperCase();
+    if (/^(PM-4|PP-4|PJ-4|ACV-|XV-4|FCV-4|PCV-4|TI-4|PI-4|TCV-4|LCV-4|PM-405|PP-405|PM-6|PP-6|PD-6|PZ-6|REACTOR|OXIDATION)/i.test(t)) {
+      return 'Reaction';
+    }
+    if (/^(LCV-2|LC-2|PCV-2|PC-2|FCV-2|FC-2|TI-2|PI-2|TCV-2|PM-5|PP-5|PD-40|PD-25|PT-5|PM-9|PW-9|RPF|CENTRIFUGE|DRYER|PURIFICATION)/i.test(t)) {
+      return 'Purification';
+    }
+    if (/^(TTK-4|PTK-8|810|820|SILO|TRANSFER|BLOWER)/i.test(t)) {
+      return 'Silo';
+    }
+    if (/^(STEAM|AIR|COOLING|CONDENSATE|WASTE|FLARE|WWTP|UTILITY)/i.test(t)) {
+      return 'Utilities';
+    }
+    return 'Other';
+  },
+
+  computeParetoBadActors(entries = [], options = {}) {
+    if (!Array.isArray(entries)) entries = [];
+    const {
+      sapMemos = [],
+      minIncidents = 1,
+      unitFilter = 'ALL',
+      monthKey = 'ALL',
+      query = '',
+      referenceDate = null
+    } = options;
+
+    const q = query.trim().toLowerCase();
+
+    // 1. Gather all equipment tag occurrences
+    const tagMap = new Map();
+    let maxDateOverall = '2026-01-01';
+
+    for (const e of entries) {
+      if (monthKey && monthKey !== 'ALL' && e.monthKey !== monthKey) continue;
+      const tags = Array.isArray(e.tags) ? e.tags : [];
+      const entryDate = e.date || '';
+      if (entryDate > maxDateOverall) maxDateOverall = entryDate;
+
+      for (const rawTag of tags) {
+        const tag = rawTag.trim();
+        if (!tag || tag === 'EXAPILOT') continue; // Skip generic meta keywords
+
+        if (!tagMap.has(tag)) {
+          tagMap.set(tag, {
+            tag,
+            unit: this.detectPlantUnit(tag),
+            count: 0,
+            dates: [],
+            samples: []
+          });
+        }
+
+        const record = tagMap.get(tag);
+        record.count++;
+        if (entryDate) record.dates.push(entryDate);
+        if (record.samples.length < 3 && e.text) {
+          record.samples.push(e.text);
+        }
+      }
+    }
+
+    const refDate = referenceDate || maxDateOverall;
+
+    // 2. Sort tags descending by count
+    const allTags = Array.from(tagMap.values()).sort((a, b) => b.count - a.count);
+    const totalIncidents = allTags.reduce((acc, cur) => acc + cur.count, 0);
+
+    // 3. Compute Pareto cumulative % and intervals
+    let cumulativeCount = 0;
+    let crossedPareto80 = false;
+    const computedItems = [];
+
+    for (const item of allTags) {
+      const percentage = totalIncidents > 0 ? Number(((item.count / totalIncidents) * 100).toFixed(1)) : 0;
+      cumulativeCount += item.count;
+      const cumulativePercentage = totalIncidents > 0 ? Number(((cumulativeCount / totalIncidents) * 100).toFixed(1)) : 0;
+
+      // Determine Pareto 80 cutoff
+      let isPareto80 = false;
+      if (!crossedPareto80) {
+        isPareto80 = true;
+        if (cumulativePercentage >= 80) {
+          crossedPareto80 = true;
+        }
+      }
+
+      // Sort dates
+      const sortedDates = [...item.dates].sort();
+      const firstSeen = sortedDates[0] || '';
+      const lastSeen = sortedDates[sortedDates.length - 1] || '';
+
+      // Days between first and last incident
+      let avgDaysBetween = 0;
+      if (item.count > 1 && firstSeen && lastSeen) {
+        const diffMs = new Date(lastSeen) - new Date(firstSeen);
+        const diffDays = Math.max(1, Math.round(diffMs / (1000 * 60 * 60 * 24)));
+        avgDaysBetween = Number((diffDays / (item.count - 1)).toFixed(1));
+      }
+
+      // Days since last incident
+      let daysSinceLast = 0;
+      if (lastSeen && refDate) {
+        const diffMs = new Date(refDate) - new Date(lastSeen);
+        daysSinceLast = Math.max(0, Math.round(diffMs / (1000 * 60 * 60 * 24)));
+      }
+
+      // Trend calculation
+      let trend = 'Stable';
+      if (item.count >= 3 && sortedDates.length >= 3) {
+        const lastTwoDiff = (new Date(sortedDates[sortedDates.length - 1]) - new Date(sortedDates[sortedDates.length - 2])) / (1000 * 60 * 60 * 24);
+        if (lastTwoDiff < avgDaysBetween * 0.7) {
+          trend = 'Worsening';
+        } else if (lastTwoDiff > avgDaysBetween * 1.5) {
+          trend = 'Improving';
+        }
+      }
+
+      // Cross-link with SAP Memos
+      const tagUpper = item.tag.toUpperCase();
+      const relatedSapMemos = (sapMemos || []).filter((memo) => {
+        const memoText = `${memo.sapNo || ''} ${memo.detail || ''} ${(memo.tags || []).join(' ')}`.toUpperCase();
+        return memoText.includes(tagUpper);
+      });
+
+      computedItems.push({
+        rank: computedItems.length + 1,
+        tag: item.tag,
+        unit: item.unit,
+        count: item.count,
+        percentage,
+        cumulativeCount,
+        cumulativePercentage,
+        isPareto80,
+        firstSeen,
+        lastSeen,
+        avgDaysBetween,
+        daysSinceLast,
+        trend,
+        sampleText: item.samples[0] || '',
+        relatedSapCount: relatedSapMemos.length,
+        relatedSapMemos
+      });
+    }
+
+    // 4. Apply Filters (unitFilter, minIncidents, query)
+    const filteredItems = computedItems.filter((item) => {
+      if (unitFilter && unitFilter !== 'ALL' && item.unit !== unitFilter) return false;
+      if (item.count < minIncidents) return false;
+      if (q && !item.tag.toLowerCase().includes(q) && !item.sampleText.toLowerCase().includes(q)) return false;
+      return true;
+    });
+
+    const pareto80Count = computedItems.filter((x) => x.isPareto80).length;
+    const pareto80Percentage = allTags.length > 0 ? Number(((pareto80Count / allTags.length) * 100).toFixed(1)) : 0;
+
+    return {
+      totalIncidents,
+      totalUniqueTags: allTags.length,
+      pareto80Count,
+      pareto80Percentage,
+      items: filteredItems
+    };
   }
 };

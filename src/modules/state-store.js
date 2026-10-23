@@ -43,6 +43,12 @@ const _state = {
     monthKey: 'ALL',
     query: ''
   },
+  badActorFilters: {
+    unit: 'ALL', // 'ALL' | 'Reaction' | 'Purification' | 'Silo' | 'Utilities' | 'Other'
+    minIncidents: 2,
+    monthKey: 'ALL',
+    query: ''
+  },
   ipsDrafts: [],
   selectedDraftId: 'ips-oct-lcv2302',
   ipsMode: 'ips' // 'ips' | 'kaizen'
@@ -92,6 +98,11 @@ export const StateStore = {
   updateSapFilters(partial) {
     const next = { ..._state.sapFilters, ...partial };
     this.set('sapFilters', next);
+  },
+
+  updateBadActorFilters(partial) {
+    const next = { ..._state.badActorFilters, ...partial };
+    this.set('badActorFilters', next);
   },
 
   on(key, fn) {

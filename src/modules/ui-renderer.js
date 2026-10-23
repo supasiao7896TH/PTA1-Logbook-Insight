@@ -451,46 +451,192 @@ export const UIRenderer = {
 
   renderEquipmentChronic(handlers) {
     const grid = document.getElementById('equipment-chronic-grid');
+    const summaryBadge = document.getElementById('badactor-summary-badge');
+    const summaryText = document.getElementById('badactor-summary-text');
     if (!grid) return;
     grid.textContent = '';
 
     const entries = StateStore.get('entries') || [];
-    const filters = StateStore.get('filters');
-    const scopedEntries = LogbookParser.filterEntries(entries, {
-      monthKey: filters.monthKey
+    const sapMemos = StateStore.get('sapMemos') || [];
+    const badActorFilters = StateStore.get('badActorFilters') || {};
+
+    const paretoResult = LogbookParser.computeParetoBadActors(entries, {
+      sapMemos,
+      unitFilter: badActorFilters.unit || 'ALL',
+      minIncidents: Number(badActorFilters.minIncidents) || 1,
+      monthKey: badActorFilters.monthKey || 'ALL',
+      query: badActorFilters.query || ''
     });
 
-    const insight = LogbookParser.computeInsights(scopedEntries, []);
-    const top30 = insight.topTags.slice(0, 30);
+    // Update Summary Banner
+    if (summaryBadge) {
+      summaryBadge.textContent = `⚠️ ${paretoResult.pareto80Count} Bad Actors แรก = 80% ปัญหาโรงงาน`;
+    }
+    if (summaryText) {
+      summaryText.textContent = `วิเคราะห์จากบันทึกหน้างาน ${entries.length.toLocaleString('en-US')} รายการ: พบอุปกรณ์ทั้งหมด ${paretoResult.totalUniqueTags} ตัว (เกิดปัญหา ${paretoResult.totalIncidents} ครั้ง) โดยมีอุปกรณ์เพียง ${paretoResult.pareto80Count} ตัว (${paretoResult.pareto80Percentage}% ของ Tag ทั้งหมด) ที่สร้างปัญหาถึง 80% ของหน่วยผลิต PTA1`;
+    }
 
-    for (const [idx, item] of top30.entries()) {
-      const card = el('div', 'sa-card chronic-card');
-      const head = el('div', 'chronic-card-head');
+    // Sync Filter Selects
+    const unitSelect = document.getElementById('filter-badactor-unit');
+    if (unitSelect) unitSelect.value = badActorFilters.unit || 'ALL';
 
-      const rankTag = el('div', 'flex items-center gap-2');
-      const rankNum = el('span', 'rank-badge', `#${idx + 1}`);
-      const tagChip = el('span', 'c-ref-tag', `🏷️ ${item.tag}`);
-      rankTag.append(rankNum, tagChip);
+    const minSelect = document.getElementById('filter-badactor-min');
+    if (minSelect) minSelect.value = String(badActorFilters.minIncidents ?? '2');
 
-      const countBadge = el('span', 'chronic-count', `${item.count} ครั้ง`);
-      head.append(rankTag, countBadge);
+    const monthSelect = document.getElementById('filter-badactor-month');
+    const months = StateStore.get('months') || [];
+    if (monthSelect && monthSelect.options.length !== months.length + 1) {
+      monthSelect.textContent = '';
+      monthSelect.appendChild(new Option('📅 ทุกรอบเดือน (9 เดือน)', 'ALL'));
+      for (const m of months) {
+        monthSelect.appendChild(new Option(m.label, m.monthKey));
+      }
+    }
+    if (monthSelect) monthSelect.value = badActorFilters.monthKey || 'ALL';
 
-      const sample = el(
-        'p',
-        'chronic-sample',
-        `ตัวอย่างล่าสุด: "${insight.tagSamples[item.tag] || '-'}"`
+    const searchInput = document.getElementById('search-badactor-input');
+    if (searchInput && document.activeElement !== searchInput) {
+      searchInput.value = badActorFilters.query || '';
+    }
+
+    if (paretoResult.items.length === 0) {
+      const empty = el(
+        'div',
+        'sa-card p-8 text-center',
+        'ไม่พบอุปกรณ์ที่ตรงกับเงื่อนไขตัวกรองค่ะ ลองเลือก "ทุกหน่วยผลิต" หรือลดเกณฑ์ความถี่ดูนะคะ'
+      );
+      grid.appendChild(empty);
+      return;
+    }
+
+    for (const item of paretoResult.items) {
+      const card = el('article', 'sa-card chronic-card flex flex-col justify-between gap-3');
+
+      // 1. Header Row
+      const head = el('div', 'flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-border');
+      const leftTag = el('div', 'flex items-center flex-wrap gap-2');
+
+      const rankBadge = el('span', 'rank-badge font-bold text-sm', `#${item.rank}`);
+      const tagChip = el('span', 'c-ref-tag font-bold text-base', `🏷️ ${item.tag}`);
+
+      const unitIcon =
+        item.unit === 'Reaction' ? '🌀' :
+        item.unit === 'Purification' ? '🧪' :
+        item.unit === 'Silo' ? '🌾' :
+        item.unit === 'Utilities' ? '⚡' : '📦';
+      const unitBadge = el('span', 'badge-cat font-medium', `${unitIcon} ${item.unit}`);
+
+      leftTag.append(rankBadge, tagChip, unitBadge);
+
+      if (item.isPareto80) {
+        const paretoBadge = el(
+          'span',
+          'badge-metric badge-metric-warn font-bold',
+          `⚠️ Top 80% (สะสม ${item.cumulativePercentage}%)`
+        );
+        head.append(leftTag, paretoBadge);
+      } else {
+        const normalBadge = el(
+          'span',
+          'badge-person-muted text-xs',
+          `สะสม ${item.cumulativePercentage}%`
+        );
+        head.append(leftTag, normalBadge);
+      }
+
+      // 2. Metrics Strip (Frequency, MTBF, Last Incident, Trend)
+      const metricsGrid = el('div', 'grid grid-cols-2 gap-2 text-sm bg-subtle p-2 rounded-lg');
+
+      const mCount = el('div', 'flex flex-col');
+      mCount.append(
+        el('span', 'text-xs text-muted font-medium', 'ความถี่ที่พบ:'),
+        el('strong', 'text-brand tabular-nums text-base', `${item.count} ครั้ง (${item.percentage}%)`)
       );
 
-      const actions = el('div', 'chronic-actions');
-      const inspectBtn = el('button', 'btn-pill-primary', `🔍 ดูประวัติทั้ง ${item.count} ครั้ง`);
+      const mMtbf = el('div', 'flex flex-col');
+      mMtbf.append(
+        el('span', 'text-xs text-muted font-medium', 'ระยะห่างเฉลี่ย (MTBF):'),
+        el('strong', 'tabular-nums', item.avgDaysBetween > 0 ? `ทุกๆ ${item.avgDaysBetween} วัน` : 'พบครั้งเดียว')
+      );
+
+      const mLast = el('div', 'flex flex-col');
+      mLast.append(
+        el('span', 'text-xs text-muted font-medium', 'ครั้งล่าสุดที่บันทึก:'),
+        el('strong', 'tabular-nums text-xs', `${item.daysSinceLast === 0 ? 'วันนี้' : `${item.daysSinceLast} วันก่อน`} (${item.lastSeen || '-'})`)
+      );
+
+      const mTrend = el('div', 'flex flex-col');
+      const trendColor =
+        item.trend === 'Worsening' ? 'text-status-crit font-bold' :
+        item.trend === 'Improving' ? 'text-status-ok font-bold' : 'text-muted';
+      const trendLabel =
+        item.trend === 'Worsening' ? '🔥 เริ่มพังถี่ขึ้น' :
+        item.trend === 'Improving' ? '🟢 นานๆ เกิดที' : '⚪ ความถี่คงที่';
+      mTrend.append(
+        el('span', 'text-xs text-muted font-medium', 'แนวโน้มอาการ:'),
+        el('span', trendColor, trendLabel)
+      );
+
+      metricsGrid.append(mCount, mMtbf, mLast, mTrend);
+
+      // 3. SAP Memos Link (if any)
+      const sapWrap = el('div', 'flex flex-col gap-1 text-xs');
+      if (item.relatedSapCount > 0) {
+        const sapHead = el(
+          'div',
+          'flex items-center gap-1 font-semibold text-brand',
+          `🛠️ เชื่อมโยงใบแจ้งซ่อม SAP (${item.relatedSapCount} รายการ):`
+        );
+        sapWrap.appendChild(sapHead);
+
+        for (const memo of item.relatedSapMemos.slice(0, 2)) {
+          const memoRow = el(
+            'div',
+            'badge-metric flex items-center justify-between text-xs',
+            `SAP #${memo.sapNo || '-'} [${memo.status || 'REL'}]: ${memo.detail || '-'}`
+          );
+          sapWrap.appendChild(memoRow);
+        }
+      }
+
+      // 4. Sample text
+      const sampleText = el(
+        'p',
+        'chronic-sample text-xs text-muted italic line-clamp-2',
+        item.sampleText ? `ตัวอย่างล่าสุด: "${item.sampleText}"` : ''
+      );
+
+      // 5. Action Buttons
+      const actions = el('div', 'chronic-actions flex items-center gap-2 mt-2 pt-2 border-t border-border');
+
+      const inspectBtn = el(
+        'button',
+        'btn-pill-primary flex-1 text-xs font-semibold',
+        `🔍 ดูประวัติ (${item.count} ครั้ง)`
+      );
       inspectBtn.type = 'button';
       inspectBtn.addEventListener('click', () => {
         handlers.onFilterChange({ tag: item.tag, query: '' });
         handlers.onTabChange('search');
       });
 
-      actions.appendChild(inspectBtn);
-      card.append(head, sample, actions);
+      const kaizenBtn = el(
+        'button',
+        'btn-pill-secondary text-xs font-semibold',
+        '✨ ส่งทำ Kaizen / IPS'
+      );
+      kaizenBtn.type = 'button';
+      kaizenBtn.addEventListener('click', () => {
+        handlers.onCreateDraftFromBadActor(item);
+      });
+
+      actions.append(inspectBtn, kaizenBtn);
+
+      card.append(head, metricsGrid);
+      if (item.relatedSapCount > 0) card.appendChild(sapWrap);
+      if (item.sampleText) card.appendChild(sampleText);
+      card.appendChild(actions);
+
       grid.appendChild(card);
     }
   },

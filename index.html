@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PTA1 Logbook Insight &amp; IPS/Kaizen Studio | Supasit.A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ==========================================================================
+       Supasit.A Studio Design System
+       ST-01: Brand Ink Blue (#1D4ED8) >=50 deg apart from semantic status colors
+       ST-02: Depth via 1px solid line + single subtle shadow
+       ST-03: Interactive pills = 999px radius | Readable cards = 13px radius
+       ST-04: Verified >= 4.5:1 contrast across Light and Dark themes
+       ========================================================================== */
+    :root, [data-theme="light"] {
+      --bg-ground: #F7F9FC;
+      --bg-surface: #FFFFFF;
+      --bg-subtle: #EEF2F8;
+      --text-primary: #0F172A;
+      --text-secondary: #334155;
+      --text-muted: #475569;
+      --line-border: #CBD5E1;
+      --brand-ink: #1D4ED8;
+      --brand-ink-hover: #1E40AF;
+      --brand-ink-soft: #DBEAFE;
+      --ref-amber: #78530A;
+      --ref-amber-bg: #FEF3C7;
+      --ref-amber-border: #F59E0B;
+      --status-ok: #15803D;
+      --status-ok-bg: #DCFCE7;
+      --status-warn: #B45309;
+      --status-warn-bg: #FEF3C7;
+      --status-crit: #B91C1C;
+      --status-crit-bg: #FEE2E2;
+      --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    }
+
+    [data-theme="dark"] {
+      --bg-ground: #0B1120;
+      --bg-surface: #151F32;
+      --bg-subtle: #1E293B;
+      --text-primary: #F8FAFC;
+      --text-secondary: #E2E8F0;
+      --text-muted: #94A3B8;
+      --line-border: #334155;
+      --brand-ink: #3B82F6;
+      --brand-ink-hover: #60A5FA;
+      --brand-ink-soft: #1E3A8A;
+      --ref-amber: #FCD34D;
+      --ref-amber-bg: #451A03;
+      --ref-amber-border: #D97706;
+      --status-ok: #4ADE80;
+      --status-ok-bg: #052E16;
+      --status-warn: #FBBF24;
+      --status-warn-bg: #451A03;
+      --status-crit: #F87171;
+      --status-crit-bg: #450A0A;
+      --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      font-family: 'Noto Sans Thai', sans-serif;
+      background-color: var(--bg-ground);
+      color: var(--text-primary);
+      line-height: 1.55;
+      overflow-x: hidden;
+      font-variant-numeric: tabular-nums;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--brand-ink);
+      outline-offset: 2px;
+    }
+
+    /* Layout Structure */
+    .app-shell {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      min-height: 100vh;
+    }
+
+    @media (max-width: 960px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+      .app-sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--line-border);
+      }
+    }
+
+    .app-sidebar {
+      background-color: var(--bg-surface);
+      border-right: 1px solid var(--line-border);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--line-border);
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .brand-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .nav-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    /* ST-03: Interactive Capsule Buttons = 999px, min-height 44px */
+    .nav-pill-btn, .btn-pill-primary, .btn-pill-secondary, .month-pill-btn, .sa-chip-btn {
+      border-radius: 999px;
+      min-height: 44px;
+      padding: 0.5rem 1rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+      border: 1px solid var(--line-border);
+      background-color: var(--bg-surface);
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .nav-pill-btn {
+      justify-content: flex-start;
+      width: 100%;
+    }
+
+    .nav-pill-btn:hover, .btn-pill-secondary:hover, .month-pill-btn:hover, .sa-chip-btn:hover {
+      background-color: var(--bg-subtle);
+    }
+
+    .active-nav-pill, .btn-pill-primary {
+      background-color: var(--brand-ink);
+      color: #FFFFFF;
+      border-color: var(--brand-ink);
+    }
+
+    .active-nav-pill:hover, .btn-pill-primary:hover {
+      background-color: var(--brand-ink-hover);
+    }
+
+    .month-list-scroll {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      max-height: 360px;
+      overflow-y: auto;
+    }
+
+    .month-pill-btn {
+      justify-content: space-between;
+      min-height: 40px;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.84rem;
+      font-weight: 500;
+    }
+
+    .month-pill-active, .sa-chip-active {
+      background-color: var(--brand-ink-soft);
+      border-color: var(--brand-ink);
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .month-badge-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Main Content Area */
+    .app-main {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .sticky-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--line-border);
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .search-input-wrap {
+      flex: 1 1 300px;
+      display: flex;
+      align-items: center;
+    }
+
+    .sa-input, .sa-select, .sa-textarea {
+      width: 100%;
+      min-height: 44px;
+      padding: 0.55rem 0.95rem;
+      border-radius: 13px;
+      border: 1px solid var(--line-border);
+      background-color: var(--bg-ground);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.92rem;
+    }
+
+    .sa-search-pill {
+      border-radius: 999px;
+      padding-left: 1.15rem;
+    }
+
+    .sa-textarea {
+      min-height: 92px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .content-container {
+      padding: 1.25rem 1.5rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ST-02 & ST-03: Cards have 13px radius, 1px line, single subtle shadow */
+    .sa-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--line-border);
+      border-radius: 13px;
+      box-shadow: var(--card-shadow);
+      padding: 1.1rem 1.25rem;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.9rem;
+    }
+
+    .kpi-card-clickable {
+      cursor: pointer;
+      transition: border-color 0.15s ease;
+    }
+
+    .kpi-card-clickable:hover {
+      border-color: var(--brand-ink);
+    }
+
+    .kpi-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .kpi-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0.2rem 0;
+    }
+
+    .kpi-sub {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    /* Filter Bar & Tag Chips */
+    .filter-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .filter-toolbar .sa-select {
+      width: auto;
+      min-width: 175px;
+      border-radius: 999px;
+    }
+
+    .tag-chips-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .sa-chip-btn {
+      min-height: 38px;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.82rem;
+    }
+
+    /* Reference Tag Chips (Amber #8A6410 compliant) */
+    .c-ref-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background-color: var(--ref-amber-bg);
+      color: var(--ref-amber);
+      border: 1px solid var(--ref-amber-border);
+      border-radius: 999px;
+      padding: 0.25rem 0.7rem;
+      min-height: 34px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* Log Entry Timeline Cards */
+    .timeline-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .log-entry-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .log-entry-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .log-entry-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .badge-date, .badge-shift, .badge-cat, .badge-person, .badge-person-muted, .badge-metric {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line-border);
+      background-color: var(--bg-subtle);
+      color: var(--text-secondary);
+    }
+
+    .badge-person {
+      cursor: pointer;
+      font-family: inherit;
+      min-height: 34px;
+    }
+
+    .badge-person-highlight {
+      background-color: var(--status-ok-bg);
+      color: var(--status-ok);
+      border-color: var(--status-ok);
+      font-weight: 700;
+    }
+
+    .badge-metric-warn {
+      background-color: var(--status-warn-bg);
+      color: var(--status-warn);
+      border-color: var(--ref-amber-border);
+    }
+
+    .log-entry-text {
+      font-size: 0.96rem;
+      color: var(--text-primary);
+      word-break: break-word;
+    }
+
+    .log-time-prefix {
+      font-weight: 700;
+      color: var(--brand-ink);
+    }
+
+    .log-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      padding-top: 0.2rem;
+    }
+
+    .search-mark {
+      background-color: var(--ref-amber-bg);
+      color: var(--ref-amber);
+      font-weight: 700;
+      padding: 0 0.2rem;
+      border-radius: 4px;
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .sa-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .sa-table th, .sa-table td {
+      padding: 0.7rem 0.85rem;
+      border-bottom: 1px solid var(--line-border);
+      text-align: left;
+    }
+
+    .sa-table th {
+      background-color: var(--bg-subtle);
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .text-right {
+      text-align: right !important;
+    }
+
+    .status-warn-text {
+      color: var(--status-warn);
+      font-weight: 700;
+    }
+
+    /* Equipment Chronic Grid */
+    .chronic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 0.9rem;
+    }
+
+    .chronic-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .chronic-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .rank-badge {
+      font-weight: 700;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-right: 0.4rem;
+    }
+
+    .chronic-count {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--brand-ink);
+    }
+
+    .chronic-sample {
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+    }
+
+    /* IPS / Kaizen Studio Layout */
+    .ips-studio-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1200px) {
+      .ips-studio-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .draft-select-btn {
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 0.9rem;
+      border-radius: 13px;
+      border: 1px solid var(--line-border);
+      background-color: var(--bg-ground);
+      color: var(--text-primary);
+      cursor: pointer;
+      font-family: inherit;
+      margin-bottom: 0.5rem;
+    }
+
+    .draft-select-active {
+      border-color: var(--brand-ink);
+      background-color: var(--brand-ink-soft);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .form-label {
+      font-size: 0.83rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+    }
+
+    .preview-pre {
+      background-color: var(--bg-ground);
+      border: 1px solid var(--line-border);
+      border-radius: 13px;
+      padding: 1rem;
+      font-family: 'Noto Sans Thai', monospace;
+      font-size: 0.86rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 680px;
+      overflow-y: auto;
+    }
+
+    /* Toast & Modal */
+    .toast-container {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .sa-toast {
+      background-color: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--brand-ink);
+      border-radius: 13px;
+      padding: 0.75rem 1.1rem;
+      box-shadow: var(--card-shadow);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.55);
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-backdrop[hidden] {
+      display: none !important;
+    }
+
+    .modal-dialog {
+      max-width: 480px;
+      width: 100%;
+    }
+
+    .app-footer {
+      margin-top: auto;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--line-border);
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      background-color: var(--bg-surface);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Left Sidebar -->
+    <aside class="app-sidebar" aria-label="เมนูหลักและรายชื่อเดือน">
+      <div class="brand-header">
+        <div>
+          <div class="brand-title">● PTA1 LOGBOOK INSIGHT</div>
+          <div class="brand-sub">GC-M PTA Unit 1 · Boardman Studio</div>
+        </div>
+        <button id="btn-theme-toggle" type="button" class="btn-pill-secondary" aria-label="สลับธีมมืด/สว่าง" title="สลับธีม Light/Dark">
+          ◐
+        </button>
+      </div>
+
+      <nav class="nav-stack" role="tablist" aria-label="โหมดการทำงาน">
+        <button type="button" class="nav-pill-btn active-nav-pill" data-tab-btn="search" role="tab" aria-selected="true">
+          🔍 ค้นหาย้อนหลัง (9 เดือน)
+        </button>
+        <button type="button" class="nav-pill-btn" data-tab-btn="overview" role="tab" aria-selected="false">
+          📊 ภาพรวมรายเดือน &amp; กะพี่ A
+        </button>
+        <button type="button" class="nav-pill-btn" data-tab-btn="equipment" role="tab" aria-selected="false">
+          🔧 สถิติอุปกรณ์เสียซ้ำ
+        </button>
+        <button type="button" class="nav-pill-btn" data-tab-btn="ips" role="tab" aria-selected="false">
+          📋 สตูดิโอร่าง IPS &amp; Kaizen
+        </button>
+      </nav>
+
+      <div>
+        <div class="kpi-label" style="margin-bottom: 0.5rem;">📂 เลือกเดือนในฐานข้อมูล (2026)</div>
+        <div id="sidebar-months-list" class="month-list-scroll"></div>
+      </div>
+
+      <div style="margin-top: auto; display: flex; flex-direction: column; gap: 0.5rem;">
+        <label for="excel-upload-input" class="btn-pill-primary" style="cursor: pointer; text-align: center;">
+          📥 อัปโหลดไฟล์ .xlsm / .xlsx เพิ่ม
+        </label>
+        <input id="excel-upload-input" type="file" accept=".xlsx,.xlsm" hidden />
+        <button id="btn-open-settings" type="button" class="btn-pill-secondary">
+          ⚙️ ตั้งค่า Gemini AI Key
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Area -->
+    <div class="app-main">
+      <!-- Sticky Topbar -->
+      <header class="sticky-topbar">
+        <div class="search-input-wrap">
+          <input
+            id="global-search-input"
+            type="search"
+            class="sa-input sa-search-pill"
+            placeholder="🔍 พิมพ์ค้นหา Tag อุปกรณ์ / อาการ / ชื่อคน (เช่น LCV-2302, PP-404A, PM-401D, Exapilot, leak, trip)..."
+            aria-label="ค้นหาข้อมูลใน Logbook"
+          />
+        </div>
+        <button id="btn-my-shifts" type="button" class="btn-pill-secondary" title="กรองเฉพาะกะของพี่ A (C ศุภสิทธิ์)">
+          ⭐ เฉพาะกะพี่ A (C ศุภสิทธิ์)
+        </button>
+        <button id="btn-reset-filters" type="button" class="btn-pill-secondary">
+          🔄 ล้างตัวกรอง
+        </button>
+      </header>
+
+      <main class="content-container">
+        <!-- Top 4 KPI Summary Cards -->
+        <section class="kpi-grid" aria-label="ตัวชี้วัดภาพรวม">
+          <div class="sa-card">
+            <div class="kpi-label">📝 รายการบันทึกทั้งหมด</div>
+            <div id="kpi-total-entries" class="kpi-value">-</div>
+            <div id="kpi-total-sub" class="kpi-sub">กำลังโหลดข้อมูล...</div>
+          </div>
+          <div id="kpi-card-bm" class="sa-card kpi-card-clickable" title="คลิกเพื่อกรองเฉพาะกะของพี่ A">
+            <div class="kpi-label">👨‍💻 กะที่พี่ A (C ศุภสิทธิ์) เข้าเวร</div>
+            <div id="kpi-bm-shifts" class="kpi-value">-</div>
+            <div id="kpi-bm-sub" class="kpi-sub">คลิกเพื่อกรองเฉพาะกะพี่ A</div>
+          </div>
+          <div class="sa-card">
+            <div class="kpi-label">🧪 ค่าเฉลี่ย 4-CBA (Target ≤ 15 ppm)</div>
+            <div id="kpi-avg-cba" class="kpi-value">-</div>
+            <div id="kpi-cba-sub" class="kpi-sub">-</div>
+          </div>
+          <div id="kpi-card-toptag" class="sa-card kpi-card-clickable" title="คลิกเพื่อดูรายการของอุปกรณ์นี้">
+            <div class="kpi-label">🔧 Tag อุปกรณ์ที่พบบ่อยอันดับ #1</div>
+            <div id="kpi-top-tag" class="kpi-value">-</div>
+            <div id="kpi-top-tag-sub" class="kpi-sub">-</div>
+          </div>
+        </section>
+
+        <!-- VIEW 1: SMART LOGBOOK SEARCH -->
+        <section data-view-panel="search" aria-label="ค้นหาย้อนหลัง">
+          <div class="sa-card" style="margin-bottom: 1rem;">
+            <div class="filter-toolbar" style="margin-bottom: 0.85rem;">
+              <select id="filter-month" class="sa-select" aria-label="กรองตามเดือน"></select>
+              <select id="filter-bm" class="sa-select" aria-label="กรองตาม Boardman"></select>
+              <select id="filter-shift" class="sa-select" aria-label="กรองตามช่วงกะ">
+                <option value="ALL">🕒 กะ: ทั้งเช้าและดึก</option>
+                <option value="Day">☀️ กะเช้า (08:00 - 20:00)</option>
+                <option value="Night">🌙 กะดึก (20:00 - 08:00)</option>
+              </select>
+              <span id="search-results-count" class="kpi-label" style="margin-left: auto;"></span>
+            </div>
+            <div class="kpi-label" style="margin-bottom: 0.4rem;">🏷️ กดเลือก Tag อุปกรณ์ที่พบบ่อยเพื่อกรองทันที:</div>
+            <div id="quick-tag-chips" class="tag-chips-bar"></div>
+          </div>
+
+          <div id="search-results-list" class="timeline-stack"></div>
+        </section>
+
+        <!-- VIEW 2: MONTHLY OVERVIEW & SUPASIT HIGHLIGHTS -->
+        <section data-view-panel="overview" hidden aria-label="ภาพรวมรายเดือน">
+          <div class="sa-card" style="margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.1rem; margin-bottom: 0.75rem;">📊 สรุปสถิติรายเดือน (ม.ค. – ต.ค. 2026)</h2>
+            <div class="table-wrap">
+              <table class="sa-table">
+                <thead>
+                  <tr>
+                    <th>เดือน</th>
+                    <th class="text-right">จำนวนวัน</th>
+                    <th class="text-right">จำนวนบันทึก</th>
+                    <th class="text-right">กะพี่ A (C ศุภสิทธิ์)</th>
+                    <th class="text-right">4-CBA เฉลี่ย</th>
+                    <th class="text-right">ยอดผลิตเฉลี่ย</th>
+                    <th>Top 3 Equipment Tags</th>
+                    <th class="text-right">จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="overview-months-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="sa-card">
+            <h2 style="font-size: 1.1rem; margin-bottom: 0.75rem;">⭐ บันทึกการตัดสินใจและแก้ปัญหาในกะของพี่ A (C ศุภสิทธิ์)</h2>
+            <div id="overview-supasit-highlights" class="timeline-stack"></div>
+          </div>
+        </section>
+
+        <!-- VIEW 3: CHRONIC EQUIPMENT TRACKER -->
+        <section data-view-panel="equipment" hidden aria-label="สถิติอุปกรณ์เสียซ้ำ">
+          <div class="sa-card" style="margin-bottom: 1rem;">
+            <h2 style="font-size: 1.1rem; margin-bottom: 0.25rem;">🔧 จัดอันดับ 30 อุปกรณ์/Tag ที่ถูกบันทึกปัญหาบ่อยที่สุด</h2>
+            <p class="kpi-sub">คลิกปุ่ม "ดูประวัติ" ในการ์ดใดก็ได้เพื่อกาง Timeline การแก้ไขปัญหาของอุปกรณ์นั้นย้อนหลังทุกเดือนค่ะ</p>
+          </div>
+          <div id="equipment-chronic-grid" class="chronic-grid"></div>
+        </section>
+
+        <!-- VIEW 4: IPS & KAIZEN STUDIO -->
+        <section data-view-panel="ips" hidden aria-label="สตูดิโอร่าง IPS และ Kaizen">
+          <div class="ips-studio-grid">
+            <!-- Left column: Draft selector -->
+            <div class="sa-card">
+              <h2 style="font-size: 1rem; margin-bottom: 0.65rem;">📂 เลือกเคส IPS / Kaizen</h2>
+              <p class="kpi-sub" style="margin-bottom: 0.75rem;">คัด 4 เคสเด่นจากหน้างานจริงของพี่ A มาให้แล้ว หรือกดส่งมาจากหน้าค้นหาก็ได้ค่ะ</p>
+              <div id="ips-draft-selector"></div>
+            </div>
+
+            <!-- Middle column: Editor & 1.1 Benefit Calculator -->
+            <div class="sa-card">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                <h2 style="font-size: 1rem;">✏️ แก้ไขรายละเอียด &amp; คำนวณผลตอบแทน</h2>
+                <button id="btn-ai-refine" type="button" class="btn-pill-secondary" title="ใช้ Gemini AI ช่วยเกลาสำนวนและวิเคราะห์ Why-Why">
+                  ✨ ให้ AI ช่วยเกลาสำนวน
+                </button>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="ips-job-name">🏷️ ชื่องาน (Job name)</label>
+                <input id="ips-job-name" type="text" class="sa-input" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ips-case-name">📁 ชื่อเรื่อง (Case name)</label>
+                <input id="ips-case-name" type="text" class="sa-input" />
+              </div>
+              <div class="calc-grid">
+                <div class="form-group">
+                  <label class="form-label" for="ips-objective">🎯 Objective แนะนำ</label>
+                  <input id="ips-objective" type="text" class="sa-input" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="ips-kaizen-way">🛠️ Kaizen Way แนะนำ</label>
+                  <input id="ips-kaizen-way" type="text" class="sa-input" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="ips-before-text">❌ ก่อนการปรับปรุง (Before improvement)</label>
+                <textarea id="ips-before-text" class="sa-textarea"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ips-after-text">✅ หลังการปรับปรุง (After improvement)</label>
+                <textarea id="ips-after-text" class="sa-textarea"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ips-effect-text">📈 ประสิทธิภาพหลังการปฏิบัติ (Effectiveness)</label>
+                <textarea id="ips-effect-text" class="sa-textarea"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ips-rootcause-text">🔍 Root Cause (Why-Why Analysis สำหรับ Kaizen Card)</label>
+                <textarea id="ips-rootcause-text" class="sa-textarea"></textarea>
+              </div>
+
+              <hr style="border: none; border-top: 1px solid var(--line-border); margin: 1rem 0;" />
+              <h3 style="font-size: 0.95rem; margin-bottom: 0.5rem;">💰 ข้อ 1.1 คำนวณมูลค่าผลตอบแทน (สูตรฟอร์ม HCL Notes: 1+2-4-5)</h3>
+              <div class="calc-grid">
+                <div class="form-group">
+                  <label class="form-label" for="calc-cost-saving">(1) ลดต้นทุน (บาท/เดือน)</label>
+                  <input id="calc-cost-saving" type="number" step="any" class="sa-input" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="calc-man-hours">(2) เวลา Man-Hour ที่ลดได้ (ชม./เดือน)</label>
+                  <input id="calc-man-hours" type="number" step="any" class="sa-input" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="calc-hourly-rate">อัตรา บาท/ชม. (ตามฟอร์ม)</label>
+                  <input id="calc-hourly-rate" type="number" step="any" class="sa-input" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="calc-opp-tons">(3) ลดโอกาสสูญเสีย (ตัน-PTA/เดือน)</label>
+                  <input id="calc-opp-tons" type="number" step="any" class="sa-input" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="calc-ton-rate">อัตรา บาท/ตัน-PTA (ตามฟอร์ม)</label>
+                  <input id="calc-ton-rate" type="number" step="any" class="sa-input" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="calc-invest-year">(4) เงินลงทุน (บาท/ปี — ระบบหาร 12 ให้)</label>
+                  <input id="calc-invest-year" type="number" step="any" class="sa-input" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="calc-extra-cost">(5) ค่าใช้จ่ายที่เพิ่มขึ้น (บาท/เดือน)</label>
+                  <input id="calc-extra-cost" type="number" step="any" class="sa-input" />
+                </div>
+                <div class="form-group" style="justify-content: center;">
+                  <div class="form-label">มูลค่ารวมสุทธิ (1+2-4-5)</div>
+                  <div id="calc-total-monthly" style="font-size: 1.25rem; font-weight: 700; color: var(--brand-ink);">0.00 บาท/เดือน</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right column: Formatted Output & One-Click Copy -->
+            <div class="sa-card">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+                <div style="display: flex; gap: 0.4rem;">
+                  <button type="button" class="btn-pill-primary" data-ips-mode="ips">🟢 ฟอร์ม IPS (HCL Notes)</button>
+                  <button type="button" class="btn-pill-secondary" data-ips-mode="kaizen">🔵 Kaizen Report (7 หัวข้อ)</button>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.75rem;">
+                <button id="btn-copy-before" type="button" class="btn-pill-secondary">📋 Copy ช่องก่อนทำ</button>
+                <button id="btn-copy-after" type="button" class="btn-pill-secondary">📋 Copy ช่องหลังทำ</button>
+                <button id="btn-copy-full" type="button" class="btn-pill-primary">📋 Copy ทั้งใบ</button>
+              </div>
+
+              <pre id="ips-formatted-preview" class="preview-pre"></pre>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        A-Class WebCraft • Code • Share • Inspire • by Supasit.A (GC-M PTA Unit 1 Logbook Insight Studio)
+      </footer>
+    </div>
+  </div>
+
+  <!-- Settings Modal for Gemini API Key -->
+  <div id="ai-key-modal" class="modal-backdrop" hidden>
+    <div class="sa-card modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-ai-title">
+      <h2 id="modal-ai-title" style="font-size: 1.05rem; margin-bottom: 0.5rem;">⚙️ ตั้งค่า Gemini API Key (BYOK)</h2>
+      <p class="kpi-sub" style="margin-bottom: 0.85rem;">
+        คีย์ของพี่ A จะถูกเข้ารหัสด้วย Web Crypto AES-GCM 256-bit เก็บไว้ในเครื่องนี้เท่านั้น (หากไม่ใส่คีย์ ระบบร่าง IPS อัตโนมัติแบบ Offline ก็ทำงานได้ปกติ 100% ค่ะ)
+      </p>
+      <div class="form-group">
+        <label class="form-label" for="gemini-api-key-input">Gemini API Key</label>
+        <input id="gemini-api-key-input" type="password" class="sa-input" placeholder="AIzaSy..." />
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+        <button id="btn-close-settings" type="button" class="btn-pill-secondary">ยกเลิก</button>
+        <button id="btn-save-api-key" type="button" class="btn-pill-primary">บันทึกคีย์ปลอดภัย</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,555 @@
+/**
+ * ⑦ UI_RENDERER — Safe DOM Renderer following Supasit.A Studio Design System
+ * Rules enforced:
+ * - ST-01..04: Ink Blue (#1D4ED8) interactive pills (999px), Amber (#8A6410) reference tags,
+ *   1px border + single subtle shadow, 13px card radius, Ground (#F7F9FC) != Surface (#FFFFFF)
+ * - XSS prevention: All user/logbook text injected via textContent / createTextNode
+ */
+
+import { AppConfig } from './app-config.js';
+import { StateStore } from './state-store.js';
+import { LogbookParser } from './logbook-parser.js';
+
+function el(tag, className = '', text = '') {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== '' && text !== null && text !== undefined) {
+    node.textContent = String(text);
+  }
+  return node;
+}
+
+function createHighlightedText(text, query) {
+  const frag = document.createDocumentFragment();
+  if (!query || !query.trim()) {
+    frag.appendChild(document.createTextNode(text || ''));
+    return frag;
+  }
+  const q = query.trim();
+  const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const parts = String(text || '').split(new RegExp(`(${escaped})`, 'gi'));
+  for (const part of parts) {
+    if (part.toLowerCase() === q.toLowerCase()) {
+      const mark = el('mark', 'search-mark', part);
+      frag.appendChild(mark);
+    } else {
+      frag.appendChild(document.createTextNode(part));
+    }
+  }
+  return frag;
+}
+
+export const UIRenderer = {
+  showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    const toast = el('div', `sa-toast sa-toast-${type}`, message);
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.remove();
+    }, 3200);
+  },
+
+  renderAll(handlers) {
+    this.renderSidebarMonths(handlers);
+    this.renderKpiCards(handlers);
+    this.renderQuickTagBar(handlers);
+    this.renderFilterSelects();
+
+    const activeTab = StateStore.get('activeTab');
+    document.querySelectorAll('[data-tab-btn]').forEach((btn) => {
+      const isAct = btn.getAttribute('data-tab-btn') === activeTab;
+      btn.classList.toggle('active-nav-pill', isAct);
+      btn.setAttribute('aria-selected', isAct ? 'true' : 'false');
+    });
+
+    document.querySelectorAll('[data-view-panel]').forEach((panel) => {
+      const isAct = panel.getAttribute('data-view-panel') === activeTab;
+      panel.hidden = !isAct;
+    });
+
+    if (activeTab === 'search') {
+      this.renderSearchTimeline(handlers);
+    } else if (activeTab === 'overview') {
+      this.renderMonthlyOverview(handlers);
+    } else if (activeTab === 'equipment') {
+      this.renderEquipmentChronic(handlers);
+    } else if (activeTab === 'ips') {
+      this.renderIpsStudio(handlers);
+    }
+  },
+
+  renderSidebarMonths(handlers) {
+    const listEl = document.getElementById('sidebar-months-list');
+    if (!listEl) return;
+    listEl.textContent = '';
+
+    const months = StateStore.get('months') || [];
+    const filters = StateStore.get('filters');
+
+    const allBtn = el(
+      'button',
+      `month-pill-btn ${filters.monthKey === 'ALL' ? 'month-pill-active' : ''}`,
+      `ทุกเดือนรวมกัน (${months.length} เดือน)`
+    );
+    allBtn.type = 'button';
+    allBtn.addEventListener('click', () => handlers.onFilterChange({ monthKey: 'ALL' }));
+    listEl.appendChild(allBtn);
+
+    for (const m of months) {
+      const btn = el(
+        'button',
+        `month-pill-btn ${filters.monthKey === m.monthKey ? 'month-pill-active' : ''}`
+      );
+      btn.type = 'button';
+      const left = el('span', 'font-semibold', m.label || m.monthKey);
+      const right = el('span', 'month-badge-meta', `${m.daysCount} วัน · ${m.entriesCount} บันทึก`);
+      btn.append(left, right);
+      btn.addEventListener('click', () => handlers.onFilterChange({ monthKey: m.monthKey }));
+      listEl.appendChild(btn);
+    }
+  },
+
+  renderFilterSelects() {
+    const entries = StateStore.get('entries') || [];
+    const filters = StateStore.get('filters');
+
+    const bmSelect = document.getElementById('filter-bm');
+    if (bmSelect && bmSelect.options.length <= 1) {
+      const bms = Array.from(new Set(entries.map((e) => e.bm).filter(Boolean))).sort();
+      bmSelect.textContent = '';
+      bmSelect.appendChild(new Option('👨‍💻 Boardman: ทั้งหมด', 'ALL'));
+      for (const bm of bms) {
+        const label = bm.includes('ศุภสิทธิ์') ? `⭐ ${bm} (พี่ A)` : bm;
+        bmSelect.appendChild(new Option(label, bm));
+      }
+    }
+    if (bmSelect) bmSelect.value = filters.bm || 'ALL';
+
+    const monthSelect = document.getElementById('filter-month');
+    const months = StateStore.get('months') || [];
+    if (monthSelect && monthSelect.options.length !== months.length + 1) {
+      monthSelect.textContent = '';
+      monthSelect.appendChild(new Option('📅 เดือน: ทั้งหมด (ม.ค.–ต.ค.)', 'ALL'));
+      for (const m of months) {
+        monthSelect.appendChild(new Option(`${m.label} (${m.entriesCount})`, m.monthKey));
+      }
+    }
+    if (monthSelect) monthSelect.value = filters.monthKey || 'ALL';
+
+    const shiftSelect = document.getElementById('filter-shift');
+    if (shiftSelect) shiftSelect.value = filters.shift || 'ALL';
+
+    const searchInput = document.getElementById('global-search-input');
+    if (searchInput && document.activeElement !== searchInput) {
+      searchInput.value = filters.query || '';
+    }
+  },
+
+  renderKpiCards(handlers) {
+    const entries = StateStore.get('entries') || [];
+    const daysSummary = StateStore.get('daysSummary') || [];
+    const filters = StateStore.get('filters');
+
+    const scopedEntries = LogbookParser.filterEntries(entries, {
+      monthKey: filters.monthKey
+    });
+    const scopedDays =
+      filters.monthKey === 'ALL'
+        ? daysSummary
+        : daysSummary.filter((d) => d.monthKey === filters.monthKey);
+
+    const insight = LogbookParser.computeInsights(scopedEntries, scopedDays);
+    const supasitShifts = insight.bmShiftCount['C ศุภสิทธิ์'] || 0;
+    const topTag = insight.topTags[0] || { tag: '-', count: 0 };
+
+    const kpiTotalEl = document.getElementById('kpi-total-entries');
+    const kpiTotalSubEl = document.getElementById('kpi-total-sub');
+    if (kpiTotalEl) kpiTotalEl.textContent = scopedEntries.length.toLocaleString('en-US');
+    if (kpiTotalSubEl) kpiTotalSubEl.textContent = `จาก ${insight.totalDays} วันทำการที่มีบันทึก`;
+
+    const kpiBmEl = document.getElementById('kpi-bm-shifts');
+    const kpiBmSubEl = document.getElementById('kpi-bm-sub');
+    if (kpiBmEl) kpiBmEl.textContent = `${supasitShifts} กะ`;
+    if (kpiBmSubEl) {
+      const supasitLogs = scopedEntries.filter((e) => (e.bm || '').includes('ศุภสิทธิ์')).length;
+      kpiBmSubEl.textContent = `บันทึกในกะพี่ A รวม ${supasitLogs.toLocaleString('en-US')} รายการ`;
+    }
+
+    const kpiCbaEl = document.getElementById('kpi-avg-cba');
+    const kpiCbaSubEl = document.getElementById('kpi-cba-sub');
+    if (kpiCbaEl) kpiCbaEl.textContent = `${insight.avgCba} ppm`;
+    if (kpiCbaSubEl) {
+      kpiCbaSubEl.textContent = `เกิน Target (>15 ppm) ${insight.cbaExceedCount} กะ`;
+    }
+
+    const kpiTopTagEl = document.getElementById('kpi-top-tag');
+    const kpiTopTagSubEl = document.getElementById('kpi-top-tag-sub');
+    if (kpiTopTagEl) kpiTopTagEl.textContent = topTag.tag;
+    if (kpiTopTagSubEl) {
+      kpiTopTagSubEl.textContent = `พบในบันทึก ${topTag.count} ครั้ง (คลิกเพื่อดู)`;
+    }
+
+    const topTagCard = document.getElementById('kpi-card-toptag');
+    if (topTagCard && topTag.tag !== '-') {
+      topTagCard.onclick = () => {
+        handlers.onFilterChange({ tag: topTag.tag });
+        handlers.onTabChange('search');
+      };
+    }
+
+    const bmCard = document.getElementById('kpi-card-bm');
+    if (bmCard) {
+      bmCard.onclick = () => {
+        const nextBm = filters.bm === 'C ศุภสิทธิ์' ? 'ALL' : 'C ศุภสิทธิ์';
+        handlers.onFilterChange({ bm: nextBm });
+        handlers.onTabChange('search');
+      };
+    }
+  },
+
+  renderQuickTagBar(handlers) {
+    const bar = document.getElementById('quick-tag-chips');
+    if (!bar) return;
+    bar.textContent = '';
+
+    const entries = StateStore.get('entries') || [];
+    const filters = StateStore.get('filters');
+    const scoped = LogbookParser.filterEntries(entries, {
+      monthKey: filters.monthKey,
+      bm: filters.bm,
+      shift: filters.shift
+    });
+    const insight = LogbookParser.computeInsights(scoped, []);
+    const popularTags = insight.topTags.slice(0, 14);
+
+    const allChip = el(
+      'button',
+      `sa-chip-btn ${filters.tag === 'ALL' ? 'sa-chip-active' : ''}`,
+      '🏷️ ทุก Tag อุปกรณ์'
+    );
+    allChip.type = 'button';
+    allChip.addEventListener('click', () => handlers.onFilterChange({ tag: 'ALL' }));
+    bar.appendChild(allChip);
+
+    for (const item of popularTags) {
+      const chip = el(
+        'button',
+        `sa-chip-btn ${filters.tag === item.tag ? 'sa-chip-active' : ''}`,
+        `${item.tag} (${item.count})`
+      );
+      chip.type = 'button';
+      chip.addEventListener('click', () =>
+        handlers.onFilterChange({ tag: filters.tag === item.tag ? 'ALL' : item.tag })
+      );
+      bar.appendChild(chip);
+    }
+  },
+
+  renderSearchTimeline(handlers) {
+    const listEl = document.getElementById('search-results-list');
+    const countEl = document.getElementById('search-results-count');
+    if (!listEl) return;
+    listEl.textContent = '';
+
+    const entries = StateStore.get('entries') || [];
+    const filters = StateStore.get('filters');
+    const filtered = LogbookParser.filterEntries(entries, filters);
+
+    // Sort newest date first so recent logs appear at top
+    const sorted = [...filtered].sort((a, b) => b.date.localeCompare(a.date) || a.row - b.row);
+
+    if (countEl) {
+      countEl.textContent = `พบ ${sorted.length.toLocaleString('en-US')} รายการ`;
+    }
+
+    if (sorted.length === 0) {
+      const empty = el(
+        'div',
+        'sa-card p-8 text-center',
+        'ไม่พบรายการบันทึกที่ตรงกับเงื่อนไขการค้นหา ลองกดปุ่ม "ล้างตัวกรอง" เพื่อดูข้อมูลทั้งหมดค่ะ'
+      );
+      listEl.appendChild(empty);
+      return;
+    }
+
+    // Render up to 250 items cleanly for instant DOM responsiveness
+    const displaySlice = sorted.slice(0, 250);
+
+    for (const item of displaySlice) {
+      const card = el('article', 'sa-card log-entry-card');
+
+      const header = el('div', 'log-entry-header');
+      const leftMeta = el('div', 'log-entry-meta');
+
+      const dateBadge = el('span', 'badge-date', `${item.date}`);
+      const shiftBadge = el(
+        'span',
+        `badge-shift ${item.shift === 'Night' ? 'badge-night' : 'badge-day'}`,
+        item.shift === 'Night' ? '🌙 Night (20:00–08:00)' : '☀️ Day (08:00–20:00)'
+      );
+      const catBadge = el(
+        'span',
+        'badge-cat',
+        item.category === 'QC' ? 'Quality Control' : 'Daily Work'
+      );
+
+      const isSupasit = (item.bm || '').includes('ศุภสิทธิ์');
+      const bmBadge = el(
+        'button',
+        `badge-person ${isSupasit ? 'badge-person-highlight' : ''}`,
+        `BM: ${item.bm || '-'}`
+      );
+      bmBadge.type = 'button';
+      bmBadge.title = 'คลิกเพื่อกรองเฉพาะกะของ Boardman ท่านนี้';
+      bmBadge.addEventListener('click', () =>
+        handlers.onFilterChange({ bm: filters.bm === item.bm ? 'ALL' : item.bm })
+      );
+
+      const fmBadge = el('span', 'badge-person-muted', `FM: ${item.fm || '-'}`);
+
+      leftMeta.append(dateBadge, shiftBadge, catBadge, bmBadge, fmBadge);
+      if (item.cba > 0) {
+        const cbaBadge = el(
+          'span',
+          `badge-metric ${item.cba > AppConfig.TARGETS.CBA_MAX ? 'badge-metric-warn' : ''}`,
+          `4-CBA: ${item.cba} ppm · Load: ${item.load || '-'}%`
+        );
+        leftMeta.appendChild(cbaBadge);
+      }
+
+      const draftBtn = el('button', 'btn-pill-secondary', '✨ ส่งเข้าร่าง IPS/Kaizen');
+      draftBtn.type = 'button';
+      draftBtn.addEventListener('click', () => handlers.onCreateDraftFromEntry(item));
+
+      header.append(leftMeta, draftBtn);
+
+      const bodyText = el('p', 'log-entry-text');
+      if (item.time) {
+        const timeSpan = el('span', 'log-time-prefix', `[${item.time}] `);
+        bodyText.appendChild(timeSpan);
+      }
+      bodyText.appendChild(createHighlightedText(item.text, filters.query));
+
+      const tagRow = el('div', 'log-tag-row');
+      if (Array.isArray(item.tags) && item.tags.length > 0) {
+        for (const t of item.tags) {
+          const tChip = el('button', 'c-ref-tag', `🏷️ ${t}`);
+          tChip.type = 'button';
+          tChip.addEventListener('click', () =>
+            handlers.onFilterChange({ tag: filters.tag === t ? 'ALL' : t })
+          );
+          tagRow.appendChild(tChip);
+        }
+      }
+
+      card.append(header, bodyText);
+      if (item.tags && item.tags.length > 0) {
+        card.appendChild(tagRow);
+      }
+      listEl.appendChild(card);
+    }
+
+    if (sorted.length > 250) {
+      const moreNotice = el(
+        'div',
+        'sa-card p-4 text-center text-sm',
+        `แสดง 250 รายการล่าสุดจากทั้งหมด ${sorted.length.toLocaleString('en-US')} รายการ (พิมพ์คำค้นหาหรือเลือกเดือน/Tag เพื่อเจาะจงเพิ่มเติมได้ค่ะ)`
+      );
+      listEl.appendChild(moreNotice);
+    }
+  },
+
+  renderMonthlyOverview(handlers) {
+    const tbody = document.getElementById('overview-months-tbody');
+    const supasitList = document.getElementById('overview-supasit-highlights');
+    if (!tbody || !supasitList) return;
+
+    tbody.textContent = '';
+    supasitList.textContent = '';
+
+    const months = StateStore.get('months') || [];
+    const daysSummary = StateStore.get('daysSummary') || [];
+    const entries = StateStore.get('entries') || [];
+
+    for (const m of months) {
+      const mDays = daysSummary.filter((d) => d.monthKey === m.monthKey);
+      const mEntries = entries.filter((e) => e.monthKey === m.monthKey);
+      const insight = LogbookParser.computeInsights(mEntries, mDays);
+      const supasitCount = insight.bmShiftCount['C ศุภสิทธิ์'] || 0;
+      const top3 = insight.topTags
+        .slice(0, 3)
+        .map((t) => `${t.tag} (${t.count})`)
+        .join(', ');
+
+      const tr = el('tr', 'table-row-hover');
+      const tdMonth = el('td', 'font-semibold', m.label);
+      const tdDays = el('td', 'text-right', `${m.daysCount} วัน`);
+      const tdEntries = el('td', 'text-right', m.entriesCount.toLocaleString('en-US'));
+      const tdSupasit = el('td', 'text-right font-semibold', `${supasitCount} กะ`);
+      const tdCba = el(
+        'td',
+        `text-right ${insight.avgCba > 15 ? 'status-warn-text' : ''}`,
+        `${insight.avgCba || '-'} ppm`
+      );
+      const tdProd = el('td', 'text-right', insight.avgProd ? `${insight.avgProd} T/d` : '-');
+      const tdTop = el('td', '', top3 || '-');
+
+      const tdAction = el('td', 'text-right');
+      const viewBtn = el('button', 'btn-pill-secondary', 'ดูเดือนนี้');
+      viewBtn.type = 'button';
+      viewBtn.addEventListener('click', () => {
+        handlers.onFilterChange({ monthKey: m.monthKey });
+        handlers.onTabChange('search');
+      });
+      tdAction.appendChild(viewBtn);
+
+      tr.append(tdMonth, tdDays, tdEntries, tdSupasit, tdCba, tdProd, tdTop, tdAction);
+      tbody.appendChild(tr);
+    }
+
+    // Renderพี่ A's recent shift logs across filtered month
+    const filters = StateStore.get('filters');
+    const supasitEntries = LogbookParser.filterEntries(entries, {
+      monthKey: filters.monthKey,
+      bm: 'C ศุภสิทธิ์'
+    }).sort((a, b) => b.date.localeCompare(a.date));
+
+    for (const item of supasitEntries.slice(0, 40)) {
+      const row = el('div', 'sa-card log-entry-card');
+      const top = el('div', 'log-entry-header');
+      const meta = el(
+        'span',
+        'font-semibold',
+        `📅 ${item.date} (${item.shift}) · คู่กะ FM: ${item.fm || '-'}`
+      );
+      const btn = el('button', 'btn-pill-secondary', '✨ ร่าง IPS');
+      btn.type = 'button';
+      btn.addEventListener('click', () => handlers.onCreateDraftFromEntry(item));
+      top.append(meta, btn);
+
+      const txt = el('p', 'log-entry-text', item.text);
+      row.append(top, txt);
+      supasitList.appendChild(row);
+    }
+  },
+
+  renderEquipmentChronic(handlers) {
+    const grid = document.getElementById('equipment-chronic-grid');
+    if (!grid) return;
+    grid.textContent = '';
+
+    const entries = StateStore.get('entries') || [];
+    const filters = StateStore.get('filters');
+    const scopedEntries = LogbookParser.filterEntries(entries, {
+      monthKey: filters.monthKey
+    });
+
+    const insight = LogbookParser.computeInsights(scopedEntries, []);
+    const top30 = insight.topTags.slice(0, 30);
+
+    for (const [idx, item] of top30.entries()) {
+      const card = el('div', 'sa-card chronic-card');
+      const head = el('div', 'chronic-card-head');
+
+      const rankTag = el('div', 'flex items-center gap-2');
+      const rankNum = el('span', 'rank-badge', `#${idx + 1}`);
+      const tagChip = el('span', 'c-ref-tag', `🏷️ ${item.tag}`);
+      rankTag.append(rankNum, tagChip);
+
+      const countBadge = el('span', 'chronic-count', `${item.count} ครั้ง`);
+      head.append(rankTag, countBadge);
+
+      const sample = el(
+        'p',
+        'chronic-sample',
+        `ตัวอย่างล่าสุด: "${insight.tagSamples[item.tag] || '-'}"`
+      );
+
+      const actions = el('div', 'chronic-actions');
+      const inspectBtn = el('button', 'btn-pill-primary', `🔍 ดูประวัติทั้ง ${item.count} ครั้ง`);
+      inspectBtn.type = 'button';
+      inspectBtn.addEventListener('click', () => {
+        handlers.onFilterChange({ tag: item.tag, query: '' });
+        handlers.onTabChange('search');
+      });
+
+      actions.appendChild(inspectBtn);
+      card.append(head, sample, actions);
+      grid.appendChild(card);
+    }
+  },
+
+  renderIpsStudio(handlers) {
+    const draftListEl = document.getElementById('ips-draft-selector');
+    if (!draftListEl) return;
+    draftListEl.textContent = '';
+
+    const drafts = StateStore.get('ipsDrafts') || [];
+    const selectedId = StateStore.get('selectedDraftId');
+    const currentDraft = drafts.find((d) => d.id === selectedId) || drafts[0];
+    if (!currentDraft) return;
+
+    for (const d of drafts) {
+      const btn = el(
+        'button',
+        `draft-select-btn ${d.id === currentDraft.id ? 'draft-select-active' : ''}`
+      );
+      btn.type = 'button';
+      const title = el('div', 'font-semibold', d.jobName);
+      const sub = el('div', 'text-xs opacity-80', `📅 ${d.date || '-'} · ${(d.tags || []).join(', ')}`);
+      btn.append(title, sub);
+      btn.addEventListener('click', () => {
+        StateStore.set('selectedDraftId', d.id);
+        this.renderIpsStudio(handlers);
+      });
+      draftListEl.appendChild(btn);
+    }
+
+    // Populate form inputs with currentDraft values
+    const setVal = (id, v) => {
+      const node = document.getElementById(id);
+      if (node && document.activeElement !== node) node.value = v ?? '';
+    };
+
+    setVal('ips-job-name', currentDraft.jobName);
+    setVal('ips-case-name', currentDraft.caseName);
+    setVal('ips-objective', currentDraft.objective);
+    setVal('ips-kaizen-way', currentDraft.kaizenWay);
+    setVal('ips-before-text', currentDraft.beforeText);
+    setVal('ips-after-text', currentDraft.afterText);
+    setVal('ips-effect-text', currentDraft.effectText);
+    setVal('ips-rootcause-text', currentDraft.rootCauseText);
+
+    const bc = currentDraft.benefitCalc || {};
+    setVal('calc-cost-saving', bc.costSaving || 0);
+    setVal('calc-man-hours', bc.manHours || 0);
+    setVal('calc-hourly-rate', bc.hourlyRate || 0);
+    setVal('calc-opp-tons', bc.oppLossTons || 0);
+    setVal('calc-ton-rate', bc.tonRate || 0);
+    setVal('calc-invest-year', bc.investYear || 0);
+    setVal('calc-extra-cost', bc.extraCost || 0);
+
+    const calcResult = LogbookParser.calculateIpsBenefit(bc);
+    const totalEl = document.getElementById('calc-total-monthly');
+    if (totalEl) {
+      totalEl.textContent = `${calcResult.totalMonthly.toLocaleString('en-US', {
+        minimumFractionDigits: 2
+      })} บาท/เดือน`;
+    }
+
+    const mode = StateStore.get('ipsMode') || 'ips';
+    const previewEl = document.getElementById('ips-formatted-preview');
+    if (previewEl) {
+      previewEl.textContent =
+        mode === 'kaizen'
+          ? LogbookParser.formatKaizenCard(currentDraft)
+          : LogbookParser.formatIpsDraft(currentDraft);
+    }
+
+    document.querySelectorAll('[data-ips-mode]').forEach((b) => {
+      b.classList.toggle('btn-pill-primary', b.getAttribute('data-ips-mode') === mode);
+      b.classList.toggle('btn-pill-secondary', b.getAttribute('data-ips-mode') !== mode);
+    });
+  }
+};

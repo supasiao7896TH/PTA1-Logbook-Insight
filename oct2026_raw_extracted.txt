@@ -1,0 +1,631 @@
+Command exited with code 0.
+
+Command output:
+=== DAY 01 | Day: FM=D อดุลย์, BM=D เพชร (4CBA=9.6499996185302734, Load=102) | Night: FM=A  กฤษณะ, BM=A สถิตย์ (4CBA=9.7100000381469727, Load=102) | Prod=1381.4 | DP2500=0.6584441065788269 ===
+  [QC R15] Start recovery residue 50%
+  --- QC Night Shift ---
+  [DW R78] Fill up CoAc PD-450.
+  [DW R80] LOTO PP-601A for clean pump and remove oil cooler for chemical cleaning. เสร็จพรุ่งนี้และ Switch B -> A
+  [DW R81] - ME clear drain suction strainer + clean SG and clear vent discharge line
+  [DW R83] Decrease max gen 10S at PE-601 37% -> 30% due to PC-2614 MV 100%
+  [DW R85] F/O found PP-503A M/S leak 200ml/min
+  [DW R87] Sland line purge LI-2101 (PD-101) for improve PV swing.
+  [DW R89] LPW Purge LS-2400A and B (level pan PM-402) due to error.
+  [DW R91] After PTK-810C empty BG request transfer PTK-800C to PTK-810C
+  [DW R92] Increase speed PZ-800C 90% -> 100% for increase rate transfer.
+  [DW R95] PTK-800A,B ให้ทับไปก่อนจนกว่าจะส่ง PTK-800C to PTK-810C จนหมด
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R121] ME confirm install PP-601A complete and remove LOTO keep condition pump dry.
+  [DW R123] Found PC-2301A MV increase continue normal 32% >>> 47%request F/O check condition found B/V PE-101D to PE-302 open 1/4 round increase to 1/2 round
+  [DW R124] - After MV PC-2301 drop to 32% and increase gen PE-302 from 9.2 to 10.0 ton
+  [DW R126] Found AI-2101 swing high  and stand by PACE for adjust Density to normal after switch to PACE control.
+  [DW R128] Found PC-2303 MV up 34% to 48% and request F/O open B/V vent PE-101B  to PT-501 1/4 round.
+  [DW R130] Found LC-2401 MV up and flush LC-2401 2 time after condition recovery to normal.
+  [DW R155] K:Link to --> IOW
+  [DW R156] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R157] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R159] K:Link to --> ALARM TOP 3
+  [DW R160] Data EXAPLOG for P#1
+=== DAY 02 | Day: FM=D อดุลย์, BM=D เพชร (4CBA=11.359999656677246, Load=102) | Night: FM=C ชาญชัช, BM=A สถิตย์ (4CBA=12.760000228881836, Load=102) | Prod=1376.9 | DP2500=0.6584441065788269 ===
+  --- QC Night Shift ---
+  [DW R78] Switch PP-601B -> A and Isolate drain LOTO PP-601B
+  [DW R79] ME use 7N purge oil cooler PP-601B and Re-move LOTO for keep dry.
+  [DW R81] LOTO and Inspect PM-802C due to found lump at BG.
+  [DW R82] Found screen damage 45 cm. (36 Batch)
+  [DW R83] Replace screen (Stainless) complete. (ยังไม่ได้ Flush screen ฝากด้วยนะครับ)
+  [DW R86] Flush LI-2901 due to level error.
+  [DW R88] PP-601A Outlet cooler TG = 58 C temp. gun = 70C
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R121] PP-503A overload trip F/O confirm mech seal damage and start PP-503B after condition recovery to normal.
+  [DW R123] Found gland packing PM-401D NDE drum leak and keep monitor. ( ฝากกะเช้าตาม ME retighten )
+  [DW R125] Found PI-2105 high 340 mmH2O and cut FC-1401  5 min after condition recovery to normal.
+  [DW R127] Found LC-2401 MV up and flush LC-2401 2 time after condition recovery to normal.
+  [DW R153] K:Link to --> IOW
+  [DW R154] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R155] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R157] K:Link to --> ALARM TOP 3
+  [DW R158] Data EXAPLOG for P#1
+=== DAY 03 | Day: FM=B เฉลิมพล, BM=B ฐาณันตร์ (4CBA=13.670000076293945, Load=102) | Night: FM=C ชาญชัช, BM=C ศุภสิทธิ์ (4CBA=13.329999923706055, Load=100) | Prod=1377.5 | DP2500=0.6584441065788269 ===
+  [QC R15] Inc.rinse ratio 0.45 >> 0.5  p-TA = 161 ppm
+  --- QC Night Shift ---
+  [QC R21] - Load down plant 102 --> 100% balance weight TTK-400 and CTA washing RVF at 06:00 AM.
+  [DW R78] ME come to remove  pump PP-503A 0verhaul to work shop
+  [DW R80] F/O fill up oil PP-503B  0.4 lite   ( PP-503B oil seal leak alittle monitor condition )
+  [DW R82] RPF leak drum NDE inform ME tighten stop leak complete
+  [DW R84] LC-2401 alarm MV.up B/M flush LC-2401 1 time vand increase flow FC-2705  650 >> 700 kg/hr  condition recover to normal
+  [DW R86] Start PP-603 and pumpTreat H.O and drain H.O to PD-603 2 time.
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R121] - Flush LCV-2401 by open = 45% and close to 2% for improve LCV-2401 MV up and flush line bypass steam too. After that LCV-2401 condition recover to normal MV dec to 15.6%.
+  [DW R124] - Start PP-603 to PD-601
+  [DW R125] - Drain PD-601 --> PD-603
+  [DW R126] - Start PP-603 --> PD-601
+  [DW R127] - Drain hot oil PD-601 --> PD-603
+  [DW R130] - Increased FC-2701 from 1000 to 1050 kg/hr due to PV swing; sustained MPW flow fluctuation may cause LCV-2301 fouling.
+  [DW R156] K:Link to --> IOW
+  [DW R157] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R158] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R160] K:Link to --> ALARM TOP 3
+=== DAY 04 | Day: FM=B เฉลิมพล, BM=B ฐาณันตร์ (4CBA=14.779999732971191, Load=99) | Night: FM=C ชาญชัช, BM=C ศุภสิทธิ์ (4CBA=14.789999961853027, Load=98) | Prod=1346 | DP2500=0.6584441065788269 ===
+  [QC R14] CTA unit start recovery powder TTK-404 to TTK-400 rate 0.5 t/hr
+  [QC R15] Load down plnt 100 >> 99% for balance weight TTK-400
+  [QC R16] Dec.LC-2301 SV. 21 >> 20% follow load down
+  [QC R17] Increase PC-2201 SV.74.7 >> 74.8 kg/cm2 for control 4-CBA
+  --- QC Night Shift ---
+  [QC R21] - Load down 99 --> 98% balance weight silo 400.
+  [DW R78] Flush level PW-901 1 time due to level error
+  [DW R80] F/O patrol plant found belt PC-201A (เส้นในสุด) swing closely monitor condition
+  [DW R82] F/O fill up oil PP-503B 0.3 L due to level low
+  [DW R84] F/O patrol plant level oil gearbox PJ-303 low
+  [DW R86] F/O patrol plant found clamp lock air knocker shot pipe TZ-400 damage
+  [DW R89] Start PP-603 and pumpTreat H.O and drain H.O to PD-603 2 time.
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R121] - Found troque of PM-401D inc to 184 Nm then inc DIW cooling G/P from 310 --> 350 kg/hr.
+  [DW R122] - Inc rinse ratio from 0.5 --> 0.55 due to torque high to 212 Nm. Now torque RPF dec to 117.9 Nm then dec rinse ratio 0.55 --> 0.5(5:50)
+  [DW R125] - Start PP-603 to PD-601
+  [DW R126] - Drain PD-601 --> PD-603
+  [DW R127] - Start PP-603 --> PD-601
+  [DW R128] - Drain hot oil PD-601 --> PD-603
+  [DW R143] *** PD-2500 is high at 2.0.19; PM-500B filter replacement required.
+  [DW R153] K:Link to --> IOW
+  [DW R154] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R155] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R157] K:Link to --> ALARM TOP 3
+  [DW R158] Data EXAPLOG for P#1
+=== DAY 05 | Day: FM=B เฉลิมพล, BM=B ฐาณันตร์ (4CBA=14.340000152587891, Load=98) | Night: FM=C ชาญชัช, BM=C ศุภสิทธิ์ (4CBA=15.470000267028809, Load=99) | Prod=1329.3 | DP2500=0.6584441065788269 ===
+  [QC R15] Start receive residue to PD-901  50 >> 100%
+  [QC R16] Inc.PC-2201 SV. 74.8 >> 74.9 kg/cm2  4-CBA = 15.2 ppm
+  --- QC Night Shift ---
+  [QC R21] - Load up 98 --> 98.5 --> 99%(23:36) balance silo 400.
+  [DW R78] found PI-2105 increase 288 mmH2O and PD-2104 increase 177 mmH2O confirm F/O knock line inlet PT-101 and flush line to inlet PT-101 pressure recover to normal
+  [DW R80] Section request F/O inspect screen PM-802A/B F/O check condition result normal
+  [DW R82] F/O patrol plant found cover screen (bottom) PM-802B crack
+  [DW R83] - 17:10 ME come to  temporary stop leak use silicone plug
+  [DW R85] F/O patrol plant found pump underground PP-802 (บ่อที่2) line suction plug effect underground overflow
+  [DW R86] - now F/O off breaker pump TP-802 wait ME clear suction
+  [DW R88] ME come to reinstall pump PP-503A  ( complete work 19:00)
+  [DW R90] ME come to reinstall clamp air knock and service air knocker. start condition normal
+  [DW R92] Start PP-804  to TU-800
+  [DW R94] Start PP-603 and pumpTreat H.O and drain H.O to PD-603 2 time.
+  [DW R115] Steam 10S generate
+  [DW R116] Item
+  [DW R117] FC-2302.SV
+  [DW R120] FC2602.MV
+  [DW R125] K:Link to --> IOW
+  [DW R128] - Lined up and jog-tested PP-503A to drain PG; unit operated normally with no oil or process leaks.
+  [DW R131] - Found PS-1404 and PTK-101 weight fluctuating abnormally, causing frequent WS-2101 low alarms; increased Silo 400 target weight to stabilize weight at 140–150 ton.
+  [DW R151] - Start PP-603 to PD-601
+  [DW R152] - Drain PD-601 --> PD-603
+  [DW R153] - Start PP-603 --> PD-601
+  [DW R154] - Drain hot oil PD-601 --> PD-603
+  [DW R158] *** PD-2500 is high at 2.13; PM-500B filter replacement required.
+=== DAY 06 | Day: FM=A  กฤษณะ, BM=A สถิตย์ (4CBA=15.260000228881836, Load=99) | Night: FM=C ชาญชัช, BM=D เพชร (4CBA=15.329999923706055, Load=99) | Prod=1339.4 | DP2500=0.6584441065788269 ===
+  [QC R15] Adjust PC-2201 from 74.9 >> 75.0 because 4-CBA increase
+  --- QC Night Shift ---
+  [QC R21] Increase SV PC-2201 75.0 -> 75.1 -> 75.2 -> 75.3 -> 75.4 due to 4-CBA = 15.3
+  [QC R22] Decrease SV LC-2301 20% -> 19% follow increase PC-2201
+  [QC R23] Load down 99% -> 98% -> 99% for balance weight TTK-400.
+  [DW R78] ME confirm retighten gland packing PM-401D NDE complete.
+  [DW R80] F/O found TP-800A gland packing leak and infrom ME retighten complete.
+  [DW R82] Found PS-1404 swing and request F/O adjust flow 7N aeration purge bottom TTK-400 HZV-1402 115 >> 100  A 180>> 100 B 180 >> 150 C 200 >> 150 D  220 >> 150
+  [DW R83] after condition recovery to normal.
+  [DW R85] F/O knock line PM-104 to PT-101 15 min because PI-2104 increase continue after condition not improve.
+  [DW R87] PI-2104 high  300mmH2O and confirm cut FC-1401  5 min after service normal = 27 mmH2O
+  [DW R89] F/O found line transfer PTK-800 to TTK-401 leak ( บริเวณชั้น shute )
+  [DW R97] *ฝากกะดึกเตรียม LOTO PM-500B ด้วยครับ
+  [DW R111] Steam 10S generate
+  [DW R112] Item
+  [DW R113] FC-2302.SV
+  [DW R116] FC2602.MV
+  [DW R121] K:Link to --> IOW
+  [DW R124] PM-401D torque increase to 200Nm then F/O increase flow DIW cooling G/P 350 -> 400 kg/hr.
+  [DW R126] LC-2302 alarm MV up then increase timer open/close (TM-2302F) 16 -> 17 sec. for improve condition.
+  [DW R128] Cut WG transfer TTK-400 5 min. due to PM-104 pressure diff high.
+  [DW R156] K:Link to --> IOW
+  [DW R157] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R158] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R160] K:Link to --> ALARM TOP 3
+=== DAY 07 | Day: FM=A  กฤษณะ, BM=A สถิตย์ (4CBA=14.729999542236328, Load=99) | Night: FM=D อดุลย์, BM=D เพชร (4CBA=15.170000076293945, Load=100) | Prod=1340.6 | DP2500=0.6584441065788269 ===
+  [QC R15] Increase SV PC-2201 75.4 -> 75.6 -> 75.8  due to 4-CBA = 15.7
+  [QC R16] Inc rinse ratio  from 0.50 >> 0.55 because p-TA = 164
+  --- QC Night Shift ---
+  [QC R21] Load up plant 99% -> 100% for balance weight TTK-400.
+  [QC R22] Incresae SV PC-2301 75.8 -> 75.9 gk/cm2 due to 4CBA = 15.2
+  [QC R23] Increase rinse ratio 0.55 -> 0.6 due to p-TA = 164
+  [DW R78] Switch PP-503B to A because check condition normal.
+  [DW R80] Switch PC-201A to B because condition PC-201A PC-2202 drop low 77 Kg  after switch to PC-201B condition recovery to normal.
+  [DW R82] ME come to replace filter PM-500B because PD-2500 high 2.38 Kg operate 67.9 day.
+  [DW R84] F/O found pressure oil PP-503A drop  1.8 Kg and switch PP-503A to B condition normal.
+  [DW R86] PI-2104 high  200mmH2O and confirm cut FC-1401  5 min after service normal = 27 mmH2O
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R121] PC-201B low performance , PC-2202 pressure low than SV and MV 0%.
+  [DW R123] Fill up lube oil PP-503B 100ml.
+  [DW R125] Cut FC-1401 WG transfer TTK-400 5 min. due to PM-104 pressure diff high.
+  [DW R153] K:Link to --> IOW
+  [DW R154] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R155] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R157] K:Link to --> ALARM TOP 3
+  [DW R158] Data EXAPLOG for P#1
+=== DAY 08 | Day: FM=A  กฤษณะ, BM=A สถิตย์ (4CBA=15.359999656677246, Load=100) | Night: FM=D อดุลย์, BM=D เพชร (4CBA=15.100000381469727, Load=100) | Prod=1351.4 | DP2500=0.6584441065788269 ===
+  [QC R15] Inc PC-2201 from 75.9 >> 76.0>>76.1 (17:00) >>76.2  because CTA  4-CBA increase
+  [QC R16] Inc rinse ratio from 0.60 >> 0.65 (17:00) >>0.70  because p-TA 169
+  --- QC Night Shift ---
+  [DW R78] Found PD-2104 decrease continue and request F/O open flange line to PT-101 found line fouling and clear line complete
+  [DW R80] Decrease B/V PM-104 to ATM from 50% >> 30%  condition recovery to normal.
+  [DW R82] ME confirm replace filter/ oil PP-503A support pressure oil  low 1.8 Kg.found thread seal tape at  inlet pressure guage oil.
+  [DW R84] Switch PP-503B to A after service pressure oil 2.6 and decrease continue to 2.2 Kg ME confirm switch  PP-503A to B for check oil pump PP-503A tomorrow.
+  [DW R86] Found PM-401D drum NDE leak  and infrom ME retighten .
+  [DW R92] * IT confirm  XI-2851-1 กล้องบน Silo PTK-800 sever normal น่าจะเป็นที่ตัวกล้องดูไม่ได้
+  [DW R94] *ฝากกะดึกเตรียม LOTO PP-503A ด้วยครับ
+  [DW R110] Steam 10S generate
+  [DW R111] Item
+  [DW R112] FC-2302.SV
+  [DW R115] FC2602.MV
+  [DW R120] K:Link to --> IOW
+  [DW R123] Decrase B/V KCV-1430 7N purge bottom TTK-400 40% -> 30% for improve PS-1404 swing.
+  [DW R125] Found PM-901 current high then feed short batch and discharge residue to Hopper for clear residue accumulate.
+  [DW R127] Found compound bottom PM-301 leak.
+  [DW R129] Cut FC-1401 WG transfer TTK-400 5 min. due to PM-104 pressure diff high.
+  [DW R155] K:Link to --> IOW
+  [DW R156] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R157] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R159] K:Link to --> ALARM TOP 3
+  [DW R160] Data EXAPLOG for P#1
+=== DAY 09 | Day: FM=C ชาญชัช, BM=C ศุภสิทธิ์ (4CBA=14.310000419616699, Load=98.5) | Night: FM=B เฉลิมพล, BM=B ฐาณันตร์ (4CBA=14.020000457763672, Load=99) | Prod=1345.5 | DP2500=0.6584441065788269 ===
+  [QC R14] - Dec PC-2201 from 76.2 --> 76.1 --> 76.0 kg/cm2 control 4-CBA and follow plant load down.
+  [QC R16] - Load down 100 --> 99 --> 98.5% --> 99% balance silo 400 and CTA washing RVF at 18:00
+  [QC R18] - Dec rinse ratio 0.7 --> 0.65 follow up plant load down.
+  --- QC Night Shift ---
+  [QC R21] Dec.LC-2301 SV.21 >> 20% MPS = 130 um
+  [DW R78] - Stop PP-404A for NaOH by exapilot due to LCV-2404A MV = 100% effect from line discharge pump fouling.
+  [DW R84] - ME retighten G/P PM-401D at seal drum (NDE) for stop leak.
+  [DW R88] - Flush line vent from PM-104 to PT-101 by close b/v line to PT-101 and ATM for imprve PD-2104 high to 94 mmH2O. After that PI-2105 and PD-2104 condition last same then inc b/v line to ATM
+  [DW R89] from 30 --> 50%.
+  [DW R90] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 223 , PD-2104 = 150 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 111 , PD-2104 = 33 mmH2O.
+  [DW R96] - ME add compound at line bottom PM-301 for stop leak.
+  [DW R118] - Start PP-603 to PD-601
+  [DW R119] - Drain PD-601 --> PD-603
+  [DW R120] - Start PP-603 --> PD-601
+  [DW R121] - Drain hot oil PD-601 --> PD-603
+  [DW R126] Steam 10S generate
+  [DW R127] Item
+  [DW R128] FC-2302.SV
+  [PM901 R129] ____NaOH washing ML line to PD-403 from
+  [PM901 R130] @ PM-401                                 (BTM PD-403)
+  [DW R131] FC2602.MV
+  [PM901 R131] ___ NaOH washing PJ-404
+  [PM901 R132] ___NaOH washing PP-404 to PW-901
+  [PM901 R133] @ PP-404
+  [PM901 R134] ____ NaOH Flushing LI-2901
+  [PM901 R135] ___NaOH washing PM-901
+  [DW R136] K:Link to --> IOW
+  [PM901 R136] ___Start PM-901 operation
+  [PM901 R137] Request CTA unit prepare 4% NaOH
+  [DW R139] PS-1404 drop to 0.45 kg/cm2 B/M cut FC1401 and stop TZ-400 / F/O remove lump breaker found lump plug inside F/O clear lump complete
+  [DW R141] RPF CH. Leak and drum NDE inform ME tighten stop leak  complete
+  [DW R145] Start PP-603 and pumpTreat H.O and drain H.O to PD-603 2 time.
+=== DAY 10 | Day: FM=A  กฤษณะ, BM=C ศุภสิทธิ์ (4CBA=15.560000419616699, Load=100) | Night: FM=B เฉลิมพล, BM=B ฐาณันตร์ (4CBA=14.569999694824219, Load=100) | Prod=1347.6 | DP2500=0.6584441065788269 ===
+  [QC R14] - Load up 99 --> 100% balance weight silo400.
+  --- QC Night Shift ---
+  [QC R21] Inc PC-2201 SV.76.0 >> 76.2 4-CBA = 15.9 ppm
+  [QC R22] Inc.ronse ratio 0.65 >> 0.68 >> ( 01:35) 0.65 p-TA = 164 ppm
+  [DW R78] - Start PP-603 to PD-601
+  [DW R79] - Drain PD-601 --> PD-603
+  [DW R80] - Start PP-603 --> PD-601
+  [DW R81] - Drain hot oil PD-601 --> PD-603
+  [DW R85] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 230 , PD-2104 = 152.6 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 113 , PD-2104 = 39.7 mmH2O.
+  [DW R89] - Top up oil to PP-504B = 50 ml.
+  [DW R93] - Top up alkili to PD-450 from 29.1 --> 99.2%.
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R121] Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 250 , PD-2104 = 200 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 97, PD-2104 = 35 mmH2O.
+  [DW R122] - 03:18 Cut transfer TTK-400 --> PTK-101 again
+  [DW R124] Torque RPF increase to 250 Nm3 inform F/O increase DIW cooling G/P DE and NDE 530 >> 580 kg/h  torque drop to  190 Nm3
+  [DW R125] - 06: 00 torque increase to 280 Nm3 F/O increase DIW cooling G/P 580 >> 620 >> MAX range flow gauge
+  [DW R134] Start PP-603 and pumpTreat H.O and drain H.O to PD-603 2 time.
+  [DW R154] K:Link to --> IOW
+  [DW R155] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R156] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R158] K:Link to --> ALARM TOP 3
+  [DW R159] Data EXAPLOG for P#1
+=== DAY 11 | Day: FM=A  กฤษณะ, BM=C ศุภสิทธิ์ (4CBA=14.989999771118164, Load=100) | Night: FM=B เฉลิมพล, BM=A สถิตย์ (4CBA=14.619999885559082, Load=100) | Prod=1350.8 | DP2500=0.6584441065788269 ===
+  [QC R14] - Dec LC-2301 from 20 --> 19% MPS = 131 um
+  --- QC Night Shift ---
+  [QC R22] Decrease %cell full from 82% >> 80% >> 81% >> 82% improve XIS-2401D high.
+  [DW R78] - NaOH purge LI-2901 due to level PW-901 error.
+  [DW R81] - Start PP-603 to PD-601
+  [DW R82] - Drain PD-601 --> PD-603
+  [DW R83] - Start PP-603 --> PD-601
+  [DW R84] - Drain hot oil PD-601 --> PD-603
+  [DW R87] - F/O found 7N purge tube disconnected at PRV-2104 (PM-104); reinstalled tube, but fitting remains loose—IE support required.
+  [DW R88] - Checked pulse unit operation on PM-104; found normal.
+  [DW R89] - Decreased 7N bottom purge on PM-104 (PG-2107) from 0.35 to 0.1 kg/cm².
+  [DW R90] - Checked 7N purge on PTK-101; each B/V is 30% open (normal).
+  [DW R114] - ME tighten G/P seal drum (NDE) PM-401D and PJ-404 for stop leak.
+  [DW R118] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 260 , PD-2104 = 179 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 107 , PD-2104 = 33.2 mmH2O.
+  [DW R121] - Top up oil to PP-503B = 250 mml.
+  [DW R123] - Inc DIW cooling G/P PM-401D (DE & NDE)  b/v = 1/8 round (Now flow max range  >640 kg/hr) due to torque high to 288 Nm after ME tighten G/P = 2 hr.
+  [DW R124] - Check condition RPFat local not found abnormal.(Not leak , Not high vibration )
+  [DW R125] - Dec feed to RPF from 135.7 --> 101.4 t/hr = 17 min for improve RPF torque high to 348 Nm.
+  [DW R127] - Clean PZ-905 as plan
+  [DW R131] Steam 10S generate
+  [PM901 R131] ___PM-901 high pressure ( M )
+  [DW R132] Item
+  [DW R133] FC-2302.SV
+  [PM901 R133] Total #  ___;Batch / No.
+  [PM901 R134] ____NaOH washing ML line to PD-403 from
+  [PM901 R135] @ PM-401                                 (BTM PD-403)
+  [DW R136] FC2602.MV
+  [PM901 R136] ___ NaOH washing PJ-404
+  [PM901 R137] ___NaOH washing PP-404 to PW-901
+  [PM901 R138] @ PP-404
+  [PM901 R139] ____ NaOH Flushing LI-2901
+  [PM901 R140] ___NaOH washing PM-901
+  [DW R141] K:Link to --> IOW
+  [DW R144] Found XIS-2401D high 400 Nm and request F/O adjust DIW cooling 1/4>> 1/4 round, but condition not improve yet then decrease % cell full  from 82% >> 80% after that XIS-2401D decrease 3400 >> 180 Nm.
+  [DW R145] 21:00/22:00 /23:00 check overflow normal.
+  [DW R147] Found TI-2601C increase cotinue request F/O check and cut cooling PP-601B for support temp PP-601C after temp TI-2601C decrease from 128.6 to 125.4
+  [DW R149] Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 250 , PD-2104 = 200 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 97, PD-2104 = 35 mmH2O.
+  [DW R151] F/O check overflow PZ-813B found gland packing RPF = 2.15 g. then inform Eng. and action follow procedure  inspect PM-802B condition normal.
+  [DW R153] Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 250 , PD-2104 = 200 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 110, PD-2104 = 42 mmH2O.
+=== DAY 12 | Day: FM=D อดุลย์, BM=D เพชร (4CBA=15.260000228881836, Load=100) | Night: FM=A  กฤษณะ, BM=A สถิตย์ (4CBA=15.229999542236328, Load=100) | Prod=1352.5 | DP2500=0.6584441065788269 ===
+  --- QC Night Shift ---
+  [DW R78] Cut FC-1401 WG transfer TTK-400 5 min. due to PM-104 pressure diff high.
+  [DW R80] PS-1404 pressure low and open lump breaker for clear lump.
+  [DW R81] Open valve partial re-slurry 15%MV for control density and LPW wash line already.
+  [DW R83] PP-101A found water contaminate in lube oil.
+  [DW R85] ME come to Re-tighten G/P PM-401D.
+  [DW R87] Switch PP-601C to B due to TI-2610C temp high 130C (C 16Day)
+  [DW R88] LOTO PP-601C and ME change oil cooler (Spare PTA1).
+  [DW R90] ME change filter H.O treatment and change gasket from DN 250 to 10" 150.
+  [DW R92] Switch PP-601B to C after change oil cooler complete.
+  [DW R93] LOTO PP-601B and ME purge oil cooler by 7N.
+  [DW R94] Remove LOTO PP-601B and keep dry.
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R121] Found PP-404A loss suction and NaOH wash 5 min condition recovery to normal.
+  [DW R123] Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 250 , PD-2104 = 200 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 97, PD-2104 = 35 mmH2O.
+  [DW R153] K:Link to --> IOW
+  [DW R154] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R155] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R157] K:Link to --> ALARM TOP 3
+  [DW R158] Data EXAPLOG for P#1
+=== DAY 13 | Day: FM=D อดุลย์, BM=D เพชร (4CBA=14.920000076293945, Load=100) | Night: FM=A  กฤษณะ, BM=C ศุภสิทธิ์ (4CBA=15.140000343322754, Load=100) | Prod=1353.3 | DP2500=0.6584441065788269 ===
+  [QC R15] Increase SV LC-2301 19% -> 20% due to MPS = 121
+  [QC R16] Increase SV PC-2201 76.2 -> 76.3 kg/cm2 due to 4CBA = 15.8
+  --- QC Night Shift ---
+  [DW R78] PE-601 Decrease MV Max generation 10S from 29% -> 27%MV due to PC-2614 MV 100%.
+  [DW R80] Cut FC-1401 WG transfer TTK-400 5 min. due to PM-104 pressure diff high.
+  [DW R81] Cut FC-1401 WG transfer TTK-400 5 min. due to PM-104 pressure diff high.
+  [DW R83] Fill up lube oil PP-102B 55% -> 62%
+  [DW R85] Increase DIW cooling G/P PM-401D 1/8 turn (both side) due to torque high.
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R121] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 243 , PD-2104 = 167.8 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 124 , PD-2104 = 61.7 mmH2O.
+  [DW R122] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 246 , PD-2104 = 176 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 114 , PD-2104 = 51.6 mmH2O.
+  [DW R125] - Start PP-603 to PD-601
+  [DW R126] - Drain PD-601 --> PD-603
+  [DW R127] - Start PP-603 --> PD-601
+  [DW R128] - Drain hot oil PD-601 --> PD-603
+  [DW R131] - Found LCV-2302 alarm MV up often then inc TM-2302F from 17 --> 18 sec and dec timer seq TM-2302D from 300 --> 250 sec. After that LCV-2302 condition recover to normal.
+  [DW R152] ***PP-405 dis mayby fouling due to LCV-2405 MV up now up level PD-501 from 80 --> 90%.
+  [DW R160] K:Link to --> IOW
+=== DAY 14 | Day: FM=D อดุลย์, BM=D เพชร (4CBA=14.689999580383301, Load=100) | Night: FM=A  กฤษณะ, BM=A สถิตย์ (4CBA=14.449999809265137, Load=100) | Prod=1355.5 | DP2500=0.6584441065788269 ===
+  [QC R15] Decrease SV LC-2301 20% -> 19% -> 18% due to MPS = 130
+  --- QC Night Shift ---
+  [DW R78] Fush LI-2901 due to level error.
+  [DW R80] NaOH washing PE-403 due to fouling
+  [DW R82] Open bypass DIW near PM-500 1 turn for control level PD-502
+  [DW R84] Start PC-201A due to PC-2202 MV 0%. Now two operate
+  [DW R86] LOTO PP-503A for inspection case lube oil pressure low.
+  [DW R87] ME replace pump lube oil and Re-install PP-503A.
+  [DW R90] Cut FC-1401 WG transfer TTK-400 5 min. due to PM-104 pressure diff high.
+  [DW R92] Decrease DIW cooling G/P PM-401D 1/4 turn (both side). Now flow reading 550 kg/hr. from Max range.
+  [DW R94] Cut FC-1401 WG transfer TTK-400 5 min. due to PM-104 pressure diff high.
+  [DW R96] PM-901 current high then feed short batch and discharge residue to hopper.
+  [DW R98] เปลี่ยน Parameter ตาม YOKO project PACE + แก้ใน EXA แล้ว
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R121] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 243 , PD-2104 = 167.8 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 124 , PD-2104 = 61.7 mmH2O.
+  [DW R123] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 243 , PD-2104 = 167.8 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 121 , PD-2104 = 58mmH2O.
+  [DW R125] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 243 , PD-2104 = 167.8 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 122 , PD-2104 = 62 mmH2O.
+  [DW R127] Service PP-503A and joging found line process leak
+  [DW R153] K:Link to --> IOW
+  [DW R154] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R155] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R157] K:Link to --> ALARM TOP 3
+  [DW R158] Data EXAPLOG for P#1
+=== DAY 15 | Day: FM=B เฉลิมพล, BM=B ฐาณันตร์ (4CBA=15.359999656677246, Load=100) | Night: FM=A  กฤษณะ, BM=C ศุภสิทธิ์ (4CBA=15.840000152587891, Load=100) | Prod=1354.2 | DP2500=0.6584441065788269 ===
+  --- QC Night Shift ---
+  [QC R21] - Inc PC-2201 from 76.3 --> 76.8 kg/cm2 4-CBA = 16.3 ppm
+  [QC R23] - Inc rinse ratio 0.65 --> 0.68 for control p-TA (p-TA = 168 ppm)
+  [DW R78] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 250 , PD-2104 = 190 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 110 , PD-2104 = 70 mmH2O.
+  [DW R80] torque RPF increase to 330 Nm3 inform F/O increase DIW cooling G/P DE and NDE 560 >> 610 kg/hr
+  [DW R81] - Dec.% cell full 82 >>(08:26) 80  >>(14:05) 81% for improve condition torgue high
+  [DW R84] ME come to cleaning suction pump TP-802A/B fpllow inform SAP. Complete
+  [DW R86] ME come to change oil TP-800B follow inform SAP. Complete
+  [DW R88] Switching pump PP-503B to PP-503A after ME overhaul complete
+  [DW R89] - current 145 amp
+  [DW R90] - pressure oil 2.0 kg/cm2
+  [DW R92] Found level PD-405 continue increase inform F/O check at local found pressure gauge pump PP-405B swing after that pump PP-405B trip/ F/O start pump PP-405A
+  [DW R93] - check on Sub. PP-405B Show ''UC'' F/M reset breaker
+  [DW R94] - Use NaOH washing suction pump PP-405B 5 min  test drain suction found lump at drain / after washing condition recover to normal
+  [DW R97] Start PP-603 and pumpTreat H.O and drain H.O to PD-603 2 time.
+  [DW R100] Open by-pass PC-2202 a little for improve condition MV. PC-2202
+  [DW R114] Steam 10S generate
+  [DW R115] Item
+  [DW R116] FC-2302.SV
+  [DW R119] FC2602.MV
+  [DW R124] K:Link to --> IOW
+  [DW R127] - Stop PP-404A for NaOH by exapilot due to LCV-2404A MV = 100% effect from line discharge pump fouling.
+  [DW R130] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 261 , PD-2104 = 198.7 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 124 , PD-2104 = 61.7 mmH2O.
+  [DW R131] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 256 , PD-2104 = 190.6 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 106 , PD-2104 = 42.1 mmH2O.
+  [DW R136] - Inc DIW cooling G/P PM-401D from 600 --> 650 kg/hr (Max range = 640 kg/hr) due to torque high to 303 Nm.
+  [DW R159] - Start PP-603 to PD-601
+  [DW R160] - Drain PD-601 --> PD-603
+=== DAY 16 | Day: FM=B เฉลิมพล, BM=B ฐาณันตร์ (4CBA=15.039999961853027, Load=100) | Night: FM=D อดุลย์, BM=A สถิตย์ (4CBA=14.970000267028809, Load=100) | Prod=1349.6 | DP2500=0.6584441065788269 ===
+  [QC R15] Inc.LC-2301 SV.18 >> 19% MPS = 117 um
+  [QC R16] Dec.PC-2201 SV.76.8 >> 76.6 kg/cm2 4-CBA = 14.8 ppm
+  --- QC Night Shift ---
+  [QC R22] Inc.LC-2301 SV.19 >> 20%>> 21%  MPS = 117 um
+  [QC R23] Dec rinse ratio from 0.68 >> 0.65 control p-TA
+  [DW R78] Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 240 , PD-2104 = 200 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 105 , PD-2104 = 45 mmH2O.
+  [DW R80] Switching pump PP-601C to PP-601B due to temp motor PP-601C increase to 143 C  (TI-2610C = 126 C)
+  [DW R81] After switch tune condition plant to normal
+  [DW R82] - II-2601B = 262 amp
+  [DW R83] - Temp TI-2610B = 141.3C
+  [DW R84] - 10:25 F/O LOTO PP-601C for ME remove overhaul
+  [DW R85] - 18:35 ME continue reinstall PP-601C
+  [DW R87] Eng. Confirm stop PC-201A from two operation to one operation normal  ( close by-pass PC-2202 already )
+  [DW R91] Line Steam 3S to PE-606 leak in insulation
+  [DW R93] Condition PP-503A
+  [DW R94] Temp in = 64
+  [DW R95] Temp out = 60
+  [DW R96] pressure oil = 1.9
+  [DW R109] Steam 10S generate
+  [DW R110] Item
+  [DW R111] FC-2302.SV
+  [DW R114] FC2602.MV
+  [DW R119] K:Link to --> IOW
+  [DW R122] ME confirm install PP-601C complete and remove LOTO /switch PP-601B to C check condition 30 min and drain PP-601B .
+  [DW R124] Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 240 , PD-2104 = 200 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 105 , PD-2104 = 45 mmH2O.
+  [DW R126] Found PE-403 fouling because LC-2405 increase continue and NaOH wash PE-403 7 min after service condition normal.
+  [DW R154] K:Link to --> IOW
+  [DW R155] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R156] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R158] K:Link to --> ALARM TOP 3
+  [DW R159] Data EXAPLOG for P#1
+=== DAY 17 | Day: FM=A  กฤษณะ, BM=B ฐาณันตร์ (4CBA=14.020000457763672, Load=100) | Night: FM=D อดุลย์, BM=D เพชร (4CBA=15.210000038146973, Load=100) | Prod=1348.4 | DP2500=0.6584441065788269 ===
+  --- QC Night Shift ---
+  [DW R78] Found level PD-405 continue increase inform F/O check at local found pressure gauge pump PP-405A swing after that pump PP-405A trip/ F/O start pump PP-405B
+  [DW R79] - check on Sub. PP-405B Show ''UC'' F/M reset breaker
+  [DW R80] - Use NaOH washing suction pump PP-405A 5 min  test drain suction found lump at drain / after washing condition recover to normal
+  [DW R82] ME come to righten G/P RPF drum NDE stop leak complete
+  [DW R84] Open by-pass LC-2502  2 >> 6 .5 round and by-pass PE-501 to PE-502  1 round  for control level PD-502
+  [DW R86] F/O patrol plant found  Sum preheat D leak under insulation inform SAP. already
+  [DW R110] Steam 10S generate
+  [DW R111] Item
+  [DW R112] FC-2302.SV
+  [DW R115] FC2602.MV
+  [DW R120] K:Link to --> IOW
+  [DW R123] Stop PP-404B and NaOH washing due to fouling and empty PW-901 for recovery residue next batch.
+  [DW R125] Flush LI-2901 due to level error.
+  [DW R127] Cut FC-1401 WG transfer TTK-400 5 min. due to PM-104 pressure diff high.
+  [DW R129] Close valve DIW bypass PE-501 and decrease valve bypass LC-2502 100% -> 50% for control level PD-502.
+  [DW R155] K:Link to --> IOW
+  [DW R156] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R157] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R159] K:Link to --> ALARM TOP 3
+  [DW R160] Data EXAPLOG for P#1
+=== DAY 18 | Day: FM=A  กฤษณะ, BM=A สถิตย์ (4CBA=15.270000457763672, Load=100) | Night: FM=D อดุลย์, BM=D เพชร (4CBA=16.149999618530273, Load=100) | Prod=1355.4 | DP2500=0.6584441065788269 ===
+  [QC R15] Inc rinse ratio from 0.65 >> 0.68 control p-TA
+  [QC R16] Dec LC-2301 from 21% >> 20%  because MPS = 129 um
+  --- QC Night Shift ---
+  [QC R21] Increase PC-2201 76.6 -> 76.7 -> 76.8 (07:15) kg/cm2 du to 4CBA = 16.1
+  [DW R78] Stop PP-404B and NaOH washing due to fouling and empty PW-901 for recovery residue next batch.
+  [DW R80] Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 240 , PD-2104 = 200 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 105 , PD-2104 = 36 mmH2O.
+  [DW R99] Condition PP-503A
+  [DW R100] Temp in = 64
+  [DW R101] Temp out = 59
+  [DW R102] pressure oil = 1.9
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R121] PD-603 Found flash vapor and check %LEL = 0
+  [DW R123] Cut FC-1401 WG transfer TTK-400 5 min. due to PM-104 pressure diff high.
+  [DW R153] K:Link to --> IOW
+  [DW R154] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R155] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R157] K:Link to --> ALARM TOP 3
+  [DW R158] Data EXAPLOG for P#1
+=== DAY 19 | Day: FM=A  กฤษณะ, BM=A สถิตย์ (4CBA=16.100000381469727, Load=100) | Night: FM=D อดุลย์, BM=D เพชร (4CBA=14.569999694824219, Load=100) | Prod=1353.5 | DP2500=0.6584441065788269 ===
+  [QC R15] Inc rinseratio from 0.68 >> 0.70 because p-TA = 169
+  [QC R17] Increase PC-2201 76.8 -> 77.1 -> 77.3 (014:00) kg/cm2 du to 4CBA = 16.4
+  --- QC Night Shift ---
+  [DW R78] Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 240 , PD-2104 = 200 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 105 , PD-2104 = 36 mmH2O.
+  [DW R80] ME confirm remove insulation PE-101D found flange bottom leak.   ( รอสรุปครับว่าจะทำยังไง )
+  [DW R82] Found alarm A rank not show and test lamp not show and infrom EI check found UC-105 damage ( power supply ) and replace / service complete.
+  [DW R101] * ฝากกะดึกเตรียม LOTO PP-601B ถอด pump clean
+  [DW R102] *LOTO PM-802B install blind งานเชื่อม PM-802B
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R121] Stop PP-404A and NaOH washing due to fouling and empty PW-901 for recovery residue next batch.
+  [DW R123] ไฟส่องสว่าง PD-101 ถึง PD-402 ดับ
+  [DW R125] Open bypass DIW PE-501 1.5 turn for control level PD-502
+  [DW R153] K:Link to --> IOW
+  [DW R154] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R155] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R157] K:Link to --> ALARM TOP 3
+  [DW R158] Data EXAPLOG for P#1
+=== DAY 20 | Day: FM=A  กฤษณะ, BM=B ฐาณันตร์ (4CBA=15.520000457763672, Load=98) | Night: FM=D อดุลย์, BM=D เพชร (4CBA=14.760000228881836, Load=100) | Prod=1347.6 | DP2500=0.6584441065788269 ===
+  [QC R14] CTA unit increase receive TTK-401 to TTK-400 1.5 >> 2 t/h
+  [QC R15] Load down plant 100 >> 99 for improve TTK-400 plug
+  [QC R16] Inc.PC-2201 SV.77.3 >> 77.5 kg/cm2  4-CBA = 16.0 ppm
+  --- QC Night Shift ---
+  [QC R21] Load up plant 99% -> 100% for balance weight TTK-400.
+  [DW R78] Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 280 , PD-2104 = 210 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 100 , PD-2104 = 54 mmH2O.
+  [DW R80] ME come to remove pump PP-601B for overhaul to work shop
+  [DW R81] - 17:00 ME come to reinsrtall pump PP-601 and oil cooler ( swap oli cooler PE#2 to PP-601B)
+  [DW R84] ME come to torque bolt sum PE-101D  Now stop leak already and monitor condition
+  [DW R86] RPF leak drum NDE inform ME tighten stop leak complete
+  [DW R88] PS-1404 setdely drop to 0.4 kg/cm2 B/M cut HC-1400 and start - stop TZ-400 and F/O knock shot pipe TZ-400 weight low to 5.4 ton
+  [DW R89] - B/M open line partail  5 min. improve condition weight low
+  [DW R90] - After condition recover close line partail and washing line partail
+  [DW R93] Start PP-603 and pumpTreat H.O and drain H.O to PD-603 2 time.
+  [DW R110] Steam 10S generate
+  [DW R111] Item
+  [DW R112] FC-2302.SV
+  [DW R115] FC2602.MV
+  [DW R120] K:Link to --> IOW
+  [DW R123] Service RCCW PP-601B found flange leak then F/O re-tighten complete.
+  [DW R125] Cut FC-1401 WG transfer TTK-400 5 min. due to PM-104 pressure diff high.
+  [DW R155] K:Link to --> IOW
+  [DW R156] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R157] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R159] K:Link to --> ALARM TOP 3
+  [DW R160] Data EXAPLOG for P#1
+=== DAY 21 | Day: FM=A  กฤษณะ, BM=C ศุภสิทธิ์ (4CBA=15.510000228881836, Load=100) | Night: FM=B เฉลิมพล, BM=D เพชร (4CBA=14.170000076293945, Load=100) | Prod=1353.3 | DP2500=0.6584441065788269 ===
+  [QC R14] - Dec PC-221 from 77.5 --> 77.3 kg/cm2 p-TA 175 ppm , 4CBA = 14.8 ppm.
+  [QC R15] - Dec PC-221 from 77.5 --> 77.2 kg/cm2 p-TA 171 ppm , 4CBA = 14.7 ppm.
+  [QC R17] - Dec rinse ratio 0.7 --> 0.65 control p-TA.
+  [QC R18] - Inc rinse 0.65 --> 0.68 P-TA = 175 ppm
+  [QC R19] - Inc LC-2301 from 20 --> 21% MPS = 120 um.
+  --- QC Night Shift ---
+  [QC R21] Increase rinse ratio 0.68 -> 0.7 due to p-TA =173
+  [DW R78] - Start PP-603 to PD-601
+  [DW R79] - Drain PD-601 --> PD-603
+  [DW R80] - Start PP-603 --> PD-601
+  [DW R81] - Drain hot oil PD-601 --> PD-603
+  [DW R83] - Found torque PM-401D suddenly high to 412 Nm then inform F/O check condition RPF at local.
+  [DW R84] - Sound and vibration --> Normal
+  [DW R85] - Found control head leak --> Inform ME for stop leak and check SE leak or not due to p-TA high = 175 ppm.
+  [DW R86] - Inc DIW cooling G/P by open b/v inc = 1/8 round.
+  [DW R87] - Check overflow at PZ-803B not found gland packing.
+  [DW R91] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 250 , PD-2104 = 179 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 108 , PD-2104 = 40.1 mmH2O.
+  [DW R95] - Top up oil to PP-102C = 10 lite level oil inc 20 --> 68%.
+  [DW R104] *** พรุ่งนี้เช้า ME เข้า Remove PP-601C เพื่อ Cleaning ---> Shift night เตรียม LOTO ให้ด้วย
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R121] Flush LI-2901 due to level error.
+  [DW R123] Open-close block valve LC-2405 due to fouling.
+  [DW R125] Cut FC-1401 WG transfer TTK-400 5 min. due to PM-104 pressure diff high.
+  [DW R127] Stop PP-404B and NaOH washing due to fouling and empty PW-901 for recovery residue next batch.
+  [DW R153] K:Link to --> IOW
+  [DW R154] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R155] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R157] K:Link to --> ALARM TOP 3
+  [DW R158] Data EXAPLOG for P#1
+=== DAY 22 | Day: FM=D อดุลย์, BM=C ศุภสิทธิ์ (4CBA=14.5, Load=100) | Night: FM=B เฉลิมพล, BM=B ฐาณันตร์ (4CBA=15.079999923706055, Load=100) | Prod=1353.5 | DP2500=0.6584441065788269 ===
+  [QC R14] - Dec LC-2301 from 21 --> 20% MPS = 129 um.
+  [QC R16] - Dec rinse ratio 0.7 --> 0.65 P-TA = 157 ppm.
+  [QC R18] - Dec PC-2201 from 77.2 --> 77.1 K 4-CBA = 14.0 ppm
+  --- QC Night Shift ---
+  [DW R78] - Top up alkali to PD-450 from  28.5 --> 96.2%.
+  [DW R80] - Start PP-603 to PD-601
+  [DW R81] - Drain PD-601 --> PD-603
+  [DW R82] - Start PP-603 --> PD-601
+  [DW R83] - Drain hot oil PD-601 --> PD-603
+  [DW R85] - Line up PP-601B for switch PP-601C --> B and remove PP-601C cleaning oil cooler.(TI2610C = 124.4 °C)
+  [DW R86] - Isolate PP-601C support work ME.
+  [DW R87] - ME move coil of oil cooler PP-601C for 3S and chemical cleaning at TPRC.
+  [DW R88] - Switch PP-601B --> C after ME cleaned cooler oil complete.(TI-2610B = 137.9 °C)
+  [DW R89] - Isolate PP-601B for 7N purge oil cooler by ME. Now PP-601B keep dry for standby.
+  [DW R112] - ME check lube oil PP-102C by start pump lube oil= 1 min. Result oil leak pass ST2.
+  [DW R113] - During start pump lube oil level dec 68 --> 55%
+  [DW R114] - After stop lube oil level = 60%.
+  [DW R119] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 245 , PD-2104 = 173.3 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 139 , PD-2104 = 71 mmH2O.
+  [DW R129] Steam 10S generate
+  [PM901 R129] _13:25__PM-901 high pressure ( M )
+  [DW R130] Item
+  [DW R131] FC-2302.SV
+  [PM901 R131] Total #  _30__;Batch / No. 2
+  [PM901 R132] ____NaOH washing ML line to PD-403 from
+  [PM901 R133] @ PM-401                                 (BTM PD-403)
+  [DW R134] FC2602.MV
+  [PM901 R134] ___ NaOH washing PJ-404
+  [PM901 R135] _13:31__NaOH washing PP-404 to PW-901
+  [PM901 R136] @ PP-404B
+  [PM901 R137] ____ NaOH Flushing LI-2901
+  [PM901 R138] _14:00__NaOH washing PM-901
+  [DW R139] K:Link to --> IOW
+  [PM901 R139] _15:32__Start PM-901 operation
+  [PM901 R140] Request CTA unit prepare 4% NaOH
+  [DW R142] RPF torque increase to 290 Nm3 inform F/O adjust DIW cooling G/P RPF drum DE and NDE 1/8 round torque drop to 190 Nm3
+  [DW R143] - 01:28 torque RPF increase again F/O adjust DIW 1/8 round
+  [DW R145] Found level PD-405 continue increase inform F/O check at local found pressure gauge pump PP-405B swing after that pump PP-405B trip/ F/O start pump PP-405A
+  [DW R146] - check on Sub. PP-405B Show ''UC'' F/M reset breaker
+  [DW R147] - effect FC-2104 lump fouling MV.up to 98%  inform F/O flush manual B/V FC-2104 condition recover tonormal
+  [DW R149] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 250 , PD-2104 = 200 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 112 , PD-2104 = 45 mmH2O.
+=== DAY 23 | Day: FM=D อดุลย์, BM=C ศุภสิทธิ์ (4CBA=No Data, Load=No Data) | Night: FM=, BM= (4CBA=No Data, Load=No Data) | Prod= | DP2500=0.6584441065788269 ===
+  --- QC Night Shift ---
+  [DW R78] - Cut transfer TTK-400 --> PTK-101 due to PI-2105 = 245 , PD-2104 = 173.3 mmH2O . After 5 min line up transfer TTK-400 --> PTK-101 result PI-2105 = 139 , PD-2104 = 71 mmH2O.
+  [DW R83] - Stop PP-404A for NaOH by exapilot due to LCV-2404A MV = 100% effect from line discharge pump fouling.
+  [DW R108] Steam 10S generate
+  [DW R109] Item
+  [DW R110] FC-2302.SV
+  [DW R113] FC2602.MV
+  [DW R118] K:Link to --> IOW
+  [DW R153] K:Link to --> IOW
+  [DW R154] K:\PE\02-Daily PTA product CAL ( SM )\06-Product transfer\Plant 1\2026\P1_Product_Transfer_Monitoring_202609.xlsm
+  [DW R155] K:\PE\01-WWT Daily consumption (SM)\02-Daily cons plant 1\2026\10-Plant1 Daily Cons for Shift Oct'26-OPS.xlsm
+  [DW R157] K:Link to --> ALARM TOP 3
+  [DW R158] Data EXAPLOG for P#1

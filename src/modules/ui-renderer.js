@@ -78,6 +78,8 @@ export const UIRenderer = {
       this.renderRegularWorkView(handlers);
     } else if (activeTab === 'sap') {
       this.renderSapView(handlers);
+    } else if (activeTab === 'handover') {
+      this.renderShiftHandover(handlers);
     } else if (activeTab === 'overview') {
       this.renderMonthlyOverview(handlers);
     } else if (activeTab === 'equipment') {
@@ -313,15 +315,15 @@ export const UIRenderer = {
       const bmBadge = el(
         'button',
         `badge-person ${isSupasit ? 'badge-person-highlight' : ''}`,
-        `BM: ${item.bm || '-'}`
+        `B/M: ${item.bm || '-'}`
       );
       bmBadge.type = 'button';
-      bmBadge.title = 'คลิกเพื่อกรองเฉพาะกะของ Boardman ท่านนี้';
+      bmBadge.title = 'คลิกเพื่อกรองเฉพาะกะของ Boardman (B/M) ท่านนี้';
       bmBadge.addEventListener('click', () =>
         handlers.onFilterChange({ bm: filters.bm === item.bm ? 'ALL' : item.bm })
       );
 
-      const fmBadge = el('span', 'badge-person-muted', `FM: ${item.fm || '-'}`);
+      const fmBadge = el('span', 'badge-person-muted', `F/M: ${item.fm || '-'}`);
 
       leftMeta.append(dateBadge, shiftBadge, catBadge, bmBadge, fmBadge);
       if (item.cba > 0) {
@@ -436,7 +438,7 @@ export const UIRenderer = {
       const meta = el(
         'span',
         'font-semibold',
-        `📅 ${item.date} (${item.shift}) · คู่กะ FM: ${item.fm || '-'}`
+        `📅 ${item.date} (${item.shift}) · คู่กะ F/M (Foreman): ${item.fm || '-'}`
       );
       const btn = el('button', 'btn-pill-secondary', '✨ ร่าง IPS');
       btn.type = 'button';
@@ -776,7 +778,7 @@ export const UIRenderer = {
       const bmBadge = el(
         'span',
         `badge-person ${isSupasit ? 'badge-person-highlight' : ''}`,
-        `BM: ${item.bm || '-'}`
+        `B/M: ${item.bm || '-'}`
       );
 
       leftMeta.append(dateBadge, shiftBadge, bmBadge);
@@ -897,15 +899,15 @@ export const UIRenderer = {
       const bmBadge = el(
         'button',
         `badge-person ${isSupasit ? 'badge-person-highlight' : ''}`,
-        `BM: ${item.bm || '-'}`
+        `B/M: ${item.bm || '-'}`
       );
       bmBadge.type = 'button';
-      bmBadge.title = 'คลิกเพื่อกรองกะของ Boardman ท่านนี้';
+      bmBadge.title = 'คลิกเพื่อกรองกะของ Boardman (B/M) ท่านนี้';
       bmBadge.addEventListener('click', () => {
         handlers.onWashingFilterChange({ query: washFilters.query === item.bm ? '' : item.bm });
       });
 
-      const fmBadge = el('span', 'badge-person-muted', `FM: ${item.fm || '-'}`);
+      const fmBadge = el('span', 'badge-person-muted', `F/M: ${item.fm || '-'}`);
 
       leftMeta.append(dateBadge, shiftBadge, bmBadge, fmBadge);
 
@@ -1082,15 +1084,15 @@ export const UIRenderer = {
       const bmBadge = el(
         'button',
         `badge-person ${isSupasit ? 'badge-person-highlight' : ''}`,
-        `BM: ${item.bm || '-'}`
+        `B/M: ${item.bm || '-'}`
       );
       bmBadge.type = 'button';
-      bmBadge.title = 'คลิกเพื่อกรองกะของ Boardman ท่านนี้';
+      bmBadge.title = 'คลิกเพื่อกรองกะของ Boardman (B/M) ท่านนี้';
       bmBadge.addEventListener('click', () => {
         handlers.onRegularWorkFilterChange({ query: rwFilters.query === item.bm ? '' : item.bm });
       });
 
-      const fmBadge = el('span', 'badge-person-muted', `FM: ${item.fm || '-'}`);
+      const fmBadge = el('span', 'badge-person-muted', `F/M: ${item.fm || '-'}`);
 
       leftMeta.append(dateBadge, timeBadge, bmBadge, fmBadge);
 
@@ -1223,6 +1225,180 @@ export const UIRenderer = {
       }
 
       listEl.appendChild(card);
+    }
+  },
+
+  renderShiftHandover(handlers) {
+    const entries = StateStore.get('entries') || [];
+    const siloOperations = StateStore.get('siloOperations') || [];
+    const washingRoutines = StateStore.get('washingRoutines') || [];
+    const sapMemos = StateStore.get('sapMemos') || [];
+    const handoverState = StateStore.get('handoverState') || {};
+
+    let targetDate = handoverState.selectedDate;
+    let targetShift = handoverState.selectedShift || 'Day';
+
+    if (!targetDate && entries.length > 0) {
+      const sortedEntries = [...entries].sort((a, b) => b.date.localeCompare(a.date));
+      targetDate = sortedEntries[0].date;
+      targetShift = sortedEntries[0].shift || 'Day';
+      StateStore.set('handoverState', { ...handoverState, selectedDate: targetDate, selectedShift: targetShift });
+    }
+
+    const dateSelect = document.getElementById('handover-select-date');
+    if (dateSelect) {
+      const dateSet = new Set();
+      for (const e of entries) {
+        if (e.date) dateSet.add(e.date);
+      }
+      const sortedDates = Array.from(dateSet).sort((a, b) => b.localeCompare(a));
+
+      if (dateSelect.options.length !== sortedDates.length) {
+        dateSelect.textContent = '';
+        for (const d of sortedDates) {
+          dateSelect.appendChild(new Option(`📅 ${d}`, d));
+        }
+      }
+      dateSelect.value = targetDate || '';
+    }
+
+    const shiftSelect = document.getElementById('handover-select-shift');
+    if (shiftSelect) {
+      shiftSelect.value = targetShift;
+    }
+
+    const digest = LogbookParser.generateShiftHandoverDigest(entries, {
+      date: targetDate,
+      shift: targetShift,
+      siloOperations,
+      washingRoutines,
+      sapMemos
+    });
+
+    const titleEl = document.getElementById('handover-title');
+    const personnelEl = document.getElementById('handover-personnel');
+    const metricsStrip = document.getElementById('handover-metrics-strip');
+
+    const shiftIcon = digest.shift === 'Night' ? '🌙 กะดึก (19:30 – 07:30)' : '☀️ กะเช้า (07:30 – 19:30)';
+    if (titleEl) {
+      titleEl.textContent = `📋 สรุปส่งเวร: วันที่ ${digest.date} [${shiftIcon}]`;
+    }
+    if (personnelEl) {
+      personnelEl.textContent = `👨‍💻 B/M (Boardman): ${digest.bm} · 👷‍♂️ F/M (Foreman): ${digest.fm}`;
+    }
+
+    if (metricsStrip) {
+      metricsStrip.textContent = '';
+      if (digest.avgLoad > 0) {
+        metricsStrip.appendChild(el('span', 'c-ref-tag font-bold', `📊 โหลดเฉลี่ย: ${digest.avgLoad}%`));
+      }
+      if (digest.avgCba > 0) {
+        const isCbaHigh = digest.avgCba > AppConfig.TARGETS.CBA_MAX;
+        metricsStrip.appendChild(el('span', `badge-metric ${isCbaHigh ? 'badge-metric-warn' : ''}`, `🧪 4-CBA: ${digest.avgCba} ppm`));
+      }
+      if (digest.prod > 0) {
+        metricsStrip.appendChild(el('span', 'badge-metric', `📦 ยอดผลิต: ${digest.prod} T/d`));
+      }
+    }
+
+    // Pillar 1: Operations
+    const p1Badge = document.getElementById('handover-p1-badge');
+    const p1Content = document.getElementById('handover-p1-content');
+    if (p1Badge) p1Badge.textContent = `${digest.keyEvents.length} เหตุการณ์`;
+    if (p1Content) {
+      p1Content.textContent = '';
+      if (digest.keyEvents.length === 0) {
+        p1Content.appendChild(el('div', 'text-xs text-muted p-3 text-center', 'การเดินเครื่องปกติ ไม่พบอาการผิดปกติในกะนี้ค่ะ'));
+      } else {
+        for (const ev of digest.keyEvents) {
+          const row = el('div', 'sa-card p-2 text-xs flex flex-col gap-1');
+          const top = el('div', 'flex items-center gap-1 font-semibold');
+          top.append(el('span', 'text-brand', `[${ev.time || '-'}]`), el('span', 'badge-cat text-xs', ev.category));
+          row.append(top, el('div', 'text-secondary', ev.text));
+          p1Content.appendChild(row);
+        }
+      }
+    }
+
+    // Pillar 2: Silo Status
+    const p2Badge = document.getElementById('handover-p2-badge');
+    const p2Content = document.getElementById('handover-p2-content');
+    if (p2Badge) p2Badge.textContent = digest.siloEvents.length > 0 ? `${digest.siloEvents.length} รายการในกะ` : 'สถานะสืบทอด';
+    if (p2Content) {
+      p2Content.textContent = '';
+      if (digest.siloEvents.length > 0) {
+        for (const s of digest.siloEvents) {
+          const row = el('div', 'sa-card p-2 text-xs flex flex-col gap-1');
+          const top = el('div', 'flex items-center gap-1 font-semibold text-brand');
+          top.append(el('span', '', `⏱️ [${s.time || '-'}]`), el('span', 'c-ref-tag', s.switchText ? `สลับ: ${s.switchText}` : 'ส่งผง'));
+          const desc = el('div', 'font-medium', `ปลายทาง: ${s.destination || '-'}${s.description ? ` (${s.description})` : ''}`);
+          row.append(top, desc);
+          p2Content.appendChild(row);
+        }
+      } else if (digest.latestSiloState) {
+        const ls = digest.latestSiloState;
+        const row = el('div', 'sa-card p-2 text-xs flex flex-col gap-1 bg-subtle');
+        row.append(
+          el('div', 'text-xs text-muted font-semibold', `📌 สถานะเดินต่อเนื่อง (จากบันทึก ${ls.date} ${ls.time}):`),
+          el('div', 'font-bold text-brand', `${ls.switchText ? `สลับ ${ls.switchText} | ` : ''}ส่ง ${ls.destination || '-'}`),
+          el('div', 'text-secondary', ls.description ? `หมายเหตุ: ${ls.description}` : '')
+        );
+        p2Content.appendChild(row);
+      } else {
+        p2Content.appendChild(el('div', 'text-xs text-muted p-3 text-center', 'ไม่มีการสลับ Silo ในกะนี้ค่ะ'));
+      }
+    }
+
+    // Pillar 3: PM-901 Washing
+    const p3Badge = document.getElementById('handover-p3-badge');
+    const p3Content = document.getElementById('handover-p3-content');
+    const ws = digest.washingStatus;
+    if (p3Badge) p3Badge.textContent = ws.performedInShift ? 'มีการล้างในกะนี้ 🧼' : 'ไม่ล้างในกะนี้';
+    if (p3Content) {
+      p3Content.textContent = '';
+      if (ws.performedInShift && ws.shiftWashRecords.length > 0) {
+        for (const wr of ws.shiftWashRecords) {
+          const row = el('div', 'sa-card p-2 text-xs flex flex-col gap-1 bg-subtle border-brand');
+          row.append(
+            el('div', 'font-bold text-brand flex items-center gap-1', `🧼 ${wr.washNo} (${wr.batchCount || '-'} Batch)`),
+            el('div', '', `ล้าง ${wr.pp404Target || 'PP-404'} @ ${wr.pp404Time || '-'} · หยุดล้างรวม: ${LogbookParser.formatDurationMinutes(wr.durationMin)}`)
+          );
+          p3Content.appendChild(row);
+        }
+      } else {
+        const row = el('div', 'sa-card p-2 text-xs flex flex-col gap-1');
+        row.append(
+          el('div', 'font-semibold text-secondary', '• ในกะนี้ไม่มีการล้างเครื่องจักร PM-901'),
+          el('div', 'text-muted', ws.lastWashDate !== '-' ? `• ล้างครั้งล่าสุดเมื่อ: ${ws.lastWashDate} (${ws.lastWashNo || '-'}, ${ws.lastWashBatch ? `${ws.lastWashBatch} Batch` : '-'}, หยุดล้าง ${LogbookParser.formatDurationMinutes(ws.lastWashDuration)})` : '')
+        );
+        p3Content.appendChild(row);
+      }
+    }
+
+    // Pillar 4: Pending SAP Memos
+    const p4Badge = document.getElementById('handover-p4-badge');
+    const p4Content = document.getElementById('handover-p4-content');
+    if (p4Badge) p4Badge.textContent = `${digest.pendingSap.length} งานค้างส่งต่อ`;
+    if (p4Content) {
+      p4Content.textContent = '';
+      if (digest.pendingSap.length === 0) {
+        p4Content.appendChild(el('div', 'text-xs text-muted p-3 text-center', 'ไม่มีงานแจ้งซ่อมบำรุง SAP ค้างส่งต่อค่ะ'));
+      } else {
+        for (const m of digest.pendingSap) {
+          const row = el('div', 'sa-card p-2 text-xs flex flex-col gap-1');
+          row.append(
+            el('div', 'font-bold text-brand flex items-center justify-between', `SAP #${m.sapNo || '-'}`),
+            el('div', 'text-secondary', `[สถานะ: ${m.status || 'REL'}]: ${m.detail || '-'}`)
+          );
+          p4Content.appendChild(row);
+        }
+      }
+    }
+
+    // Preview Formatting
+    const previewEl = document.getElementById('handover-formatted-preview');
+    if (previewEl) {
+      previewEl.textContent = LogbookParser.formatShiftHandoverText(digest);
     }
   }
 };

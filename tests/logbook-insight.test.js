@@ -570,4 +570,135 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
       expect(min3Incidents.items.map((x) => x.tag)).toEqual(['LCV-2302', 'PP-404A']);
     });
   });
+
+  describe('13. Smart Shift Handover Digest (generateShiftHandoverDigest & formatShiftHandoverText)', () => {
+    const mockShiftEntries = [
+      {
+        id: '2026-10-23-23-D-QC-14',
+        date: '2026-10-23',
+        day: '23',
+        shift: 'Day',
+        bm: 'C ศุภสิทธิ์',
+        fm: 'D อดุลย์',
+        cba: 12.5,
+        load: 85.0,
+        prod: 920.0,
+        category: 'QC',
+        row: 14,
+        time: '11:36',
+        text: 'LC-2301 check level stable',
+        tags: ['LC-2301']
+      },
+      {
+        id: '2026-10-23-23-D-DW-78',
+        date: '2026-10-23',
+        day: '23',
+        shift: 'Day',
+        bm: 'C ศุภสิทธิ์',
+        fm: 'D อดุลย์',
+        cba: 12.5,
+        load: 85.0,
+        prod: 920.0,
+        category: 'DW',
+        row: 78,
+        time: '07:48',
+        text: 'Cut transfer powder to silo B',
+        tags: ['SILO', 'TRANSFER']
+      },
+      {
+        id: '2026-10-23-23-D-DW-83',
+        date: '2026-10-23',
+        day: '23',
+        shift: 'Day',
+        bm: 'C ศุภสิทธิ์',
+        fm: 'D อดุลย์',
+        cba: 12.5,
+        load: 85.0,
+        prod: 920.0,
+        category: 'DW',
+        row: 83,
+        time: '12:00',
+        text: 'LCV-2302 valve hunt 40-70%',
+        tags: ['LCV-2302']
+      }
+    ];
+
+    const mockSilo = [
+      {
+        id: 'silo-1',
+        date: '2026-10-23',
+        time: '12:00',
+        shift: 'Day',
+        bm: 'C ศุภสิทธิ์',
+        fm: 'D อดุลย์',
+        switchText: 'B to A',
+        destination: 'B to PTK810A',
+        description: 'transfer normal'
+      }
+    ];
+
+    const mockWash = [
+      {
+        id: 'wash-1',
+        date: '2026-10-22',
+        shift: 'Night',
+        bm: 'B ฐาณันตร์',
+        fm: 'B เฉลิมพล',
+        washNo: 'No. 5',
+        batchCount: 28,
+        durationMin: 120
+      }
+    ];
+
+    const mockSap = [
+      {
+        id: 'sap-1',
+        date: '2026-10-23',
+        sapNo: '10045688',
+        detail: 'Check LCV-2302 gland packing leak',
+        status: 'REL'
+      }
+    ];
+
+    it('extracts all 4 handover pillars with correct Boardman (B/M) and Foreman (F/M)', () => {
+      const digest = LogbookParser.generateShiftHandoverDigest(mockShiftEntries, {
+        date: '2026-10-23',
+        shift: 'Day',
+        siloOperations: mockSilo,
+        washingRoutines: mockWash,
+        sapMemos: mockSap
+      });
+
+      expect(digest.date).toBe('2026-10-23');
+      expect(digest.shift).toBe('Day');
+      expect(digest.bm).toBe('C ศุภสิทธิ์');
+      expect(digest.fm).toBe('D อดุลย์');
+      expect(digest.avgLoad).toBe(85.0);
+      expect(digest.avgCba).toBe(12.5);
+
+      // Pillar 1: Key Operations & Incidents
+      expect(digest.keyEvents).toHaveLength(3);
+      expect(digest.keyTags).toContain('LCV-2302');
+
+      // Pillar 2: Silo & Logistics Status
+      expect(digest.siloEvents).toHaveLength(1);
+      expect(digest.siloEvents[0].switchText).toBe('B to A');
+      expect(digest.siloEvents[0].destination).toBe('B to PTK810A');
+
+      // Pillar 3: Washing Status
+      expect(digest.washingStatus.performedInShift).toBe(false);
+      expect(digest.washingStatus.lastWashDate).toBe('2026-10-22');
+
+      // Pillar 4: Pending SAP Memos
+      expect(digest.pendingSap).toHaveLength(1);
+      expect(digest.pendingSap[0].sapNo).toBe('10045688');
+
+      // Formatted text test
+      const formatted = LogbookParser.formatShiftHandoverText(digest);
+      expect(formatted).toContain('B/M (Boardman): C ศุภสิทธิ์');
+      expect(formatted).toContain('F/M (Foreman): D อดุลย์');
+      expect(formatted).toContain('B to PTK810A');
+      expect(formatted).toContain('LCV-2302');
+    });
+  });
 });

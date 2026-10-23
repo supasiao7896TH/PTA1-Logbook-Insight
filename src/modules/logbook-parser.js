@@ -1107,5 +1107,188 @@ export const LogbookParser = {
       pareto80Percentage,
       items: filteredItems
     };
+  },
+
+  generateShiftHandoverDigest(entries = [], options = {}) {
+    if (!Array.isArray(entries)) entries = [];
+    const {
+      date = '',
+      shift = 'Day',
+      siloOperations = [],
+      washingRoutines = [],
+      sapMemos = []
+    } = options;
+
+    // 1. Filter entries for this specific shift and date
+    const shiftEntries = entries
+      .filter((e) => e.date === date && e.shift === shift)
+      .sort((a, b) => this.compareLogChronology(a, b, 'asc'));
+
+    // Extract B/M (Boardman) and F/M (Foreman)
+    let bm = '-';
+    let fm = '-';
+    let totalLoad = 0;
+    let loadCount = 0;
+    let totalCba = 0;
+    let cbaCount = 0;
+    let prod = 0;
+
+    for (const e of shiftEntries) {
+      if (!bm || bm === '-') bm = e.bm || '-';
+      if (!fm || fm === '-') fm = e.fm || '-';
+      if (e.load > 0) {
+        totalLoad += e.load;
+        loadCount++;
+      }
+      if (e.cba > 0) {
+        totalCba += e.cba;
+        cbaCount++;
+      }
+      if (e.prod > 0 && prod === 0) {
+        prod = e.prod;
+      }
+    }
+
+    const avgLoad = loadCount > 0 ? Number((totalLoad / loadCount).toFixed(1)) : 0;
+    const avgCba = cbaCount > 0 ? Number((totalCba / cbaCount).toFixed(1)) : 0;
+
+    // Pillar 1: Key Operations & Incidents
+    const tagSet = new Set();
+    const keyEvents = [];
+    for (const e of shiftEntries) {
+      if (Array.isArray(e.tags)) {
+        for (const t of e.tags) tagSet.add(t);
+      }
+      keyEvents.push({
+        id: e.id,
+        time: e.time || '-',
+        category: e.category,
+        text: e.text,
+        tags: e.tags || []
+      });
+    }
+
+    // Pillar 2: Silo & Logistics Status
+    const shiftSilo = (siloOperations || [])
+      .filter((s) => s.date === date && s.shift === shift)
+      .sort((a, b) => this.compareLogChronology(a, b, 'asc'));
+
+    let latestSiloState = null;
+    if (shiftSilo.length === 0 && Array.isArray(siloOperations) && siloOperations.length > 0) {
+      const priorSilos = siloOperations
+        .filter((s) => s.date <= date)
+        .sort((a, b) => this.compareLogChronology(a, b, 'desc'));
+      latestSiloState = priorSilos[0] || null;
+    }
+
+    // Pillar 3: PM-901 Washing Routine Status
+    const shiftWash = (washingRoutines || []).filter((w) => w.date === date && w.shift === shift);
+    const performedInShift = shiftWash.length > 0;
+
+    let lastWashRecord = null;
+    if (Array.isArray(washingRoutines) && washingRoutines.length > 0) {
+      const priorWashes = washingRoutines
+        .filter((w) => w.date <= date)
+        .sort((a, b) => this.compareLogChronology(a, b, 'desc'));
+      lastWashRecord = priorWashes[0] || null;
+    }
+
+    // Pillar 4: Pending SAP Memos
+    const pendingSap = (sapMemos || []).filter((memo) => {
+      const isDateMatch = memo.date === date;
+      const isPending = memo.status && /REL|Not yet|Open/i.test(memo.status);
+      return isDateMatch || isPending;
+    }).slice(0, 5);
+
+    return {
+      date,
+      shift,
+      bm,
+      fm,
+      avgLoad,
+      avgCba,
+      prod,
+      keyEvents,
+      keyTags: Array.from(tagSet),
+      siloEvents: shiftSilo,
+      latestSiloState,
+      washingStatus: {
+        performedInShift,
+        shiftWashRecords: shiftWash,
+        lastWashDate: lastWashRecord ? lastWashRecord.date : '-',
+        lastWashNo: lastWashRecord ? lastWashRecord.washNo : '-',
+        lastWashBatch: lastWashRecord ? lastWashRecord.batchCount : null,
+        lastWashDuration: lastWashRecord ? lastWashRecord.durationMin : 0
+      },
+      pendingSap
+    };
+  },
+
+  formatShiftHandoverText(digest) {
+    if (!digest) return '';
+    const shiftIcon = digest.shift === 'Night' ? '🌙 กะดึก' : '☀️ กะเช้า';
+    const shiftTime = digest.shift === 'Night' ? '19:30 – 07:30' : '07:30 – 19:30';
+
+    let out = `========================================\n`;
+    out += `📋 สรุปส่งเวร PTA1 (Shift Handover Digest)\n`;
+    out += `📅 วันที่: ${digest.date} [${shiftIcon} ${shiftTime}]\n`;
+    out += `👨‍💻 B/M (Boardman): ${digest.bm || '-'} | F/M (Foreman): ${digest.fm || '-'}\n`;
+    out += `📊 โหลดเฉลี่ย: ${digest.avgLoad > 0 ? `${digest.avgLoad}%` : '-'} | 4-CBA: ${digest.avgCba > 0 ? `${digest.avgCba} ppm` : '-'}${digest.prod > 0 ? ` | ยอดผลิต: ${digest.prod} T/d` : ''}\n`;
+    out += `========================================\n\n`;
+
+    // 1. Key Operations
+    out += `1. ⚙️ การเดินเครื่อง & อาการผิดปกติหน้างาน:\n`;
+    if (digest.keyEvents.length === 0) {
+      out += `   - การเดินเครื่องปกติ ไม่พบอาการผิดปกติ\n`;
+    } else {
+      for (const ev of digest.keyEvents) {
+        out += `   • [${ev.time || '-'}] ${ev.text}\n`;
+      }
+    }
+    out += `\n`;
+
+    // 2. Silo Status
+    out += `2. 🌾 สถานะ Silo 800 & โลจิสติกส์ปลายทาง:\n`;
+    if (digest.siloEvents && digest.siloEvents.length > 0) {
+      for (const s of digest.siloEvents) {
+        out += `   • [${s.time || '-'}] ${s.switchText ? `สลับ: ${s.switchText} | ` : ''}ส่ง: ${s.destination || '-'}${s.description ? ` (${s.description})` : ''}\n`;
+      }
+    } else if (digest.latestSiloState) {
+      const ls = digest.latestSiloState;
+      out += `   • สถานะคงเดิมจากรอบก่อน: ${ls.switchText ? `สลับ ${ls.switchText} | ` : ''}ส่ง ${ls.destination || '-'}${ls.description ? ` (${ls.description})` : ''} (บันทึกเมื่อ ${ls.date})\n`;
+    } else {
+      out += `   - ไม่มีการสลับ Silo ในกะนี้\n`;
+    }
+    out += `\n`;
+
+    // 3. Washing Status
+    out += `3. 🧼 สถานะการล้างเครื่องจักร PM-901:\n`;
+    const ws = digest.washingStatus;
+    if (ws.performedInShift && ws.shiftWashRecords.length > 0) {
+      for (const wr of ws.shiftWashRecords) {
+        out += `   • ล้างเครื่องจักร ${wr.washNo || ''} (ยอด ${wr.batchCount || '-'} Batch) ใช้เวลาหยุดล้าง ${this.formatDurationMinutes(wr.durationMin)}\n`;
+      }
+    } else {
+      out += `   • ในกะนี้ไม่มีการล้าง PM-901\n`;
+      if (ws.lastWashDate !== '-') {
+        out += `   • ล้างครั้งล่าสุดเมื่อ: ${ws.lastWashDate} (${ws.lastWashNo || '-'}, ${ws.lastWashBatch ? `${ws.lastWashBatch} Batch` : '-'}, หยุดล้าง ${this.formatDurationMinutes(ws.lastWashDuration)})\n`;
+      }
+    }
+    out += `\n`;
+
+    // 4. Pending SAP Memos
+    out += `4. 🛠️ งานซ่อม SAP & Memo ค้างส่งต่อ:\n`;
+    if (digest.pendingSap && digest.pendingSap.length > 0) {
+      for (const m of digest.pendingSap) {
+        out += `   • SAP #${m.sapNo || '-'} [สถานะ: ${m.status || 'REL'}]: ${m.detail || '-'}\n`;
+      }
+    } else {
+      out += `   - ไม่มีงานซ่อมบำรุง SAP ค้างส่งต่อ\n`;
+    }
+
+    out += `\n========================================\n`;
+    out += `A-Class WebCraft • Supasit.A Studio • PTA1 Logbook Insight`;
+
+    return out;
   }
 };

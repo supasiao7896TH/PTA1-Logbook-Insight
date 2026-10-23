@@ -49,6 +49,11 @@ const _state = {
     monthKey: 'ALL',
     query: ''
   },
+  handoverState: {
+    selectedDate: '',
+    selectedShift: 'Day',
+    aiNotes: ''
+  },
   ipsDrafts: [],
   selectedDraftId: 'ips-oct-lcv2302',
   ipsMode: 'ips' // 'ips' | 'kaizen'
@@ -103,6 +108,11 @@ export const StateStore = {
   updateBadActorFilters(partial) {
     const next = { ..._state.badActorFilters, ...partial };
     this.set('badActorFilters', next);
+  },
+
+  updateHandoverState(partial) {
+    const next = { ..._state.handoverState, ...partial };
+    this.set('handoverState', next);
   },
 
   on(key, fn) {

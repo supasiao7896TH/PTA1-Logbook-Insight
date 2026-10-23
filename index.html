@@ -671,6 +671,9 @@
         <button type="button" class="nav-pill-btn" data-tab-btn="sap" role="tab" aria-selected="false">
           🛠️ งานซ่อม SAP &amp; Memo
         </button>
+        <button type="button" class="nav-pill-btn" data-tab-btn="handover" role="tab" aria-selected="false">
+          🔄 สรุปส่งเวรอัจฉริยะ (Handover)
+        </button>
         <button type="button" class="nav-pill-btn" data-tab-btn="overview" role="tab" aria-selected="false">
           📊 ภาพรวมรายเดือน &amp; กะพี่ A
         </button>
@@ -1044,6 +1047,104 @@
 
           <!-- Bad Actor Cards Grid -->
           <div id="equipment-chronic-grid" class="chronic-grid"></div>
+        </section>
+
+        <!-- VIEW HANDOVER: SMART SHIFT HANDOVER DIGEST -->
+        <section data-view-panel="handover" hidden aria-label="สรุปส่งเวรอัจฉริยะ">
+          <!-- Shift Selection Bar -->
+          <div class="sa-card" style="margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.65rem;">
+              <h2 style="font-size: 1.15rem; display: flex; align-items: center; gap: 0.4rem;">
+                <span>🔄</span>
+                <span>สรุปส่งเวรอัจฉริยะ (Shift Handover Digest 30 วินาที)</span>
+              </h2>
+              <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                <button id="btn-handover-latest" type="button" class="btn-pill-primary" style="background-color: var(--brand-ink);">
+                  <span>⚡</span>
+                  <span>กะล่าสุดทันที</span>
+                </button>
+                <button id="btn-handover-copy-all" type="button" class="btn-pill-secondary">
+                  <span>📋</span>
+                  <span>Copy ข้อความส่งเวรทั้งหมด</span>
+                </button>
+              </div>
+            </div>
+            <p class="kpi-sub" style="margin-bottom: 0.85rem;">
+              ดึงข้อมูล 12 ชม. ล่าสุดของกะ ประมวลผล 4 เสาหลัก (เครื่องจักร, Silo, PM-901, SAP) ให้ B/M กะถัดไปทราบสถานะได้ทันทีโดยไม่ต้องไล่อ่าน Logbook ย้อนหลัง
+            </p>
+            <div class="filter-toolbar">
+              <select id="handover-select-date" class="sa-select" aria-label="เลือกวันที่ส่งเวร"></select>
+              <select id="handover-select-shift" class="sa-select" aria-label="เลือกช่วงกะ">
+                <option value="Day">☀️ กะเช้า (07:30 – 19:30)</option>
+                <option value="Night">🌙 กะดึก (19:30 – 07:30)</option>
+              </select>
+              <button id="btn-handover-ai-advice" type="button" class="btn-pill-secondary" title="ใช้ AI ช่วยวิเคราะห์ข้อควรระวังพิเศษสำหรับกะถัดไป">
+                <span>✨</span>
+                <span>ให้ AI วิเคราะห์ข้อควรระวัง</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Shift Header Card -->
+          <div id="handover-header-card" class="sa-card" style="margin-bottom: 1rem; border-left: 4px solid var(--brand-ink);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+              <div>
+                <div id="handover-title" style="font-size: 1.1rem; font-weight: 700;">กำลังประมวลผล...</div>
+                <div id="handover-personnel" class="kpi-sub" style="margin-top: 0.2rem;">-</div>
+              </div>
+              <div id="handover-metrics-strip" style="display: flex; gap: 0.6rem; flex-wrap: wrap;"></div>
+            </div>
+          </div>
+
+          <!-- 4 Pillars Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+            <!-- Pillar 1: Operation & Incidents -->
+            <div class="sa-card" style="display: flex; flex-direction: column; gap: 0.65rem;">
+              <h3 style="font-size: 0.98rem; display: flex; align-items: center; justify-content: space-between;">
+                <span>1. ⚙️ การเดินเครื่อง &amp; อาการผิดปกติ</span>
+                <span id="handover-p1-badge" class="c-ref-tag" style="font-size: 0.75rem;">-</span>
+              </h3>
+              <div id="handover-p1-content" class="timeline-stack" style="max-height: 280px; overflow-y: auto;"></div>
+            </div>
+
+            <!-- Pillar 2: Silo Status -->
+            <div class="sa-card" style="display: flex; flex-direction: column; gap: 0.65rem;">
+              <h3 style="font-size: 0.98rem; display: flex; align-items: center; justify-content: space-between;">
+                <span>2. 🌾 สถานะ Silo 800 &amp; ปลายทางส่งผง</span>
+                <span id="handover-p2-badge" class="c-ref-tag" style="font-size: 0.75rem;">-</span>
+              </h3>
+              <div id="handover-p2-content" class="timeline-stack" style="max-height: 280px; overflow-y: auto;"></div>
+            </div>
+
+            <!-- Pillar 3: PM-901 Washing -->
+            <div class="sa-card" style="display: flex; flex-direction: column; gap: 0.65rem;">
+              <h3 style="font-size: 0.98rem; display: flex; align-items: center; justify-content: space-between;">
+                <span>3. 🧼 สถานะการล้างเครื่องจักร PM-901</span>
+                <span id="handover-p3-badge" class="c-ref-tag" style="font-size: 0.75rem;">-</span>
+              </h3>
+              <div id="handover-p3-content" class="timeline-stack" style="max-height: 280px; overflow-y: auto;"></div>
+            </div>
+
+            <!-- Pillar 4: Pending SAP Memos -->
+            <div class="sa-card" style="display: flex; flex-direction: column; gap: 0.65rem;">
+              <h3 style="font-size: 0.98rem; display: flex; align-items: center; justify-content: space-between;">
+                <span>4. 🛠️ งานซ่อม SAP &amp; Memo ค้างส่งต่อ</span>
+                <span id="handover-p4-badge" class="c-ref-tag" style="font-size: 0.75rem;">-</span>
+              </h3>
+              <div id="handover-p4-content" class="timeline-stack" style="max-height: 280px; overflow-y: auto;"></div>
+            </div>
+          </div>
+
+          <!-- Preview & Raw Text for One-Click Copy -->
+          <div class="sa-card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.65rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h3 style="font-size: 0.98rem;">📄 ข้อความสรุปส่งเวรฉบับสมบูรณ์ (พร้อมคัดลอก)</h3>
+              <button id="btn-handover-copy-preview" type="button" class="btn-pill-primary">
+                📋 Copy ข้อความนี้
+              </button>
+            </div>
+            <pre id="handover-formatted-preview" class="preview-pre" style="max-height: 360px;"></pre>
+          </div>
         </section>
 
         <!-- VIEW 4: IPS & KAIZEN STUDIO -->

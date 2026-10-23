@@ -10,7 +10,10 @@
 
 ## 📌 ภาพรวมระบบ (Multi-File Vite + ES Modules + Vitest + Cloudflare Workers)
 
-ระบบจัดการฐานความรู้และค้นหาย้อนหลังสำหรับไฟล์ Logbook ประจำเดือนของโรงงาน **GC-M PTA Unit 1** ที่แปลงไฟล์ Excel (`.xlsx` / `.xlsm`) ขนาดใหญ่หลายร้อย MB ให้เป็นฐานข้อมูลค้นหาย้อนหลังความเร็วสูง พร้อมเครื่องมือร่าง **IPS (HCL/Lotus Notes)** และ **Kaizen Report Card (7 หัวข้อ)** อัตโนมัติ
+ระบบจัดการฐานความรู้และค้นหาย้อนหลังสำหรับไฟล์ Logbook ประจำเดือนของโรงงาน **GC-M PTA Unit 1** ที่แปลงไฟล์ Excel (`.xlsx` / `.xlsm`) ขนาดใหญ่หลายร้อย MB ให้เป็นฐานข้อมูลค้นหาย้อนหลังความเร็วสูง พร้อมเครื่องมือ:
+- 🔄 **Smart Shift Handover Digest (สรุปส่งเวรอัจฉริยะ 30 วินาที):** สรุปข้อมูลส่งเวร 12 ชม. อัตโนมัติ 4 เสาหลัก (Operations/Alarm, Silo, Washing, SAP Pending) พร้อมปุ่ม 1-Click Copy ข้อความส่งต่อระหว่าง **B/M (Boardman)** และ **F/M (Foreman)**
+- 📝 **ร่างแบบฟอร์ม IPS (HCL/Lotus Notes):** สกัดปัญหาหน้างานและร่างข้อความ Before/After พร้อมสูตรคำนวณ Benefit
+- 🏆 **Kaizen Report Card (7 หัวข้อ + Why-Why Analysis):** ร่างการ์ดรายงาน Kaizen ฉบับสมบูรณ์พร้อม Root Cause และผลลัพธ์ที่วัดผลได้
 
 ### 📊 ข้อมูลที่สกัดไว้แล้วในระบบ (`public/data/logbook_2026.json`)
 - **ครอบคลุม 9 เดือนของปี 2026:** `01.Jan`, `02.Feb`, `03.Mar`, `04.Apr`, `06.Jun`, `07.Jul`, `08.Aug`, `09.Sep`, `10.Oct`

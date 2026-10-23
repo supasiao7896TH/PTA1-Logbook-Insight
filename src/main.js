@@ -46,6 +46,11 @@ const handlers = {
     UIRenderer.renderEquipmentChronic(handlers);
   },
 
+  onHandoverChange(partial) {
+    StateStore.updateHandoverState(partial);
+    UIRenderer.renderShiftHandover(handlers);
+  },
+
   async onCreateDraftFromBadActor(badActorItem) {
     const allEntries = StateStore.get('entries') || [];
     const relatedEntries = allEntries.filter((e) => Array.isArray(e.tags) && e.tags.includes(badActorItem.tag));
@@ -394,6 +399,76 @@ function wireEvents() {
       }, 250);
     });
   }
+
+  // Handover Event Listeners
+  const hoDateSelect = document.getElementById('handover-select-date');
+  if (hoDateSelect) {
+    hoDateSelect.addEventListener('change', (e) => {
+      handlers.onHandoverChange({ selectedDate: e.target.value });
+    });
+  }
+
+  const hoShiftSelect = document.getElementById('handover-select-shift');
+  if (hoShiftSelect) {
+    hoShiftSelect.addEventListener('change', (e) => {
+      handlers.onHandoverChange({ selectedShift: e.target.value });
+    });
+  }
+
+  document.getElementById('btn-handover-latest')?.addEventListener('click', () => {
+    const entries = StateStore.get('entries') || [];
+    if (entries.length > 0) {
+      const sorted = [...entries].sort((a, b) => b.date.localeCompare(a.date));
+      handlers.onHandoverChange({ selectedDate: sorted[0].date, selectedShift: sorted[0].shift || 'Day' });
+      UIRenderer.showToast(`ดึงข้อมูลกะล่าสุด (${sorted[0].date} ${sorted[0].shift}) เรียบร้อยค่ะ ⚡`, 'success');
+    }
+  });
+
+  const copyHandoverText = async () => {
+    const text = document.getElementById('handover-formatted-preview')?.textContent || '';
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      UIRenderer.showToast('📋 คัดลอกข้อความสรุปส่งเวรฉบับสมบูรณ์เรียบร้อยแล้วค่ะ!', 'success');
+    } catch {
+      UIRenderer.showToast('ไม่สามารถคัดลอกอัตโนมัติได้ กรุณาคลุมดำแล้วกด Ctrl+C ค่ะ', 'error');
+    }
+  };
+
+  document.getElementById('btn-handover-copy-all')?.addEventListener('click', copyHandoverText);
+  document.getElementById('btn-handover-copy-preview')?.addEventListener('click', copyHandoverText);
+
+  document.getElementById('btn-handover-ai-advice')?.addEventListener('click', async () => {
+    const key = await StorageEngine.getDecryptedApiKey();
+    if (!key) {
+      UIRenderer.showToast('กรุณากรอก Gemini API Key ในปุ่ม "⚙️ ตั้งค่า & ย้ายเครื่อง" ก่อนใช้งาน AI ค่ะ', 'info');
+      return;
+    }
+    const handoverText = document.getElementById('handover-formatted-preview')?.textContent || '';
+    if (!handoverText) return;
+
+    try {
+      UIRenderer.showToast('กำลังให้ Gemini AI วิเคราะห์จุดเสี่ยงของกะถัดไป...');
+      const prompt = `ในฐานะ Senior Process Engineer โรงงาน GC-M PTA Unit 1 จงวิเคราะห์ข้อความสรุปส่งเวรต่อไปนี้ และให้คำแนะนำข้อควรระวังพิเศษสำหรับกะถัดไป 3 ข้อสั้นๆ:\n\n${handoverText}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      });
+      const data = await res.json();
+      const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (aiReply) {
+        const preview = document.getElementById('handover-formatted-preview');
+        if (preview) {
+          preview.textContent += `\n\n🤖 ข้อแนะนำพิเศษจาก Gemini AI สำหรับกะถัดไป:\n${aiReply}`;
+        }
+        UIRenderer.showToast('Gemini AI วิเคราะห์ข้อควรระวังเสร็จเรียบร้อยค่ะ! ✨', 'success');
+      }
+    } catch (err) {
+      UIRenderer.showToast(`เกิดข้อผิดพลาดจาก AI: ${err.message}`, 'error');
+    }
+  });
 
   // One-Click Live SharePoint Sync button
   const btnSyncLive = document.getElementById('btn-sync-live');

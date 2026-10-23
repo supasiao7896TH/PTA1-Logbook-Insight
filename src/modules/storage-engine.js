@@ -134,5 +134,51 @@ export const StorageEngine = {
     } catch {
       return '';
     }
+  },
+
+  async exportAllData() {
+    const customMonths = await this.getAllCustomMonths();
+    const ipsDrafts = await this.getAllIpsDrafts();
+    const theme = await this.getSetting('theme', 'light');
+
+    return JSON.stringify({
+      appName: 'PTA1 Logbook Insight',
+      version: '1.0.0',
+      exportedAt: new Date().toISOString(),
+      theme,
+      customMonths,
+      ipsDrafts
+    }, null, 2);
+  },
+
+  async importAllData(jsonStr) {
+    if (!jsonStr) throw new Error('ไฟล์ข้อมูลว่างเปล่าค่ะ');
+    const payload = JSON.parse(jsonStr);
+
+    let draftsImported = 0;
+    if (Array.isArray(payload.ipsDrafts)) {
+      for (const d of payload.ipsDrafts) {
+        if (d && d.id) {
+          await this.saveIpsDraft(d);
+          draftsImported++;
+        }
+      }
+    }
+
+    let monthsImported = 0;
+    if (Array.isArray(payload.customMonths)) {
+      for (const m of payload.customMonths) {
+        if (m && m.monthKey) {
+          await this.saveCustomMonth(m);
+          monthsImported++;
+        }
+      }
+    }
+
+    if (payload.theme) {
+      await this.saveSetting('theme', payload.theme);
+    }
+
+    return { draftsImported, monthsImported };
   }
 };

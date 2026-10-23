@@ -528,8 +528,45 @@ function wireEvents() {
   document.getElementById('btn-save-api-key')?.addEventListener('click', async () => {
     const val = document.getElementById('gemini-api-key-input')?.value || '';
     await StorageEngine.saveEncryptedApiKey(val);
-    if (modal) modal.hidden = true;
     UIRenderer.showToast('บันทึก Gemini API Key (เข้ารหัส AES-GCM 256-bit) เรียบร้อยค่ะ!', 'success');
+  });
+
+  // Backup Export
+  document.getElementById('btn-export-backup')?.addEventListener('click', async () => {
+    try {
+      const json = await StorageEngine.exportAllData();
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const dateStr = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `pta1_logbook_backup_${dateStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      UIRenderer.showToast('ดาวน์โหลดไฟล์สำรองข้อมูลเรียบร้อยค่ะ! นำไปกู้คืนบนเครื่องใหม่ได้ทันที', 'success');
+    } catch (err) {
+      UIRenderer.showToast(`เกิดข้อผิดพลาดในการสำรองข้อมูล: ${err.message}`, 'error');
+    }
+  });
+
+  // Backup Import (Restore)
+  document.getElementById('backup-import-input')?.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const result = await StorageEngine.importAllData(text);
+      await loadInitialData();
+      UIRenderer.renderAll(handlers);
+      if (modal) modal.hidden = true;
+      UIRenderer.showToast(`กู้คืนข้อมูลสำเร็จ! นำเข้าร่าง IPS ${result.draftsImported} รายการเรียบร้อยค่ะ 🎉`, 'success');
+    } catch (err) {
+      UIRenderer.showToast(`กู้คืนข้อมูลไม่สำเร็จ: ${err.message}`, 'error');
+    } finally {
+      e.target.value = '';
+    }
   });
 }
 

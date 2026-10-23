@@ -752,10 +752,10 @@
           type="button"
           class="btn-pill-secondary"
           style="display: inline-flex; align-items: center; gap: 0.35rem;"
-          title="ตั้งค่า Gemini AI API Key (AES-256)"
+          title="ตั้งค่า Gemini AI API Key และสำรองข้อมูลย้ายเครื่อง"
         >
           <span>⚙️</span>
-          <span>ตั้งค่า AI</span>
+          <span>ตั้งค่า &amp; ย้ายเครื่อง</span>
         </button>
       </header>
 
@@ -1130,10 +1130,10 @@
     </div>
   </div>
 
-  <!-- Settings Modal for Gemini API Key -->
+  <!-- Settings & Migration Modal -->
   <div id="ai-key-modal" class="modal-backdrop" hidden>
     <div class="sa-card modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-ai-title">
-      <h2 id="modal-ai-title" style="font-size: 1.05rem; margin-bottom: 0.5rem;">⚙️ ตั้งค่า Gemini API Key (BYOK)</h2>
+      <h2 id="modal-ai-title" style="font-size: 1.05rem; margin-bottom: 0.5rem;">⚙️ ตั้งค่าระบบ &amp; สำรองข้อมูลย้ายเครื่อง</h2>
       <p class="kpi-sub" style="margin-bottom: 0.85rem;">
         คีย์ของพี่ A จะถูกเข้ารหัสด้วย Web Crypto AES-GCM 256-bit เก็บไว้ในเครื่องนี้เท่านั้น (หากไม่ใส่คีย์ ระบบร่าง IPS อัตโนมัติแบบ Offline ก็ทำงานได้ปกติ 100% ค่ะ)
       </p>
@@ -1141,9 +1141,34 @@
         <label class="form-label" for="gemini-api-key-input">Gemini API Key</label>
         <input id="gemini-api-key-input" type="password" class="sa-input" placeholder="AIzaSy..." />
       </div>
-      <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-        <button id="btn-close-settings" type="button" class="btn-pill-secondary">ยกเลิก</button>
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.5rem;">
         <button id="btn-save-api-key" type="button" class="btn-pill-primary">บันทึกคีย์ปลอดภัย</button>
+      </div>
+
+      <hr style="border: none; border-top: 1px solid var(--line-border); margin: 1.25rem 0 1rem;" />
+      <h3 style="font-size: 0.95rem; margin-bottom: 0.35rem;">💾 สำรองและกู้คืนข้อมูล (PC Migration Backup)</h3>
+      <p class="kpi-sub" style="margin-bottom: 0.75rem;">
+        ก่อนเปลี่ยนเครื่อง PC วันที่ 30 ต.ค. แนะนำให้กดดาวน์โหลดไฟล์สำรองเก็บไว้ใน OneDrive บริษัท เพื่อนำไปกดกู้คืนบนเครื่องใหม่ได้ทันทีค่ะ
+      </p>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <button id="btn-export-backup" type="button" class="btn-pill-primary">
+          <span>💾</span>
+          <span>ดาวน์โหลดไฟล์สำรอง (Backup)</span>
+        </button>
+        <label
+          for="backup-import-input"
+          class="btn-pill-secondary"
+          style="cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;"
+          title="เลือกไฟล์ .json ที่สำรองไว้เพื่อกู้คืนข้อมูลบนเครื่องนี้"
+        >
+          <span>📥</span>
+          <span>กู้คืนข้อมูล (Restore)</span>
+        </label>
+        <input id="backup-import-input" type="file" accept=".json" hidden />
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.25rem;">
+        <button id="btn-close-settings" type="button" class="btn-pill-secondary">ปิดหน้าต่าง</button>
       </div>
     </div>
   </div>

@@ -462,4 +462,33 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
       expect(desc.map((x) => x.time)).toEqual(['00:16', '21:00', '13:28', '11:36', '08:45', '07:48']);
     });
   });
+
+  describe('11. Storage Engine Data Export & Import (PC Migration Backup & Restore)', () => {
+    it('validates backup JSON structure and restores drafts successfully', async () => {
+      const { StorageEngine } = await import('../src/modules/storage-engine.js');
+      const backupJson = JSON.stringify({
+        appName: 'PTA1 Logbook Insight',
+        version: '1.0.0',
+        exportedAt: '2026-10-23T15:00:00.000Z',
+        theme: 'light',
+        ipsDrafts: [
+          { id: 'draft-test-1', jobName: 'แก้ไขท่อระบายน้ำ', date: '2026-10-23' },
+          { id: 'draft-test-2', jobName: 'ปรับจูน Exapilot LCV-2302', date: '2026-10-22' }
+        ],
+        customMonths: [
+          { monthKey: '2026-11', monthMeta: { label: 'พ.ย. 2026' } }
+        ]
+      });
+
+      const result = await StorageEngine.importAllData(backupJson);
+      expect(result.draftsImported).toBe(2);
+      expect(result.monthsImported).toBe(1);
+
+      const exported = await StorageEngine.exportAllData();
+      const parsed = JSON.parse(exported);
+      expect(parsed.appName).toBe('PTA1 Logbook Insight');
+      expect(parsed.version).toBe('1.0.0');
+      expect(Array.isArray(parsed.ipsDrafts)).toBe(true);
+    });
+  });
 });

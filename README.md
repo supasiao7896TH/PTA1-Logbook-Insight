@@ -38,5 +38,8 @@ npm run check
 ---
 
 ## 📂 เอกสารวิเคราะห์และคัดกรองเคส IPS/Kaizen
-- [`01_IPS_Kaizen_Candidates_Oct2026.md`](./01_IPS_Kaizen_Candidates_Oct2026.md) — 4 เคสเด่นจากหน้างานจริงของพี่ A พร้อมร่างฟอร์ม **IPS (HCL Notes)** ครบ 3 เคส และ **Kaizen Report Card (7 หัวข้อ + Why-Why Analysis)** 2 เคสใหญ่
-- [`02_Monthly_Shift_Insight_Oct2026.md`](./02_Monthly_Shift_Insight_Oct2026.md) — รายงานสรุป Insight ประจำเดือน ต.ค. 2026
+- [`docs/01_IPS_Kaizen_Candidates_Oct2026.md`](./docs/01_IPS_Kaizen_Candidates_Oct2026.md) — 4 เคสเด่นจากหน้างานจริงของพี่ A พร้อมร่างฟอร์ม **IPS (HCL Notes)** ครบ 3 เคส และ **Kaizen Report Card (7 หัวข้อ + Why-Why Analysis)** 2 เคสใหญ่
+- [`docs/02_Monthly_Shift_Insight_Oct2026.md`](./docs/02_Monthly_Shift_Insight_Oct2026.md) — รายงานสรุป Insight ประจำเดือน ต.ค. 2026
+
+## 📁 โฟลเดอร์จัดเก็บไฟล์ Logbook
+- [`logbooks/`](./logbooks/) — แหล่งเก็บไฟล์ Logbook ต้นฉบับประจำเดือน (`.xlsx` และ `.xlsm`) สำหรับรัน `npm run extract` หรือนำเข้าเพิ่มในแต่ละเดือน

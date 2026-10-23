@@ -3,4 +3,6 @@ dist/
 .vite/
 *.xlsx
 *.xlsm
+logbooks/*.xlsx
+logbooks/*.xlsm
 .DS_Store

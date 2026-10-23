@@ -11,6 +11,9 @@ import zlib from 'zlib';
 import { LogbookParser } from '../src/modules/logbook-parser.js';
 
 const WORKSPACE_DIR = process.cwd();
+const LOGBOOKS_DIR = fs.existsSync(path.join(WORKSPACE_DIR, 'logbooks'))
+  ? path.join(WORKSPACE_DIR, 'logbooks')
+  : WORKSPACE_DIR;
 const OUTPUT_DIR = path.join(WORKSPACE_DIR, 'public', 'data');
 const OUTPUT_JSON = path.join(OUTPUT_DIR, 'logbook_2026.json');
 
@@ -357,19 +360,23 @@ function parseWorkbookFile(filePath, monthMeta) {
 
 function main() {
   const startTime = Date.now();
-  const filesInWorkspace = fs.readdirSync(WORKSPACE_DIR);
+  const filesInLogbooks = fs.readdirSync(LOGBOOKS_DIR);
+  const filesInWorkspace = fs.existsSync(WORKSPACE_DIR) ? fs.readdirSync(WORKSPACE_DIR) : [];
+  const searchFiles = [...new Set([...filesInLogbooks, ...filesInWorkspace])];
 
   const allMonths = [];
   const allDaysSummary = [];
   const allEntries = [];
 
   for (const meta of MONTH_FILE_PATTERNS) {
-    const matchedFile = filesInWorkspace.find(
+    const matchedFile = searchFiles.find(
       (f) => f.startsWith(meta.prefix) && (f.endsWith('.xlsx') || f.endsWith('.xlsm'))
     );
     if (!matchedFile) continue;
 
-    const fullPath = path.join(WORKSPACE_DIR, matchedFile);
+    const fullPath = fs.existsSync(path.join(LOGBOOKS_DIR, matchedFile))
+      ? path.join(LOGBOOKS_DIR, matchedFile)
+      : path.join(WORKSPACE_DIR, matchedFile);
     const t0 = Date.now();
     try {
       const { daysSummary, entries } = parseWorkbookFile(fullPath, meta);

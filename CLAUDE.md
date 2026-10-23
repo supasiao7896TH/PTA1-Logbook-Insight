@@ -27,6 +27,6 @@
 
 ## DO NOT
 - ❌ ห้าม hardcode API key ในโค้ด
-- ❌ ห้าม push ไฟล์ `*.xlsx` / `*.xlsm` ขึ้น repo
+- ❌ ห้าม push ไฟล์ `*.xlsx` / `*.xlsm` ในโฟลเดอร์ `logbooks/` ขึ้น repo
 - ❌ ห้ามใช้ innerHTML กับข้อมูลบันทึก
 - ❌ ห้าม deploy หรือ commit โดยที่ `npm run check` ยังไม่เขียว

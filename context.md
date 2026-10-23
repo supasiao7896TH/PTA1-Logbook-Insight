@@ -92,9 +92,14 @@ Store: settings
 ## 📁 โครงสร้างไฟล์
 ```text
 PTA1-Logbook-Insight/
+├── logbooks/                    ← จัดเก็บไฟล์ Excel Logbook (.xlsx / .xlsm) ประจำเดือนทั้งหมด (ignore ไม่ขึ้น git)
+├── docs/                        ← รวบรวมเอกสารวิเคราะห์และรายงานสรุป
+│   ├── 01_IPS_Kaizen_Candidates_Oct2026.md
+│   ├── 02_Monthly_Shift_Insight_Oct2026.md
+│   └── oct2026_raw_extracted.txt
 ├── index.html                   ← HTML Markup หลัก และ Design System Tokens
 ├── package.json                 ← Tooling (Vite + Vitest)
-├── .gitignore                   ← ยกเว้น node_modules, dist, *.xlsx, *.xlsm
+├── .gitignore                   ← ยกเว้น node_modules, dist, logbooks/*.xlsx, logbooks/*.xlsm
 ├── src/
 │   ├── main.js                  ← APP_CORE Entry point & Event wiring
 │   └── modules/
@@ -106,14 +111,12 @@ PTA1-Logbook-Insight/
 │       ├── ui-renderer.js       ← UI_RENDERER Safe DOM & Templates
 │       └── debug-module.js      ← DEBUG_MODULE Audit logger
 ├── scripts/
-│   └── extract-logbooks.mjs     ← Node.js CLI Extractor สำหรับอ่าน 9 เดือน
+│   └── extract-logbooks.mjs     ← Node.js CLI Extractor สำหรับอ่าน 9 เดือนจากโฟลเดอร์ logbooks/
 ├── tests/
 │   └── logbook-insight.test.js  ← Vitest Unit Tests (TDD Coverage)
 ├── public/
 │   └── data/
 │       └── logbook_2026.json    ← ฐานข้อมูลสกัดแล้ว 9 เดือน (3,074 บันทึก)
-├── 01_IPS_Kaizen_Candidates_Oct2026.md
-├── 02_Monthly_Shift_Insight_Oct2026.md
 ├── context.md                   ← ไฟล์นี้
 ├── agents.md                    ← กฎสำหรับ AI Agent
 ├── CLAUDE.md                    ← สรุปคำสั่งและสถาปัตยกรรม

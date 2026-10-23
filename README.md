@@ -1,12 +1,14 @@
 # PTA1 Logbook Insight & IPS/Kaizen Studio
 
-> **อัปเดตล่าสุด:** 23 ต.ค. 2026
-> **ผู้ใช้งาน:** พี่ A (Supasit Aoothai · `C ศุภสิทธิ์` · Boardman PTA Unit 1 · GC-M PTA)
-> **แบรนด์:** A-Class WebCraft • Code • Share • Inspire • by Supasit.A
+> **🌐 Live Production URL:** [https://pta1-logbook-insight.supasiao.workers.dev](https://pta1-logbook-insight.supasiao.workers.dev)  
+> **📱 PWA Ready:** ติดตั้งบนมือถือ (iOS / Android) และใช้งานออฟไลน์ในโรงงานได้ทันที  
+> **อัปเดตล่าสุด:** 23 ต.ค. 2026  
+> **ผู้ใช้งาน:** พี่ A (Supasit Aoothai · `C ศุภสิทธิ์` · Boardman PTA Unit 1 · GC-M PTA)  
+> **แบรนด์:** A-Class WebCraft • Code • Share • Inspire • by Supasit.A  
 
 ---
 
-## 📌 ภาพรวมระบบ (Multi-File Vite + ES Modules + Vitest)
+## 📌 ภาพรวมระบบ (Multi-File Vite + ES Modules + Vitest + Cloudflare Workers)
 
 ระบบจัดการฐานความรู้และค้นหาย้อนหลังสำหรับไฟล์ Logbook ประจำเดือนของโรงงาน **GC-M PTA Unit 1** ที่แปลงไฟล์ Excel (`.xlsx` / `.xlsm`) ขนาดใหญ่หลายร้อย MB ให้เป็นฐานข้อมูลค้นหาย้อนหลังความเร็วสูง พร้อมเครื่องมือร่าง **IPS (HCL/Lotus Notes)** และ **Kaizen Report Card (7 หัวข้อ)** อัตโนมัติ
 

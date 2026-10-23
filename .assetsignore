@@ -1,0 +1,14 @@
+node_modules
+.git
+.github
+.wrangler
+logbooks
+*.xlsx
+*.xlsm
+scripts
+test
+CLAUDE.md
+AGENTS.md
+context.md
+README.md
+HANDOFF.md

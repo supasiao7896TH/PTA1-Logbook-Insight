@@ -58,15 +58,16 @@
 2. ตั้งสิทธิ์โฟลเดอร์ (Folder Properties > Security) ให้กลุ่ม `Users` หรือ `Everyone` มีสิทธิ์ Read/Write
 3. ตั้งค่า **Windows Task Scheduler** ให้สั่งรัน `npm run dev` และ `npm run sync:watch` ตั้งแต่เปิดเครื่องคอมพิวเตอร์ (Run whether user is logged on or not)
 
-### แนวทาง B: Deploy ขึ้น Cloud / Intranet Web Server (⭐ แนะนำที่สุดสำหรับการใช้งานทั้งโรงงาน)
-1. **สถาปัตยกรรม:** Build เว็บแอปเป็น Static Production Asset (`npm run build`)
-2. **Deploy ไปยังโฮสติ้ง:**
-   - ใช้งาน **Cloudflare Pages / Workers** หรือ **GitHub Pages**
-   - นำไฟล์ `dist/` และ `public/data/logbook_2026.json` ขึ้นโฮสติ้ง
-3. **ข้อดี:**
-   - ทุกคนในโรงงานเปิดผ่าน URL ลิงก์เดียว (เช่น `https://pta1-logbook.pages.dev`)
-   - ใช้งานได้จากคอมพิวเตอร์ทุกเครื่อง แท็บเล็ต หรือมือถือในโรงงาน
-   - ไม่ต้องติดตั้ง Node.js หรือเปิดคอมพิวเตอร์เครื่องใดเครื่องหนึ่งทิ้งไว้ 24 ชม.
+### แนวทาง B: Deploy ขึ้น Cloudflare Workers & Mobile PWA (⭐ ดำเนินการเสร็จสมบูรณ์แล้ว)
+1. **Live Production URL:** [https://pta1-logbook-insight.supasiao.workers.dev](https://pta1-logbook-insight.supasiao.workers.dev)
+2. **GitHub Repository:** [https://github.com/supasiao7896TH/PTA1-Logbook-Insight](https://github.com/supasiao7896TH/PTA1-Logbook-Insight)
+3. **Cloudflare Account ID:** `e87e6b4e7ec59834a35db192e7e37eb8` (User: `supasiao@gmail.com`)
+4. **CI/CD Auto-Deploy:** ทุกครั้งที่มีการ `git push origin main` เวิร์กโฟลว์ `.github/workflows/deploy.yml` จะทำการรัน `npm run check` (Vitest 17 ข้อ + Vite Build) แล้วสั่ง deploy ขึ้น Cloudflare Workers อัตโนมัติผ่าน GitHub Secret `CLOUDFLARE_API_TOKEN`
+5. **Mobile PWA Capabilities:**
+   - ติดตั้งเป็น Web App บนมือถือได้ทันที (iOS Safari: Share > Add to Home Screen, Android Chrome: Install App)
+   - มี Service Worker (`sw.js`) แคชไฟล์สำหรับเปิดใช้งานแบบ Offline ใน Plant ที่ไม่มีสัญญาณเน็ต
+   - UI ปรับขนาด responsive บนหน้าจอมือถือ พร้อมปุ่ม `☰ เมนู` สำหรับเปิด/ปิดแถบนำทางและเลือกเดือนอย่างสะดวก
+   - ข้อมูล Logbook ซิงค์แบบ Network-First (เมื่อมีเน็ตจะดึงข้อมูลอัปเดตล่าสุด เมื่อออฟไลน์จะดึงจากแคชในเครื่อง)
 
 ---
 

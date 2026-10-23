@@ -561,10 +561,71 @@ function startBackgroundSyncDetector() {
   });
 }
 
+function registerServiceWorker() {
+  if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then((reg) => {
+        DebugModule.log('ServiceWorker registered with scope:', reg.scope);
+      }).catch((err) => {
+        DebugModule.error('ServiceWorker registration failed:', err);
+      });
+    });
+  }
+}
+
+let deferredPrompt = null;
+function setupPwaInstallPrompt() {
+  const btnInstall = document.getElementById('btn-pwa-install');
+  if (!btnInstall) return;
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    btnInstall.style.display = 'inline-flex';
+  });
+
+  btnInstall.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    DebugModule.log('PWA install prompt outcome:', outcome);
+    deferredPrompt = null;
+    btnInstall.style.display = 'none';
+  });
+
+  window.addEventListener('appinstalled', () => {
+    btnInstall.style.display = 'none';
+    deferredPrompt = null;
+    UIRenderer.showToast('ติดตั้งแอป PTA1 Logbook Insight บนอุปกรณ์เรียบร้อยแล้วค่ะ! 📲', 'success');
+  });
+}
+
+function setupMobileDrawer() {
+  const btnMobileMenu = document.getElementById('btn-mobile-menu');
+  const sidebar = document.querySelector('.app-sidebar');
+  if (!btnMobileMenu || !sidebar) return;
+
+  btnMobileMenu.addEventListener('click', () => {
+    sidebar.classList.toggle('sidebar-mobile-open');
+    const isOpen = sidebar.classList.contains('sidebar-mobile-open');
+    btnMobileMenu.innerHTML = isOpen ? '<span>✕</span> <span>ปิด</span>' : '<span>☰</span> <span>เมนู</span>';
+  });
+
+  sidebar.addEventListener('click', (e) => {
+    if (window.innerWidth <= 960 && (e.target.closest('[data-tab-btn]') || e.target.closest('.month-pill-btn'))) {
+      sidebar.classList.remove('sidebar-mobile-open');
+      btnMobileMenu.innerHTML = '<span>☰</span> <span>เมนู</span>';
+    }
+  });
+}
+
 async function init() {
   const savedTheme = await StorageEngine.getSetting('theme', 'light');
   document.documentElement.setAttribute('data-theme', savedTheme);
   wireEvents();
+  setupMobileDrawer();
+  setupPwaInstallPrompt();
+  registerServiceWorker();
   await loadInitialData();
   startBackgroundSyncDetector();
 }

@@ -2,7 +2,16 @@
 <html lang="th" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#1D4ED8" />
+  <meta name="description" content="PTA1 Logbook Insight & IPS Kaizen Studio - Plant 1 Operation Analytics by Supasit.A" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="PTA1 Logbook" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="/icons/icon-192.svg" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
   <title>PTA1 Logbook Insight &amp; IPS/Kaizen Studio | Supasit.A</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -88,14 +97,33 @@
       min-height: 100vh;
     }
 
+    .mobile-menu-btn {
+      display: none;
+    }
+
     @media (max-width: 960px) {
       .app-shell {
         grid-template-columns: 1fr;
       }
+      .mobile-menu-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
       .app-sidebar {
+        display: none;
         border-right: none;
         border-bottom: 1px solid var(--line-border);
       }
+      .app-sidebar.sidebar-mobile-open {
+        display: flex;
+        animation: fadeIn 0.15s ease-out;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .app-sidebar {
@@ -664,6 +692,16 @@
     <div class="app-main">
       <!-- Sticky Topbar -->
       <header class="sticky-topbar">
+        <button
+          id="btn-mobile-menu"
+          type="button"
+          class="btn-pill-secondary mobile-menu-btn"
+          aria-label="เปิดหรือปิดเมนูนำทาง"
+          title="เปิดเมนูนำทางและเลือกเดือน"
+        >
+          <span>☰</span>
+          <span>เมนู</span>
+        </button>
         <div class="search-input-wrap">
           <input
             id="global-search-input"
@@ -673,6 +711,16 @@
             aria-label="ค้นหาข้อมูลใน Logbook"
           />
         </div>
+        <button
+          id="btn-pwa-install"
+          type="button"
+          class="btn-pill-primary"
+          style="display: none; background-color: var(--brand-ink);"
+          title="ติดตั้งแอป PTA1 Logbook Insight ลงหน้าจอมือถือ/คอมพิวเตอร์"
+        >
+          <span>📲</span>
+          <span>ติดตั้ง App</span>
+        </button>
         <button
           id="btn-sync-live"
           type="button"

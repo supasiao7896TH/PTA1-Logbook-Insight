@@ -10,7 +10,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "extract": "node scripts/extract-logbooks.mjs",
+    "extract:live": "node scripts/extract-logbooks.mjs --dir \"C:\\Users\\26007294\\OneDrive - PTT Global Chemical Public Company Limited\\Shortcuts\\Production - PE Documents\\02 - Plant 1\\Log book PTA1\\Report FM,BM 2026\"",
     "sync:watch": "node scripts/watch-logbooks.mjs",
+    "sync:live": "node scripts/watch-logbooks.mjs --dir \"C:\\Users\\26007294\\OneDrive - PTT Global Chemical Public Company Limited\\Shortcuts\\Production - PE Documents\\02 - Plant 1\\Log book PTA1\\Report FM,BM 2026\"",
     "check": "vitest run && vite build"
   },
   "devDependencies": {

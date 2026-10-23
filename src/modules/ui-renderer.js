@@ -74,6 +74,8 @@ export const UIRenderer = {
       this.renderSiloView(handlers);
     } else if (activeTab === 'washing') {
       this.renderWashingView(handlers);
+    } else if (activeTab === 'regular') {
+      this.renderRegularWorkView(handlers);
     } else if (activeTab === 'sap') {
       this.renderSapView(handlers);
     } else if (activeTab === 'overview') {
@@ -854,6 +856,131 @@ export const UIRenderer = {
       }
 
       bodyWrap.appendChild(timelineStrip);
+
+      card.append(head, bodyWrap);
+      listEl.appendChild(card);
+    }
+  },
+
+  renderRegularWorkView(handlers) {
+    const listEl = document.getElementById('regular-timeline-list');
+    const countEl = document.getElementById('regular-results-count');
+    if (!listEl) return;
+    listEl.textContent = '';
+
+    const allRW = StateStore.get('regularWorkRoutines') || [];
+    const rwFilters = StateStore.get('regularWorkFilters') || {};
+    const filtered = LogbookParser.filterRegularWorkRoutines(allRW, rwFilters);
+
+    // Sync month select
+    const monthSelect = document.getElementById('filter-regular-month');
+    const months = StateStore.get('months') || [];
+    if (monthSelect && monthSelect.options.length !== months.length + 1) {
+      monthSelect.textContent = '';
+      monthSelect.appendChild(new Option('📅 เดือน: ทั้งหมด', 'ALL'));
+      for (const m of months) {
+        monthSelect.appendChild(new Option(`${m.label} (${m.regularWorkCount || 0})`, m.monthKey));
+      }
+    }
+    if (monthSelect) monthSelect.value = rwFilters.monthKey || 'ALL';
+
+    // Sync task select
+    const taskSelect = document.getElementById('filter-regular-task');
+    if (taskSelect) taskSelect.value = rwFilters.taskKey || 'ALL';
+
+    // Sync search input
+    const searchInput = document.getElementById('search-regular-input');
+    if (searchInput && document.activeElement !== searchInput) {
+      searchInput.value = rwFilters.query || '';
+    }
+
+    // Sync quick filter chips
+    const activeChip = rwFilters.taskKey || 'ALL';
+    document.querySelectorAll('#quick-regular-chips [data-regular-chip]').forEach((btn) => {
+      const chipVal = btn.getAttribute('data-regular-chip');
+      btn.classList.toggle('sa-chip-active', chipVal === activeChip);
+    });
+
+    if (countEl) {
+      countEl.textContent = `พบ ${filtered.length.toLocaleString('en-US')} รายการ (จากทั้งหมด ${allRW.length.toLocaleString('en-US')} ครั้งที่มีการทำจริง)`;
+    }
+
+    if (filtered.length === 0) {
+      const empty = el(
+        'div',
+        'sa-card p-8 text-center',
+        'ไม่พบรายการ Regular Work ตามเงื่อนไขที่เลือกค่ะ ลองกดปุ่ม "ทั้งหมด (All)" เพื่อดูข้อมูลทั้งหมดนะคะ'
+      );
+      listEl.appendChild(empty);
+      return;
+    }
+
+    // Sort newest date first, then time
+    const sorted = [...filtered].sort((a, b) => b.date.localeCompare(a.date) || (b.time || '').localeCompare(a.time || ''));
+
+    for (const item of sorted) {
+      const card = el('article', 'sa-card log-entry-card');
+      const head = el('div', 'log-entry-header');
+      const leftMeta = el('div', 'log-entry-meta');
+
+      const dateBadge = el('span', 'badge-date', `📅 ${item.date}`);
+      const timeBadge = el('span', 'badge-metric font-bold', `⏱️ ${item.time || '-'}`);
+      const isSupasit = (item.bm || '').includes('ศุภสิทธิ์');
+      const bmBadge = el(
+        'button',
+        `badge-person ${isSupasit ? 'badge-person-highlight' : ''}`,
+        `BM: ${item.bm || '-'}`
+      );
+      bmBadge.type = 'button';
+      bmBadge.title = 'คลิกเพื่อกรองกะของ Boardman ท่านนี้';
+      bmBadge.addEventListener('click', () => {
+        handlers.onRegularWorkFilterChange({ query: rwFilters.query === item.bm ? '' : item.bm });
+      });
+
+      const fmBadge = el('span', 'badge-person-muted', `FM: ${item.fm || '-'}`);
+
+      leftMeta.append(dateBadge, timeBadge, bmBadge, fmBadge);
+
+      const draftBtn = el('button', 'btn-pill-secondary', '✨ ร่าง IPS จากงานนี้');
+      draftBtn.type = 'button';
+      draftBtn.addEventListener('click', () => {
+        handlers.onCreateDraftFromEntry({
+          id: item.id,
+          date: item.date,
+          shift: item.shift || 'Day',
+          bm: item.bm,
+          fm: item.fm,
+          tags: item.tags || ['REGULAR-WORK'],
+          text: `งานบำรุงรักษาประจำกะ (Regular Work): ${item.taskTitle} [เวลา ${item.time}] ${item.valueDetail ? `(รายละเอียด: ${item.valueDetail})` : ''} - สถานะ: ${item.note}`
+        });
+      });
+
+      head.append(leftMeta, draftBtn);
+
+      // Body layout
+      const bodyWrap = el('div', 'flex flex-col gap-2 mt-2');
+
+      // Title & highlight
+      const titleRow = el('div', 'log-entry-text font-semibold');
+      titleRow.appendChild(createHighlightedText(item.taskTitle, rwFilters.query));
+      bodyWrap.appendChild(titleRow);
+
+      // Detail Badges
+      const detailRow = el('div', 'flex flex-wrap items-center gap-2');
+
+      const noteBadge = el('span', 'c-ref-tag', `📋 ${item.note}`);
+      detailRow.appendChild(noteBadge);
+
+      if (item.valueDetail) {
+        const valBadge = el(
+          'span',
+          'badge-metric badge-metric-warn font-semibold',
+          `⚙️ ข้อมูลหน้างาน: ${item.valueDetail}`
+        );
+        detailRow.appendChild(valBadge);
+      }
+
+      bodyWrap.appendChild(detailRow);
 
       card.append(head, bodyWrap);
       listEl.appendChild(card);

@@ -253,6 +253,39 @@ export const LogbookParser = {
   },
 
   /**
+   * Filters Regular Work Routine events.
+   * @param {Array<Object>} regularWorkRoutines
+   * @param {Object} filters
+   * @returns {Array<Object>}
+   */
+  filterRegularWorkRoutines(regularWorkRoutines, filters = {}) {
+    if (!Array.isArray(regularWorkRoutines)) return [];
+    const { taskKey = 'ALL', monthKey = 'ALL', query = '' } = filters;
+    const q = query.trim().toLowerCase();
+
+    return regularWorkRoutines.filter((item) => {
+      if (monthKey && monthKey !== 'ALL' && item.monthKey !== monthKey) return false;
+
+      if (taskKey && taskKey !== 'ALL') {
+        if ((item.taskKey || '').toUpperCase() !== taskKey.toUpperCase()) return false;
+      }
+
+      if (q) {
+        const matchTitle = (item.taskTitle || '').toLowerCase().includes(q);
+        const matchVal = (item.valueDetail || '').toLowerCase().includes(q);
+        const matchNote = (item.note || '').toLowerCase().includes(q);
+        const matchBm = (item.bm || '').toLowerCase().includes(q);
+        const matchFm = (item.fm || '').toLowerCase().includes(q);
+        const matchDate = (item.date || '').toLowerCase().includes(q);
+        const matchKey = (item.taskKey || '').toLowerCase().includes(q);
+        if (!matchTitle && !matchVal && !matchNote && !matchBm && !matchFm && !matchDate && !matchKey) return false;
+      }
+
+      return true;
+    });
+  },
+
+  /**
    * Calculates duration in minutes between start time and end time (handling midnight crossing).
    * @param {string} startTime e.g. "13:40"
    * @param {string} endTime e.g. "15:44"

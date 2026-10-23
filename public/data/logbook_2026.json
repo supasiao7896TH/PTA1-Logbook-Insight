@@ -1,12 +1,13 @@
 {
-  "generatedAt": "2026-10-23T05:07:25.446Z",
+  "generatedAt": "2026-10-23T05:37:36.939Z",
   "totalMonths": 9,
   "totalDays": 226,
-  "totalEntries": 4454,
+  "totalEntries": 4541,
   "totalSiloOperations": 1128,
   "totalSapMemos": 139,
   "totalRegularWork": 2224,
   "totalWashingRoutines": 113,
+  "totalRegularWorkRoutines": 87,
   "months": [
     {
       "monthKey": "2026-01",
@@ -16,7 +17,8 @@
       "entriesCount": 439,
       "siloCount": 128,
       "sapCount": 21,
-      "washingCount": 15
+      "washingCount": 15,
+      "regularWorkCount": 0
     },
     {
       "monthKey": "2026-02",
@@ -26,7 +28,8 @@
       "entriesCount": 529,
       "siloCount": 138,
       "sapCount": 11,
-      "washingCount": 17
+      "washingCount": 17,
+      "regularWorkCount": 0
     },
     {
       "monthKey": "2026-03",
@@ -36,7 +39,8 @@
       "entriesCount": 603,
       "siloCount": 164,
       "sapCount": 34,
-      "washingCount": 13
+      "washingCount": 13,
+      "regularWorkCount": 0
     },
     {
       "monthKey": "2026-04",
@@ -46,7 +50,8 @@
       "entriesCount": 147,
       "siloCount": 43,
       "sapCount": 7,
-      "washingCount": 4
+      "washingCount": 4,
+      "regularWorkCount": 0
     },
     {
       "monthKey": "2026-06",
@@ -56,47 +61,52 @@
       "entriesCount": 421,
       "siloCount": 103,
       "sapCount": 8,
-      "washingCount": 8
+      "washingCount": 8,
+      "regularWorkCount": 0
     },
     {
       "monthKey": "2026-07",
       "label": "ก.ค. 2026",
       "fileName": "07.Jul_2026 PTA1 FM Activity Report  (2).xlsm",
       "daysCount": 31,
-      "entriesCount": 570,
+      "entriesCount": 573,
       "siloCount": 148,
       "sapCount": 12,
-      "washingCount": 13
+      "washingCount": 13,
+      "regularWorkCount": 3
     },
     {
       "monthKey": "2026-08",
       "label": "ส.ค. 2026",
       "fileName": "08.Aug_2026 PTA1 FM Activity Report (4).xlsm",
       "daysCount": 31,
-      "entriesCount": 645,
+      "entriesCount": 683,
       "siloCount": 156,
       "sapCount": 13,
-      "washingCount": 17
+      "washingCount": 17,
+      "regularWorkCount": 38
     },
     {
       "monthKey": "2026-09",
       "label": "ก.ย. 2026",
       "fileName": "09.Sep_2026 PTA1 FM Activity Report.xlsm",
       "daysCount": 28,
-      "entriesCount": 610,
+      "entriesCount": 635,
       "siloCount": 133,
       "sapCount": 14,
-      "washingCount": 14
+      "washingCount": 14,
+      "regularWorkCount": 25
     },
     {
       "monthKey": "2026-10",
       "label": "ต.ค. 2026",
       "fileName": "10.Oct_2026 PTA1 FM Activity Report.xlsm",
       "daysCount": 23,
-      "entriesCount": 490,
+      "entriesCount": 511,
       "siloCount": 115,
       "sapCount": 19,
-      "washingCount": 12
+      "washingCount": 12,
+      "regularWorkCount": 21
     }
   ],
   "daysSummary": [
@@ -64488,6 +64498,30 @@
       "tags": []
     },
     {
+      "id": "2026-07-29-D-RW-36",
+      "monthKey": "2026-07",
+      "monthLabel": "ก.ค. 2026",
+      "date": "2026-07-29",
+      "day": "29",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 15.7,
+      "pta": 158,
+      "load": 99,
+      "prod": 1338.5,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "18:05",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-07-29-D-SILO-51",
       "monthKey": "2026-07",
       "monthLabel": "ก.ค. 2026",
@@ -64743,6 +64777,54 @@
       "text": "Inc PC-2201 SV.78 >> 78.1 4- CBA = 16.0 ppm",
       "tags": [
         "PC-2201"
+      ]
+    },
+    {
+      "id": "2026-07-30-D-RW-32",
+      "monthKey": "2026-07",
+      "monthLabel": "ก.ค. 2026",
+      "date": "2026-07-30",
+      "day": "30",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 15.07,
+      "pta": 158,
+      "load": 98,
+      "prod": 1328.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 32,
+      "time": "17:49",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-07-30-D-RW-35",
+      "monthKey": "2026-07",
+      "monthLabel": "ก.ค. 2026",
+      "date": "2026-07-30",
+      "day": "30",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 15.07,
+      "pta": 158,
+      "load": 98,
+      "prod": 1328.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 35,
+      "time": "21:26",
+      "text": "[📋 Regular Work] Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -65589,6 +65671,80 @@
       "tags": []
     },
     {
+      "id": "2026-08-01-D-RW-31",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-01",
+      "day": "01",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1336.3,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 31,
+      "time": "15:15",
+      "text": "[📋 Regular Work] Drain Light oil PZ-601 = __6__ Lite(Every sat. of week) (6 Lite)",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-01-D-RW-37",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-01",
+      "day": "01",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1336.3,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 37,
+      "time": "15:26",
+      "text": "[📋 Regular Work] Blow down PT-401 (Every sat. of week)",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-01-D-RW-38",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-01",
+      "day": "01",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1336.3,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 38,
+      "time": "10:06",
+      "text": "[📋 Regular Work] Check LCV-2301-3 (Every 1,16) LCV-2301 = 30% , LCV-2302 = 70% , LCV-2303 = 95% (LCV-2301-3 (Every 1,16) LCV-2301 = 30% , LCV-2302 = 70% , LCV-2303 = 95%)",
+      "tags": [
+        "LCV",
+        "LCV-2301",
+        "LCV-2302",
+        "LCV-2303",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-08-01-N-SILO-51",
       "monthKey": "2026-08",
       "monthLabel": "ส.ค. 2026",
@@ -65866,6 +66022,30 @@
       "text": "Load up plant from 98% >> 99% balance weight TTK-400",
       "tags": [
         "TTK-400"
+      ]
+    },
+    {
+      "id": "2026-08-02-D-RW-36",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-02",
+      "day": "02",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1340.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "09:58",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -67090,6 +67270,103 @@
       "tags": []
     },
     {
+      "id": "2026-08-05-D-RW-32",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-05",
+      "day": "05",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1324,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 32,
+      "time": "14:30",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-05-D-RW-33",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-05",
+      "day": "05",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1324,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 33,
+      "time": "14:30",
+      "text": "[📋 Regular Work] NaOH washing PT-501 to sewer and stand line purge level PD-501 (Every 5,20 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "PD-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-05-D-RW-35",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-05",
+      "day": "05",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1324,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 35,
+      "time": "19:36",
+      "text": "[📋 Regular Work] Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-05-D-RW-36",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-05",
+      "day": "05",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1324,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "15:52",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-08-05-D-SILO-51",
       "monthKey": "2026-08",
       "monthLabel": "ส.ค. 2026",
@@ -68222,6 +68499,54 @@
       "tags": []
     },
     {
+      "id": "2026-08-08-D-RW-31",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-08",
+      "day": "08",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "A สถิตย์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1317.2,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 31,
+      "time": "17:56",
+      "text": "[📋 Regular Work] Drain Light oil PZ-601 = _7___ Lite(Every sat. of week) (7 Lite)",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-08-D-RW-37",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-08",
+      "day": "08",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "A สถิตย์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1317.2,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 37,
+      "time": "17:56",
+      "text": "[📋 Regular Work] Blow down PT-401 (Every sat. of week)",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-08-08-D-SILO-52",
       "monthKey": "2026-08",
       "monthLabel": "ส.ค. 2026",
@@ -68606,6 +68931,30 @@
       "tags": []
     },
     {
+      "id": "2026-08-09-D-RW-36",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-09",
+      "day": "09",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "A สถิตย์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1338.2,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "16:48",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-08-09-D-SILO-52",
       "monthKey": "2026-08",
       "monthLabel": "ส.ค. 2026",
@@ -68885,6 +69234,54 @@
       "time": "02:00",
       "text": "Decrease rinse ratio 0.65 -> 0.6 due to p-TA = 156",
       "tags": []
+    },
+    {
+      "id": "2026-08-10-D-RW-32",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-10",
+      "day": "10",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1323.1,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 32,
+      "time": "17:21",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-10-D-RW-35",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-10",
+      "day": "10",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1323.1,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 35,
+      "time": "21:33",
+      "text": "[📋 Regular Work] Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
     },
     {
       "id": "2026-08-10-D-SILO-51",
@@ -70125,6 +70522,30 @@
       "text": "Increase SV LC-2301 15% -> 16% due to MPS = 119",
       "tags": [
         "LC-2301"
+      ]
+    },
+    {
+      "id": "2026-08-12-D-RW-36",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-12",
+      "day": "12",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1326.5,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "16:36",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -72344,6 +72765,102 @@
       "tags": []
     },
     {
+      "id": "2026-08-15-D-RW-31",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-15",
+      "day": "15",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1263.1,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 31,
+      "time": "15:12",
+      "text": "[📋 Regular Work] Drain Light oil PZ-601 = __18__ Lite(Every sat. of week) (18 Lite)",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-15-D-RW-32",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-15",
+      "day": "15",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1263.1,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 32,
+      "time": "18:06",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-15-D-RW-35",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-15",
+      "day": "15",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1263.1,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 35,
+      "time": "21:26",
+      "text": "[📋 Regular Work] Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-15-D-RW-37",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-15",
+      "day": "15",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1263.1,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 37,
+      "time": "13:47",
+      "text": "[📋 Regular Work] Blow down PT-401 (Every sat. of week)",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-08-15-D-SILO-51",
       "monthKey": "2026-08",
       "monthLabel": "ส.ค. 2026",
@@ -72879,6 +73396,78 @@
       "time": "22:10",
       "text": "- Inc rinse ratio 0.5 --> 0.55 --> 0.5(3:25) control p-TA.",
       "tags": []
+    },
+    {
+      "id": "2026-08-16-D-RW-34",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-16",
+      "day": "16",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "D วุฒิชาติ",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1316.1,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 34,
+      "time": "15:11",
+      "text": "[📋 Regular Work] Switching PP-101 for run A --> B , Have lump = ___0.2____ kg. (Every 16 of month) (Lump: 0.2 kg)",
+      "tags": [
+        "PP",
+        "PP-101",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-16-D-RW-36",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-16",
+      "day": "16",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "D วุฒิชาติ",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1316.1,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "15:55",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-16-D-RW-38",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-16",
+      "day": "16",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "D วุฒิชาติ",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1316.1,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 38,
+      "time": "10:32",
+      "text": "[📋 Regular Work] Check LCV-2301-3 (Every 1,16) (LCV-2301-3 (Every 1,16))",
+      "tags": [
+        "LCV",
+        "LCV-2301",
+        "REGULAR-WORK"
+      ]
     },
     {
       "id": "2026-08-16-D-SILO-52",
@@ -73693,6 +74282,30 @@
       "tags": []
     },
     {
+      "id": "2026-08-18-D-RW-35",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-18",
+      "day": "18",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B เพชร",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1352.3,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 35,
+      "time": "08:26",
+      "text": "[📋 Regular Work] Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-08-18-D-SILO-52",
       "monthKey": "2026-08",
       "monthLabel": "ส.ค. 2026",
@@ -74127,6 +74740,30 @@
       "text": "Load up plant from 97% --> 98% for balance weight TTK-400",
       "tags": [
         "TTK-400"
+      ]
+    },
+    {
+      "id": "2026-08-19-D-RW-36",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-19",
+      "day": "19",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "A สถิตย์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1310.6,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "08:26",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -74618,6 +75255,55 @@
       "time": "",
       "text": "46254",
       "tags": []
+    },
+    {
+      "id": "2026-08-20-D-RW-32",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-20",
+      "day": "20",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "B ฐาณันตร์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1324.7,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 32,
+      "time": "17:21",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-20-D-RW-33",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-20",
+      "day": "20",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "B ฐาณันตร์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1324.7,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 33,
+      "time": "17:21",
+      "text": "[📋 Regular Work] NaOH washing PT-501 to sewer and stand line purge level PD-501 (Every 5,20 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "PD-501",
+        "REGULAR-WORK"
+      ]
     },
     {
       "id": "2026-08-20-D-SILO-51",
@@ -75336,6 +76022,54 @@
       ]
     },
     {
+      "id": "2026-08-22-D-RW-31",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-22",
+      "day": "22",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1324.7,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 31,
+      "time": "15:28",
+      "text": "[📋 Regular Work] Drain Light oil PZ-601 = _15___ Lite(Every sat. of week) (15 Lite)",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-22-D-RW-37",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-22",
+      "day": "22",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1324.7,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 37,
+      "time": "18:27",
+      "text": "[📋 Regular Work] Blow down PT-401 (Every sat. of week)",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-08-22-D-SILO-51",
       "monthKey": "2026-08",
       "monthLabel": "ส.ค. 2026",
@@ -75643,6 +76377,54 @@
       "text": "Decrease residue 100 >> 50% due to %HT-340 off spec 67.6%",
       "tags": [
         "HT-340"
+      ]
+    },
+    {
+      "id": "2026-08-23-D-RW-35",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-23",
+      "day": "23",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1337.7,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 35,
+      "time": "00:20",
+      "text": "[📋 Regular Work] Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-23-D-RW-36",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-23",
+      "day": "23",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1337.7,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "07:12",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -76067,6 +76849,30 @@
       ]
     },
     {
+      "id": "2026-08-24-D-RW-36",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-24",
+      "day": "24",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1338.5,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "07:12",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-08-24-D-SILO-52",
       "monthKey": "2026-08",
       "monthLabel": "ส.ค. 2026",
@@ -76396,6 +77202,54 @@
       "time": "19:57",
       "text": "Dec rinse ratio 0.50 >> 0.45 because p-TA = 132 ppm",
       "tags": []
+    },
+    {
+      "id": "2026-08-25-D-RW-32",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-25",
+      "day": "25",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1340.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 32,
+      "time": "17:24",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-25-D-RW-35",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-25",
+      "day": "25",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1340.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 35,
+      "time": "07:57",
+      "text": "[📋 Regular Work] Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
     },
     {
       "id": "2026-08-25-D-SILO-52",
@@ -76907,6 +77761,54 @@
       "time": "04:50",
       "text": "Inc rinseratio 0.45 >> 0.50 control p-TA",
       "tags": []
+    },
+    {
+      "id": "2026-08-26-D-RW-35",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-26",
+      "day": "26",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1325.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 35,
+      "time": "07:10",
+      "text": "[📋 Regular Work] Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-26-D-RW-36",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-26",
+      "day": "26",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1325.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "09:55",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
     },
     {
       "id": "2026-08-26-D-SILO-52",
@@ -78234,6 +79136,54 @@
       ]
     },
     {
+      "id": "2026-08-29-D-RW-31",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-29",
+      "day": "29",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1339.3,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 31,
+      "time": "15:21",
+      "text": "[📋 Regular Work] Drain Light oil PZ-601 = __20__ Lite(Every sat. of week) (20 Lite)",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-29-D-RW-37",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-29",
+      "day": "29",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1339.3,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 37,
+      "time": "14:12",
+      "text": "[📋 Regular Work] Blow down PT-401 (Every sat. of week)",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-08-29-D-SILO-52",
       "monthKey": "2026-08",
       "monthLabel": "ส.ค. 2026",
@@ -78583,6 +79533,54 @@
       "text": "- Top-up oil to PP-503B by 0.7 L due to level below normal range, noting oil leakage around the gear box.",
       "tags": [
         "PP-503B"
+      ]
+    },
+    {
+      "id": "2026-08-30-D-RW-32",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-30",
+      "day": "30",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "A สถิตย์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1330.5,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 32,
+      "time": "11:28",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-08-30-D-RW-36",
+      "monthKey": "2026-08",
+      "monthLabel": "ส.ค. 2026",
+      "date": "2026-08-30",
+      "day": "30",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "A สถิตย์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 1330.5,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "11:35",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -79615,6 +80613,30 @@
       ]
     },
     {
+      "id": "2026-09-01-D-RW-38",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-01",
+      "day": "01",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "A สถิตย์",
+      "cba": 10.06,
+      "pta": 152,
+      "load": 98,
+      "prod": 1324.1,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 38,
+      "time": "09:12",
+      "text": "[📋 Regular Work] Check LCV-2301-3 (Every 1,16) (LCV-2301-3 (Every 1,16))",
+      "tags": [
+        "LCV",
+        "LCV-2301",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-09-01-D-SILO-52",
       "monthKey": "2026-09",
       "monthLabel": "ก.ย. 2026",
@@ -80236,6 +81258,30 @@
       "text": "Dec.LC-2301.SV from 20 --> 19% MPS = 130 um.",
       "tags": [
         "LC-2301"
+      ]
+    },
+    {
+      "id": "2026-09-02-D-RW-36",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-02",
+      "day": "02",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "A สถิตย์",
+      "cba": 10.46,
+      "pta": 147,
+      "load": 97,
+      "prod": 1328.6,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "18:59",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -81922,6 +82968,103 @@
       "tags": []
     },
     {
+      "id": "2026-09-05-D-RW-31",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-05",
+      "day": "05",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "D วุฒิชาติ",
+      "cba": 11.92,
+      "pta": 149,
+      "load": 95,
+      "prod": 0,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 31,
+      "time": "15:22",
+      "text": "[📋 Regular Work] Drain Light oil PZ-601 = _25___ Lite(Every sat. of week) (25 Lite)",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-09-05-D-RW-32",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-05",
+      "day": "05",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "D วุฒิชาติ",
+      "cba": 11.92,
+      "pta": 149,
+      "load": 95,
+      "prod": 0,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 32,
+      "time": "15:58",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-09-05-D-RW-33",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-05",
+      "day": "05",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "D วุฒิชาติ",
+      "cba": 11.92,
+      "pta": 149,
+      "load": 95,
+      "prod": 0,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 33,
+      "time": "16:00",
+      "text": "[📋 Regular Work] NaOH washing PT-501 to sewer and stand line purge level PD-501 (Every 5,20 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "PD-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-09-05-D-RW-37",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-05",
+      "day": "05",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "D วุฒิชาติ",
+      "cba": 11.92,
+      "pta": 149,
+      "load": 95,
+      "prod": 0,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 37,
+      "time": "15:48",
+      "text": "[📋 Regular Work] Blow down PT-401 (Every sat. of week)",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-09-05-N-SILO-51",
       "monthKey": "2026-09",
       "monthLabel": "ก.ย. 2026",
@@ -82638,6 +83781,30 @@
       "text": "Load up plant from 100% >> 101% balance weight TTK-400",
       "tags": [
         "TTK-400"
+      ]
+    },
+    {
+      "id": "2026-09-06-D-RW-36",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-06",
+      "day": "06",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 13.61,
+      "pta": 132,
+      "load": 100,
+      "prod": 1337.3,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "09:37",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -83821,6 +84988,30 @@
       ]
     },
     {
+      "id": "2026-09-09-D-RW-36",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-09",
+      "day": "09",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B เพชร",
+      "cba": 12.66,
+      "pta": 144,
+      "load": 97,
+      "prod": 1322.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "17:40",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-09-09-D-SILO-52",
       "monthKey": "2026-09",
       "monthLabel": "ก.ย. 2026",
@@ -84281,6 +85472,30 @@
       "text": "- Load up 98.5 --> 99% TTK-400 = 137 ton.",
       "tags": [
         "TTK-400"
+      ]
+    },
+    {
+      "id": "2026-09-10-D-RW-32",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-10",
+      "day": "10",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B เพชร",
+      "cba": 12.18,
+      "pta": 137,
+      "load": 97.5,
+      "prod": 1327.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 32,
+      "time": "18:33",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -85323,6 +86538,54 @@
       ]
     },
     {
+      "id": "2026-09-12-D-RW-31",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-12",
+      "day": "12",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "A สถิตย์",
+      "cba": 11.53,
+      "pta": 141,
+      "load": 97,
+      "prod": 1329.3,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 31,
+      "time": "15:38",
+      "text": "[📋 Regular Work] Drain Light oil PZ-601 = __25__ Lite(Every sat. of week) (25 Lite)",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-09-12-D-RW-37",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-12",
+      "day": "12",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "A สถิตย์",
+      "cba": 11.53,
+      "pta": 141,
+      "load": 97,
+      "prod": 1329.3,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 37,
+      "time": "15:38",
+      "text": "[📋 Regular Work] Blow down PT-401 (Every sat. of week)",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-09-12-D-SILO-52",
       "monthKey": "2026-09",
       "monthLabel": "ก.ย. 2026",
@@ -85715,6 +86978,30 @@
       "text": "Load up plant from 98 --> 99% for balance weight TTK-400",
       "tags": [
         "TTK-400"
+      ]
+    },
+    {
+      "id": "2026-09-13-D-RW-36",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-13",
+      "day": "13",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "A สถิตย์",
+      "cba": 12.03,
+      "pta": 151,
+      "load": 97,
+      "prod": 1318.6,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "08:19",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -86313,6 +87600,30 @@
       ]
     },
     {
+      "id": "2026-09-15-D-RW-32",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-15",
+      "day": "15",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 10.47,
+      "pta": 135,
+      "load": 98,
+      "prod": 1331.8,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 32,
+      "time": "18:09",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-09-15-D-SILO-52",
       "monthKey": "2026-09",
       "monthLabel": "ก.ย. 2026",
@@ -86752,6 +88063,80 @@
       "text": "Dec.LC-2301 SV.21 >> 20 MPS =129 um",
       "tags": [
         "LC-2301"
+      ]
+    },
+    {
+      "id": "2026-09-16-D-RW-34",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-16",
+      "day": "16",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 11.31,
+      "pta": 143,
+      "load": 98,
+      "prod": 1318.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 34,
+      "time": "16:19",
+      "text": "[📋 Regular Work] Switching PP-101 for run A , Have lump = __0.6_____ kg. (Every 16 of month) (สลับปั๊ม A (Lump: 0.6 kg))",
+      "tags": [
+        "PP",
+        "PP-101",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-09-16-D-RW-36",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-16",
+      "day": "16",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 11.31,
+      "pta": 143,
+      "load": 98,
+      "prod": 1318.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "17:43",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-09-16-D-RW-38",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-16",
+      "day": "16",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 11.31,
+      "pta": 143,
+      "load": 98,
+      "prod": 1318.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 38,
+      "time": "16:48",
+      "text": "[📋 Regular Work] Check LCV-2301-3 (Every 1,16)LCV-2301 = 6 sec open = 40 %, LCV-2302 =17 sec open = 70 %, LCV-2303 = 14 sec open = 96 % (LCV-2301-3 (Every 1,16)LCV-2301 = 6 sec open = 40 %, LCV-2302 =17 sec open = 70 %, LCV-2303 = 14 sec open = 96 %)",
+      "tags": [
+        "LCV",
+        "LCV-2301",
+        "LCV-2302",
+        "LCV-2303",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -88396,6 +89781,54 @@
       ]
     },
     {
+      "id": "2026-09-19-D-RW-31",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-19",
+      "day": "19",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 11.34,
+      "pta": 149,
+      "load": 99,
+      "prod": 1336.1,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 31,
+      "time": "15:19",
+      "text": "[📋 Regular Work] Drain Light oil PZ-601 = _25___ Lite(Every sat. of week) (25 Lite)",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-09-19-D-RW-37",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-19",
+      "day": "19",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 11.34,
+      "pta": 149,
+      "load": 99,
+      "prod": 1336.1,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 37,
+      "time": "14:11",
+      "text": "[📋 Regular Work] Blow down PT-401 (Every sat. of week)",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-09-19-D-SILO-52",
       "monthKey": "2026-09",
       "monthLabel": "ก.ย. 2026",
@@ -88879,6 +90312,79 @@
       "text": "Inc PC-2201 from 81.9 >> 82.4 because 4-CBA 11.5 >> 14.1 ppm",
       "tags": [
         "PC-2201"
+      ]
+    },
+    {
+      "id": "2026-09-20-D-RW-32",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-20",
+      "day": "20",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "D วุฒิชาติ",
+      "cba": 11.59,
+      "pta": 160,
+      "load": 97,
+      "prod": 1312.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 32,
+      "time": "17:55",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-09-20-D-RW-33",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-20",
+      "day": "20",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "D วุฒิชาติ",
+      "cba": 11.59,
+      "pta": 160,
+      "load": 97,
+      "prod": 1312.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 33,
+      "time": "16:07",
+      "text": "[📋 Regular Work] NaOH washing PT-501 to sewer and stand line purge level PD-501 (Every 5,20 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "PD-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-09-20-D-RW-36",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-20",
+      "day": "20",
+      "shift": "Day",
+      "fm": "C ชาญชัช",
+      "bm": "D วุฒิชาติ",
+      "cba": 11.59,
+      "pta": 160,
+      "load": 97,
+      "prod": 1312.4,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "09:40",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -90532,6 +92038,30 @@
       ]
     },
     {
+      "id": "2026-09-23-D-RW-36",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-23",
+      "day": "23",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 13.12,
+      "pta": 152,
+      "load": 98,
+      "prod": 1342.8,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "19:08",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-09-23-D-SILO-51",
       "monthKey": "2026-09",
       "monthLabel": "ก.ย. 2026",
@@ -91337,6 +92867,30 @@
       "text": "F/O found line 10SC PE-504 to header leak.",
       "tags": [
         "PE-504"
+      ]
+    },
+    {
+      "id": "2026-09-27-D-RW-36",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-27",
+      "day": "27",
+      "shift": "Day",
+      "fm": "",
+      "bm": "",
+      "cba": 13.32,
+      "pta": 154,
+      "load": 90,
+      "prod": 0,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "23:21",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -92582,6 +94136,54 @@
       "tags": []
     },
     {
+      "id": "2026-09-30-D-RW-32",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-30",
+      "day": "30",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 8.35,
+      "pta": 146,
+      "load": 102,
+      "prod": 1370.3,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 32,
+      "time": "17:15",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-09-30-D-RW-36",
+      "monthKey": "2026-09",
+      "monthLabel": "ก.ย. 2026",
+      "date": "2026-09-30",
+      "day": "30",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D วุฒิชาติ",
+      "cba": 8.35,
+      "pta": 146,
+      "load": 102,
+      "prod": 1370.3,
+      "dp2500": 0,
+      "category": "RW",
+      "row": 36,
+      "time": "17:08",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-09-30-D-SILO-52",
       "monthKey": "2026-09",
       "monthLabel": "ก.ย. 2026",
@@ -92976,6 +94578,32 @@
       "time": "16:00",
       "text": "Start recovery residue 50%",
       "tags": []
+    },
+    {
+      "id": "2026-10-01-D-RW-38",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-01",
+      "day": "01",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D เพชร",
+      "cba": 9.65,
+      "pta": 149,
+      "load": 102,
+      "prod": 1381.4,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 38,
+      "time": "16:56",
+      "text": "[📋 Regular Work] Check LCV-2301-3 (Every 1,16) LCV-2301 = 6 sec open = 40 %, LCV-2302 =14 sec open = 70 %, LCV-2303 = 14 sec open = 100 % (LCV-2301-3 (Every 1,16) LCV-2301 = 6 sec open = 40 %, LCV-2302 =14 sec open = 70 %, LCV-2303 = 14 sec open = 100 %)",
+      "tags": [
+        "LCV",
+        "LCV-2301",
+        "LCV-2302",
+        "LCV-2303",
+        "REGULAR-WORK"
+      ]
     },
     {
       "id": "2026-10-01-D-SILO-52",
@@ -93938,6 +95566,54 @@
       ]
     },
     {
+      "id": "2026-10-03-D-RW-31",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-03",
+      "day": "03",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 13.67,
+      "pta": 161,
+      "load": 102,
+      "prod": 1377.5,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 31,
+      "time": "17:35",
+      "text": "[📋 Regular Work] Drain Light oil PZ-601 = ____ Lite(Every sat. of week)",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-10-03-D-RW-37",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-03",
+      "day": "03",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 13.67,
+      "pta": 161,
+      "load": 102,
+      "prod": 1377.5,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 37,
+      "time": "14:11",
+      "text": "[📋 Regular Work] Blow down PT-401 (Every sat. of week)",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-10-03-N-SILO-51",
       "monthKey": "2026-10",
       "monthLabel": "ต.ค. 2026",
@@ -94490,6 +96166,30 @@
       "tags": []
     },
     {
+      "id": "2026-10-04-D-RW-36",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-04",
+      "day": "04",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 14.78,
+      "pta": 156,
+      "load": 99,
+      "prod": 1346,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 36,
+      "time": "18:01",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-10-04-D-SILO-52",
       "monthKey": "2026-10",
       "monthLabel": "ต.ค. 2026",
@@ -94972,6 +96672,55 @@
       "time": "22:47",
       "text": "- Load up 98 --> 98.5 --> 99%(23:36) balance silo 400.",
       "tags": []
+    },
+    {
+      "id": "2026-10-05-D-RW-32",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-05",
+      "day": "05",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 14.34,
+      "pta": 153,
+      "load": 98,
+      "prod": 1329.3,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 32,
+      "time": "18:00",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-10-05-D-RW-33",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-05",
+      "day": "05",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 14.34,
+      "pta": 153,
+      "load": 98,
+      "prod": 1329.3,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 33,
+      "time": "18:00",
+      "text": "[📋 Regular Work] NaOH washing PT-501 to sewer and stand line purge level PD-501 (Every 5,20 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "PD-501",
+        "REGULAR-WORK"
+      ]
     },
     {
       "id": "2026-10-05-D-SILO-52",
@@ -96245,6 +97994,30 @@
       "time": "05:00",
       "text": "Increase rinse ratio 0.55 -> 0.6 due to p-TA = 164",
       "tags": []
+    },
+    {
+      "id": "2026-10-07-D-RW-36",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-07",
+      "day": "07",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "A สถิตย์",
+      "cba": 14.73,
+      "pta": 164,
+      "load": 99,
+      "prod": 1340.6,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 36,
+      "time": "18:50",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
     },
     {
       "id": "2026-10-07-D-SILO-52",
@@ -97562,6 +99335,78 @@
       "tags": []
     },
     {
+      "id": "2026-10-10-D-RW-31",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-10",
+      "day": "10",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 15.56,
+      "pta": 162,
+      "load": 100,
+      "prod": 1347.6,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 31,
+      "time": "15:49",
+      "text": "[📋 Regular Work] Drain Light oil PZ-601 = ____ Lite(Every sat. of week)",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-10-10-D-RW-32",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-10",
+      "day": "10",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 15.56,
+      "pta": 162,
+      "load": 100,
+      "prod": 1347.6,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 32,
+      "time": "15:55",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-10-10-D-RW-37",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-10",
+      "day": "10",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 15.56,
+      "pta": 162,
+      "load": 100,
+      "prod": 1347.6,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 37,
+      "time": "15:49",
+      "text": "[📋 Regular Work] Blow down PT-401 (Every sat. of week)",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-10-10-D-SILO-52",
       "monthKey": "2026-10",
       "monthLabel": "ต.ค. 2026",
@@ -97963,6 +99808,30 @@
       "text": "Decrease %cell full from 82% >> 80% >> 81% >> 82% improve XIS-2401D high.",
       "tags": [
         "XIS-2401D"
+      ]
+    },
+    {
+      "id": "2026-10-11-D-RW-36",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-11",
+      "day": "11",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 14.99,
+      "pta": 164,
+      "load": 100,
+      "prod": 1350.8,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 36,
+      "time": "10:58",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -99279,6 +101148,30 @@
       ]
     },
     {
+      "id": "2026-10-14-D-RW-36",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-14",
+      "day": "14",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "D เพชร",
+      "cba": 14.69,
+      "pta": 158,
+      "load": 100,
+      "prod": 1355.5,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 36,
+      "time": "17:19",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-10-14-N-SILO-51",
       "monthKey": "2026-10",
       "monthLabel": "ต.ค. 2026",
@@ -99809,6 +101702,30 @@
       "time": "04:45",
       "text": "- Inc rinse ratio 0.65 --> 0.68 for control p-TA (p-TA = 168 ppm)",
       "tags": []
+    },
+    {
+      "id": "2026-10-15-D-RW-32",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-15",
+      "day": "15",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 15.36,
+      "pta": 165,
+      "load": 100,
+      "prod": 1354.2,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 32,
+      "time": "17:45",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
     },
     {
       "id": "2026-10-15-D-SILO-52",
@@ -100386,6 +102303,54 @@
       "tags": []
     },
     {
+      "id": "2026-10-16-D-RW-34",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-16",
+      "day": "16",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 15.04,
+      "pta": 162,
+      "load": 100,
+      "prod": 1349.6,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 34,
+      "time": "15:52",
+      "text": "[📋 Regular Work] Switching PP-101 for run B , Have lump = ___0.2____ kg. (Every 16 of month) (สลับปั๊ม B (Lump: 0.2 kg))",
+      "tags": [
+        "PP",
+        "PP-101",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-10-16-D-RW-38",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-16",
+      "day": "16",
+      "shift": "Day",
+      "fm": "B เฉลิมพล",
+      "bm": "B ฐาณันตร์",
+      "cba": 15.04,
+      "pta": 162,
+      "load": 100,
+      "prod": 1349.6,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 38,
+      "time": "18:17",
+      "text": "[📋 Regular Work] Check LCV-2301-3 (Every 1,16) 2301=32% 2302 = 71% 2303 = 97% (LCV-2301-3 (Every 1,16) 2301=32% 2302 = 71% 2303 = 97%)",
+      "tags": [
+        "LCV",
+        "LCV-2301",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-10-16-D-SILO-52",
       "monthKey": "2026-10",
       "monthLabel": "ต.ค. 2026",
@@ -100870,6 +102835,54 @@
       ]
     },
     {
+      "id": "2026-10-17-D-RW-31",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-17",
+      "day": "17",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "B ฐาณันตร์",
+      "cba": 14.02,
+      "pta": 161,
+      "load": 100,
+      "prod": 1348.4,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 31,
+      "time": "16:10",
+      "text": "[📋 Regular Work] Drain Light oil PZ-601 = __30__ Lite(Every sat. of week) (30 Lite)",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-10-17-D-RW-37",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-17",
+      "day": "17",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "B ฐาณันตร์",
+      "cba": 14.02,
+      "pta": 161,
+      "load": 100,
+      "prod": 1348.4,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 37,
+      "time": "14:10",
+      "text": "[📋 Regular Work] Blow down PT-401 (Every sat. of week)",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-10-17-D-SILO-52",
       "monthKey": "2026-10",
       "monthLabel": "ต.ค. 2026",
@@ -101283,6 +103296,30 @@
       "text": "Increase PC-2201 76.6 -> 76.7 -> 76.8 (07:15) kg/cm2 du to 4CBA = 16.1",
       "tags": [
         "PC-2201"
+      ]
+    },
+    {
+      "id": "2026-10-18-D-RW-36",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-18",
+      "day": "18",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "A สถิตย์",
+      "cba": 15.27,
+      "pta": 163,
+      "load": 100,
+      "prod": 1355.4,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 36,
+      "time": "18:24",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
       ]
     },
     {
@@ -102050,6 +104087,55 @@
       ]
     },
     {
+      "id": "2026-10-20-D-RW-32",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-20",
+      "day": "20",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "B ฐาณันตร์",
+      "cba": 15.52,
+      "pta": 165,
+      "load": 98,
+      "prod": 1347.6,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 32,
+      "time": "16:44",
+      "text": "[📋 Regular Work] Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "2026-10-20-D-RW-33",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-20",
+      "day": "20",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "B ฐาณันตร์",
+      "cba": 15.52,
+      "pta": 165,
+      "load": 98,
+      "prod": 1347.6,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 33,
+      "time": "16:44",
+      "text": "[📋 Regular Work] NaOH washing PT-501 to sewer and stand line purge level PD-501 (Every 5,20 of month)",
+      "tags": [
+        "PT",
+        "PT-501",
+        "PD-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
       "id": "2026-10-20-D-SILO-52",
       "monthKey": "2026-10",
       "monthLabel": "ต.ค. 2026",
@@ -102593,6 +104679,30 @@
       "time": "21:00",
       "text": "Increase rinse ratio 0.68 -> 0.7 due to p-TA =173",
       "tags": []
+    },
+    {
+      "id": "2026-10-21-D-RW-36",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-21",
+      "day": "21",
+      "shift": "Day",
+      "fm": "A กฤษณะ",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 15.51,
+      "pta": 175,
+      "load": 100,
+      "prod": 1353.3,
+      "dp2500": 0.658,
+      "category": "RW",
+      "row": 36,
+      "time": "18:09",
+      "text": "[📋 Regular Work] Start lube oil PP-102 (Every wen. , sun. of week)",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
     },
     {
       "id": "2026-10-21-D-SILO-52",
@@ -146949,6 +149059,1760 @@
       "durationMin": 0,
       "naohLi2901": false,
       "requestCta": ""
+    }
+  ],
+  "regularWorkRoutines": [
+    {
+      "id": "rw-2026-07-29-36",
+      "date": "2026-07-29",
+      "monthKey": "2026-07",
+      "day": "29",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "18:05",
+      "note": "[ทำแล้ว] 18:05",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-07-30-32",
+      "date": "2026-07-30",
+      "monthKey": "2026-07",
+      "day": "30",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "17:49",
+      "note": "[ทำแล้ว] 17:49",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-07-30-35",
+      "date": "2026-07-30",
+      "monthKey": "2026-07",
+      "day": "30",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 35,
+      "taskKey": "PI-2412",
+      "taskTitle": "Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "time": "21:26",
+      "note": "[ทำแล้ว] 21:26",
+      "valueDetail": "",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-01-31",
+      "date": "2026-08-01",
+      "monthKey": "2026-08",
+      "day": "01",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "D อดุลย์",
+      "row": 31,
+      "taskKey": "PZ-601",
+      "taskTitle": "Drain Light oil PZ-601 = __6__ Lite(Every sat. of week)",
+      "time": "15:15",
+      "note": "[ทำแล้ว] 15:15",
+      "valueDetail": "6 Lite",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-01-37",
+      "date": "2026-08-01",
+      "monthKey": "2026-08",
+      "day": "01",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "D อดุลย์",
+      "row": 37,
+      "taskKey": "PT-401-BD",
+      "taskTitle": "Blow down PT-401 (Every sat. of week)",
+      "time": "15:26",
+      "note": "[ทำแล้ว] 15:26",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-01-38",
+      "date": "2026-08-01",
+      "monthKey": "2026-08",
+      "day": "01",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "D อดุลย์",
+      "row": 38,
+      "taskKey": "LCV-2301-3",
+      "taskTitle": "Check LCV-2301-3 (Every 1,16) LCV-2301 = 30% , LCV-2302 = 70% , LCV-2303 = 95%",
+      "time": "10:06",
+      "note": "[ทำแล้ว] 10:06",
+      "valueDetail": "LCV-2301-3 (Every 1,16) LCV-2301 = 30% , LCV-2302 = 70% , LCV-2303 = 95%",
+      "tags": [
+        "LCV",
+        "LCV-2301",
+        "LCV-2302",
+        "LCV-2303",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-02-36",
+      "date": "2026-08-02",
+      "monthKey": "2026-08",
+      "day": "02",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "09:58",
+      "note": "[ทำแล้ว] 09:58",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-05-32",
+      "date": "2026-08-05",
+      "monthKey": "2026-08",
+      "day": "05",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "14:30",
+      "note": "[ทำแล้ว] 14:30",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-05-33",
+      "date": "2026-08-05",
+      "monthKey": "2026-08",
+      "day": "05",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 33,
+      "taskKey": "PT-501-NAOH",
+      "taskTitle": "NaOH washing PT-501 to sewer and stand line purge level PD-501 (Every 5,20 of month)",
+      "time": "14:30",
+      "note": "[ทำแล้ว] 14:30",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "PD-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-05-35",
+      "date": "2026-08-05",
+      "monthKey": "2026-08",
+      "day": "05",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 35,
+      "taskKey": "PI-2412",
+      "taskTitle": "Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "time": "19:36",
+      "note": "[ทำแล้ว] 19:36",
+      "valueDetail": "",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-05-36",
+      "date": "2026-08-05",
+      "monthKey": "2026-08",
+      "day": "05",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "15:52",
+      "note": "[ทำแล้ว] 15:52",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-08-31",
+      "date": "2026-08-08",
+      "monthKey": "2026-08",
+      "day": "08",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "A กฤษณะ",
+      "row": 31,
+      "taskKey": "PZ-601",
+      "taskTitle": "Drain Light oil PZ-601 = _7___ Lite(Every sat. of week)",
+      "time": "17:56",
+      "note": "[ทำแล้ว] 17:56",
+      "valueDetail": "7 Lite",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-08-37",
+      "date": "2026-08-08",
+      "monthKey": "2026-08",
+      "day": "08",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "A กฤษณะ",
+      "row": 37,
+      "taskKey": "PT-401-BD",
+      "taskTitle": "Blow down PT-401 (Every sat. of week)",
+      "time": "17:56",
+      "note": "[ทำแล้ว] 17:56",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-09-36",
+      "date": "2026-08-09",
+      "monthKey": "2026-08",
+      "day": "09",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "A กฤษณะ",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "16:48",
+      "note": "[ทำแล้ว] 16:48",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-10-32",
+      "date": "2026-08-10",
+      "monthKey": "2026-08",
+      "day": "10",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "17:21",
+      "note": "[ทำแล้ว] 17:21",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-10-35",
+      "date": "2026-08-10",
+      "monthKey": "2026-08",
+      "day": "10",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 35,
+      "taskKey": "PI-2412",
+      "taskTitle": "Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "time": "21:33",
+      "note": "[ทำแล้ว] 21:33",
+      "valueDetail": "",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-12-36",
+      "date": "2026-08-12",
+      "monthKey": "2026-08",
+      "day": "12",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "D อดุลย์",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "16:36",
+      "note": "[ทำแล้ว] 16:36",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-15-31",
+      "date": "2026-08-15",
+      "monthKey": "2026-08",
+      "day": "15",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 31,
+      "taskKey": "PZ-601",
+      "taskTitle": "Drain Light oil PZ-601 = __18__ Lite(Every sat. of week)",
+      "time": "15:12",
+      "note": "[ทำแล้ว] 15:12",
+      "valueDetail": "18 Lite",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-15-32",
+      "date": "2026-08-15",
+      "monthKey": "2026-08",
+      "day": "15",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "18:06",
+      "note": "[ทำแล้ว] 18:06",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-15-35",
+      "date": "2026-08-15",
+      "monthKey": "2026-08",
+      "day": "15",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 35,
+      "taskKey": "PI-2412",
+      "taskTitle": "Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "time": "21:26",
+      "note": "[ทำแล้ว] 21:26",
+      "valueDetail": "",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-15-37",
+      "date": "2026-08-15",
+      "monthKey": "2026-08",
+      "day": "15",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 37,
+      "taskKey": "PT-401-BD",
+      "taskTitle": "Blow down PT-401 (Every sat. of week)",
+      "time": "13:47",
+      "note": "[ทำแล้ว] 13:47",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-16-34",
+      "date": "2026-08-16",
+      "monthKey": "2026-08",
+      "day": "16",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "B เฉลิมพล",
+      "row": 34,
+      "taskKey": "PP-101",
+      "taskTitle": "Switching PP-101 for run A --> B , Have lump = ___0.2____ kg. (Every 16 of month)",
+      "time": "15:11",
+      "note": "[ทำแล้ว] 15:11",
+      "valueDetail": "Lump: 0.2 kg",
+      "tags": [
+        "PP",
+        "PP-101",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-16-36",
+      "date": "2026-08-16",
+      "monthKey": "2026-08",
+      "day": "16",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "B เฉลิมพล",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "15:55",
+      "note": "[ทำแล้ว] 15:55",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-16-38",
+      "date": "2026-08-16",
+      "monthKey": "2026-08",
+      "day": "16",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "B เฉลิมพล",
+      "row": 38,
+      "taskKey": "LCV-2301-3",
+      "taskTitle": "Check LCV-2301-3 (Every 1,16)",
+      "time": "10:32",
+      "note": "[ทำแล้ว] 10:32",
+      "valueDetail": "LCV-2301-3 (Every 1,16)",
+      "tags": [
+        "LCV",
+        "LCV-2301",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-18-35",
+      "date": "2026-08-18",
+      "monthKey": "2026-08",
+      "day": "18",
+      "shift": "Day",
+      "bm": "B เพชร",
+      "fm": "B เฉลิมพล",
+      "row": 35,
+      "taskKey": "PI-2412",
+      "taskTitle": "Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "time": "08:26",
+      "note": "[ทำแล้ว] 08:26",
+      "valueDetail": "",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-19-36",
+      "date": "2026-08-19",
+      "monthKey": "2026-08",
+      "day": "19",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "A กฤษณะ",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "08:26",
+      "note": "[ทำแล้ว] 08:26",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-20-32",
+      "date": "2026-08-20",
+      "monthKey": "2026-08",
+      "day": "20",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "A กฤษณะ",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "17:21",
+      "note": "[ทำแล้ว] 17:21",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-20-33",
+      "date": "2026-08-20",
+      "monthKey": "2026-08",
+      "day": "20",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "A กฤษณะ",
+      "row": 33,
+      "taskKey": "PT-501-NAOH",
+      "taskTitle": "NaOH washing PT-501 to sewer and stand line purge level PD-501 (Every 5,20 of month)",
+      "time": "17:21",
+      "note": "[ทำแล้ว] 17:21",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "PD-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-22-31",
+      "date": "2026-08-22",
+      "monthKey": "2026-08",
+      "day": "22",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 31,
+      "taskKey": "PZ-601",
+      "taskTitle": "Drain Light oil PZ-601 = _15___ Lite(Every sat. of week)",
+      "time": "15:28",
+      "note": "[ทำแล้ว] 15:28",
+      "valueDetail": "15 Lite",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-22-37",
+      "date": "2026-08-22",
+      "monthKey": "2026-08",
+      "day": "22",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 37,
+      "taskKey": "PT-401-BD",
+      "taskTitle": "Blow down PT-401 (Every sat. of week)",
+      "time": "18:27",
+      "note": "[ทำแล้ว] 18:27",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-23-35",
+      "date": "2026-08-23",
+      "monthKey": "2026-08",
+      "day": "23",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 35,
+      "taskKey": "PI-2412",
+      "taskTitle": "Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "time": "00:20",
+      "note": "[ทำแล้ว] 00:20",
+      "valueDetail": "",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-23-36",
+      "date": "2026-08-23",
+      "monthKey": "2026-08",
+      "day": "23",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "07:12",
+      "note": "[ทำแล้ว] 07:12",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-24-36",
+      "date": "2026-08-24",
+      "monthKey": "2026-08",
+      "day": "24",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "07:12",
+      "note": "[ทำแล้ว] 07:12",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-25-32",
+      "date": "2026-08-25",
+      "monthKey": "2026-08",
+      "day": "25",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "17:24",
+      "note": "[ทำแล้ว] 17:24",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-25-35",
+      "date": "2026-08-25",
+      "monthKey": "2026-08",
+      "day": "25",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 35,
+      "taskKey": "PI-2412",
+      "taskTitle": "Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "time": "07:57",
+      "note": "[ทำแล้ว] 07:57",
+      "valueDetail": "",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-26-35",
+      "date": "2026-08-26",
+      "monthKey": "2026-08",
+      "day": "26",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 35,
+      "taskKey": "PI-2412",
+      "taskTitle": "Commissioning PI-2412 (Every 5,10,15,20,25,30 of month)",
+      "time": "07:10",
+      "note": "[ทำแล้ว] 07:10",
+      "valueDetail": "",
+      "tags": [
+        "PI",
+        "PI-2412",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-26-36",
+      "date": "2026-08-26",
+      "monthKey": "2026-08",
+      "day": "26",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "09:55",
+      "note": "[ทำแล้ว] 09:55",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-29-31",
+      "date": "2026-08-29",
+      "monthKey": "2026-08",
+      "day": "29",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 31,
+      "taskKey": "PZ-601",
+      "taskTitle": "Drain Light oil PZ-601 = __20__ Lite(Every sat. of week)",
+      "time": "15:21",
+      "note": "[ทำแล้ว] 15:21",
+      "valueDetail": "20 Lite",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-29-37",
+      "date": "2026-08-29",
+      "monthKey": "2026-08",
+      "day": "29",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 37,
+      "taskKey": "PT-401-BD",
+      "taskTitle": "Blow down PT-401 (Every sat. of week)",
+      "time": "14:12",
+      "note": "[ทำแล้ว] 14:12",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-30-32",
+      "date": "2026-08-30",
+      "monthKey": "2026-08",
+      "day": "30",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "B เฉลิมพล",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "11:28",
+      "note": "[ทำแล้ว] 11:28",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-08-30-36",
+      "date": "2026-08-30",
+      "monthKey": "2026-08",
+      "day": "30",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "B เฉลิมพล",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "11:35",
+      "note": "[ทำแล้ว] 11:35",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-01-38",
+      "date": "2026-09-01",
+      "monthKey": "2026-09",
+      "day": "01",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "A กฤษณะ",
+      "row": 38,
+      "taskKey": "LCV-2301-3",
+      "taskTitle": "Check LCV-2301-3 (Every 1,16)",
+      "time": "09:12",
+      "note": "[ทำแล้ว] 09:12",
+      "valueDetail": "LCV-2301-3 (Every 1,16)",
+      "tags": [
+        "LCV",
+        "LCV-2301",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-02-36",
+      "date": "2026-09-02",
+      "monthKey": "2026-09",
+      "day": "02",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "A กฤษณะ",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "18:59",
+      "note": "[ทำแล้ว] 18:59",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-05-31",
+      "date": "2026-09-05",
+      "monthKey": "2026-09",
+      "day": "05",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "C ชาญชัช",
+      "row": 31,
+      "taskKey": "PZ-601",
+      "taskTitle": "Drain Light oil PZ-601 = _25___ Lite(Every sat. of week)",
+      "time": "15:22",
+      "note": "[ทำแล้ว] 15:22",
+      "valueDetail": "25 Lite",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-05-32",
+      "date": "2026-09-05",
+      "monthKey": "2026-09",
+      "day": "05",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "C ชาญชัช",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "15:58",
+      "note": "[ทำแล้ว] 15:58",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-05-33",
+      "date": "2026-09-05",
+      "monthKey": "2026-09",
+      "day": "05",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "C ชาญชัช",
+      "row": 33,
+      "taskKey": "PT-501-NAOH",
+      "taskTitle": "NaOH washing PT-501 to sewer and stand line purge level PD-501 (Every 5,20 of month)",
+      "time": "16:00",
+      "note": "[ทำแล้ว] 16:00",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "PD-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-05-37",
+      "date": "2026-09-05",
+      "monthKey": "2026-09",
+      "day": "05",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "C ชาญชัช",
+      "row": 37,
+      "taskKey": "PT-401-BD",
+      "taskTitle": "Blow down PT-401 (Every sat. of week)",
+      "time": "15:48",
+      "note": "[ทำแล้ว] 15:48",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-06-36",
+      "date": "2026-09-06",
+      "monthKey": "2026-09",
+      "day": "06",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "09:37",
+      "note": "[ทำแล้ว] 09:37",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-09-36",
+      "date": "2026-09-09",
+      "monthKey": "2026-09",
+      "day": "09",
+      "shift": "Day",
+      "bm": "B เพชร",
+      "fm": "B เฉลิมพล",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "17:40",
+      "note": "[ทำแล้ว] 17:40",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-10-32",
+      "date": "2026-09-10",
+      "monthKey": "2026-09",
+      "day": "10",
+      "shift": "Day",
+      "bm": "B เพชร",
+      "fm": "B เฉลิมพล",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "18:33",
+      "note": "[ทำแล้ว] 18:33",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-12-31",
+      "date": "2026-09-12",
+      "monthKey": "2026-09",
+      "day": "12",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "B เฉลิมพล",
+      "row": 31,
+      "taskKey": "PZ-601",
+      "taskTitle": "Drain Light oil PZ-601 = __25__ Lite(Every sat. of week)",
+      "time": "15:38",
+      "note": "[ทำแล้ว] 15:38",
+      "valueDetail": "25 Lite",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-12-37",
+      "date": "2026-09-12",
+      "monthKey": "2026-09",
+      "day": "12",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "B เฉลิมพล",
+      "row": 37,
+      "taskKey": "PT-401-BD",
+      "taskTitle": "Blow down PT-401 (Every sat. of week)",
+      "time": "15:38",
+      "note": "[ทำแล้ว] 15:38",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-13-36",
+      "date": "2026-09-13",
+      "monthKey": "2026-09",
+      "day": "13",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "B เฉลิมพล",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "08:19",
+      "note": "[ทำแล้ว] 08:19",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-15-32",
+      "date": "2026-09-15",
+      "monthKey": "2026-09",
+      "day": "15",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "18:09",
+      "note": "[ทำแล้ว] 18:09",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-16-34",
+      "date": "2026-09-16",
+      "monthKey": "2026-09",
+      "day": "16",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 34,
+      "taskKey": "PP-101",
+      "taskTitle": "Switching PP-101 for run A , Have lump = __0.6_____ kg. (Every 16 of month)",
+      "time": "16:19",
+      "note": "[ทำแล้ว] 16:19",
+      "valueDetail": "สลับปั๊ม A (Lump: 0.6 kg)",
+      "tags": [
+        "PP",
+        "PP-101",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-16-36",
+      "date": "2026-09-16",
+      "monthKey": "2026-09",
+      "day": "16",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "17:43",
+      "note": "[ทำแล้ว] 17:43",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-16-38",
+      "date": "2026-09-16",
+      "monthKey": "2026-09",
+      "day": "16",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "C ชาญชัช",
+      "row": 38,
+      "taskKey": "LCV-2301-3",
+      "taskTitle": "Check LCV-2301-3 (Every 1,16)LCV-2301 = 6 sec open = 40 %, LCV-2302 =17 sec open = 70 %, LCV-2303 = 14 sec open = 96 %",
+      "time": "16:48",
+      "note": "[ทำแล้ว] 16:48",
+      "valueDetail": "LCV-2301-3 (Every 1,16)LCV-2301 = 6 sec open = 40 %, LCV-2302 =17 sec open = 70 %, LCV-2303 = 14 sec open = 96 %",
+      "tags": [
+        "LCV",
+        "LCV-2301",
+        "LCV-2302",
+        "LCV-2303",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-19-31",
+      "date": "2026-09-19",
+      "monthKey": "2026-09",
+      "day": "19",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 31,
+      "taskKey": "PZ-601",
+      "taskTitle": "Drain Light oil PZ-601 = _25___ Lite(Every sat. of week)",
+      "time": "15:19",
+      "note": "[ทำแล้ว] 15:19",
+      "valueDetail": "25 Lite",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-19-37",
+      "date": "2026-09-19",
+      "monthKey": "2026-09",
+      "day": "19",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 37,
+      "taskKey": "PT-401-BD",
+      "taskTitle": "Blow down PT-401 (Every sat. of week)",
+      "time": "14:11",
+      "note": "[ทำแล้ว] 14:11",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-20-32",
+      "date": "2026-09-20",
+      "monthKey": "2026-09",
+      "day": "20",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "C ชาญชัช",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "17:55",
+      "note": "[ทำแล้ว] 17:55",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-20-33",
+      "date": "2026-09-20",
+      "monthKey": "2026-09",
+      "day": "20",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "C ชาญชัช",
+      "row": 33,
+      "taskKey": "PT-501-NAOH",
+      "taskTitle": "NaOH washing PT-501 to sewer and stand line purge level PD-501 (Every 5,20 of month)",
+      "time": "16:07",
+      "note": "[ทำแล้ว] 16:07",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "PD-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-20-36",
+      "date": "2026-09-20",
+      "monthKey": "2026-09",
+      "day": "20",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "C ชาญชัช",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "09:40",
+      "note": "[ทำแล้ว] 09:40",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-23-36",
+      "date": "2026-09-23",
+      "monthKey": "2026-09",
+      "day": "23",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "19:08",
+      "note": "[ทำแล้ว] 19:08",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-27-36",
+      "date": "2026-09-27",
+      "monthKey": "2026-09",
+      "day": "27",
+      "shift": "Day",
+      "bm": "",
+      "fm": "",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "23:21",
+      "note": "[ทำแล้ว] 23:21",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-30-32",
+      "date": "2026-09-30",
+      "monthKey": "2026-09",
+      "day": "30",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "17:15",
+      "note": "[ทำแล้ว] 17:15",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-09-30-36",
+      "date": "2026-09-30",
+      "monthKey": "2026-09",
+      "day": "30",
+      "shift": "Day",
+      "bm": "D วุฒิชาติ",
+      "fm": "D อดุลย์",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "17:08",
+      "note": "[ทำแล้ว] 17:08",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-01-38",
+      "date": "2026-10-01",
+      "monthKey": "2026-10",
+      "day": "01",
+      "shift": "Day",
+      "bm": "D เพชร",
+      "fm": "D อดุลย์",
+      "row": 38,
+      "taskKey": "LCV-2301-3",
+      "taskTitle": "Check LCV-2301-3 (Every 1,16) LCV-2301 = 6 sec open = 40 %, LCV-2302 =14 sec open = 70 %, LCV-2303 = 14 sec open = 100 %",
+      "time": "16:56",
+      "note": "[ทำแล้ว] 16:56",
+      "valueDetail": "LCV-2301-3 (Every 1,16) LCV-2301 = 6 sec open = 40 %, LCV-2302 =14 sec open = 70 %, LCV-2303 = 14 sec open = 100 %",
+      "tags": [
+        "LCV",
+        "LCV-2301",
+        "LCV-2302",
+        "LCV-2303",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-03-31",
+      "date": "2026-10-03",
+      "monthKey": "2026-10",
+      "day": "03",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 31,
+      "taskKey": "PZ-601",
+      "taskTitle": "Drain Light oil PZ-601 = ____ Lite(Every sat. of week)",
+      "time": "17:35",
+      "note": "[ทำแล้ว] 17:35",
+      "valueDetail": "",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-03-37",
+      "date": "2026-10-03",
+      "monthKey": "2026-10",
+      "day": "03",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 37,
+      "taskKey": "PT-401-BD",
+      "taskTitle": "Blow down PT-401 (Every sat. of week)",
+      "time": "14:11",
+      "note": "[ทำแล้ว] 14:11",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-04-36",
+      "date": "2026-10-04",
+      "monthKey": "2026-10",
+      "day": "04",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "18:01",
+      "note": "[ทำแล้ว] 18:01",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-05-32",
+      "date": "2026-10-05",
+      "monthKey": "2026-10",
+      "day": "05",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "18:00",
+      "note": "[ทำแล้ว] 18:00",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-05-33",
+      "date": "2026-10-05",
+      "monthKey": "2026-10",
+      "day": "05",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 33,
+      "taskKey": "PT-501-NAOH",
+      "taskTitle": "NaOH washing PT-501 to sewer and stand line purge level PD-501 (Every 5,20 of month)",
+      "time": "18:00",
+      "note": "[ทำแล้ว] 18:00",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "PD-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-07-36",
+      "date": "2026-10-07",
+      "monthKey": "2026-10",
+      "day": "07",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "A กฤษณะ",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "18:50",
+      "note": "[ทำแล้ว] 18:50",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-10-31",
+      "date": "2026-10-10",
+      "monthKey": "2026-10",
+      "day": "10",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "A กฤษณะ",
+      "row": 31,
+      "taskKey": "PZ-601",
+      "taskTitle": "Drain Light oil PZ-601 = ____ Lite(Every sat. of week)",
+      "time": "15:49",
+      "note": "[ทำแล้ว] 15:49",
+      "valueDetail": "",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-10-32",
+      "date": "2026-10-10",
+      "monthKey": "2026-10",
+      "day": "10",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "A กฤษณะ",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "15:55",
+      "note": "[ทำแล้ว] 15:55",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-10-37",
+      "date": "2026-10-10",
+      "monthKey": "2026-10",
+      "day": "10",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "A กฤษณะ",
+      "row": 37,
+      "taskKey": "PT-401-BD",
+      "taskTitle": "Blow down PT-401 (Every sat. of week)",
+      "time": "15:49",
+      "note": "[ทำแล้ว] 15:49",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-11-36",
+      "date": "2026-10-11",
+      "monthKey": "2026-10",
+      "day": "11",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "A กฤษณะ",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "10:58",
+      "note": "[ทำแล้ว] 10:58",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-14-36",
+      "date": "2026-10-14",
+      "monthKey": "2026-10",
+      "day": "14",
+      "shift": "Day",
+      "bm": "D เพชร",
+      "fm": "D อดุลย์",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "17:19",
+      "note": "[ทำแล้ว] 17:19",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-15-32",
+      "date": "2026-10-15",
+      "monthKey": "2026-10",
+      "day": "15",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "17:45",
+      "note": "[ทำแล้ว] 17:45",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-16-34",
+      "date": "2026-10-16",
+      "monthKey": "2026-10",
+      "day": "16",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 34,
+      "taskKey": "PP-101",
+      "taskTitle": "Switching PP-101 for run B , Have lump = ___0.2____ kg. (Every 16 of month)",
+      "time": "15:52",
+      "note": "[ทำแล้ว] 15:52",
+      "valueDetail": "สลับปั๊ม B (Lump: 0.2 kg)",
+      "tags": [
+        "PP",
+        "PP-101",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-16-38",
+      "date": "2026-10-16",
+      "monthKey": "2026-10",
+      "day": "16",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "B เฉลิมพล",
+      "row": 38,
+      "taskKey": "LCV-2301-3",
+      "taskTitle": "Check LCV-2301-3 (Every 1,16) 2301=32% 2302 = 71% 2303 = 97%",
+      "time": "18:17",
+      "note": "[ทำแล้ว] 18:17",
+      "valueDetail": "LCV-2301-3 (Every 1,16) 2301=32% 2302 = 71% 2303 = 97%",
+      "tags": [
+        "LCV",
+        "LCV-2301",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-17-31",
+      "date": "2026-10-17",
+      "monthKey": "2026-10",
+      "day": "17",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "A กฤษณะ",
+      "row": 31,
+      "taskKey": "PZ-601",
+      "taskTitle": "Drain Light oil PZ-601 = __30__ Lite(Every sat. of week)",
+      "time": "16:10",
+      "note": "[ทำแล้ว] 16:10",
+      "valueDetail": "30 Lite",
+      "tags": [
+        "PZ",
+        "PZ-601",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-17-37",
+      "date": "2026-10-17",
+      "monthKey": "2026-10",
+      "day": "17",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "A กฤษณะ",
+      "row": 37,
+      "taskKey": "PT-401-BD",
+      "taskTitle": "Blow down PT-401 (Every sat. of week)",
+      "time": "14:10",
+      "note": "[ทำแล้ว] 14:10",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-401",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-18-36",
+      "date": "2026-10-18",
+      "monthKey": "2026-10",
+      "day": "18",
+      "shift": "Day",
+      "bm": "A สถิตย์",
+      "fm": "A กฤษณะ",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "18:24",
+      "note": "[ทำแล้ว] 18:24",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-20-32",
+      "date": "2026-10-20",
+      "monthKey": "2026-10",
+      "day": "20",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "A กฤษณะ",
+      "row": 32,
+      "taskKey": "PT-501-BD",
+      "taskTitle": "Blow down PT-501 (Every 5,10,15,20,25,30 of month)",
+      "time": "16:44",
+      "note": "[ทำแล้ว] 16:44",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-20-33",
+      "date": "2026-10-20",
+      "monthKey": "2026-10",
+      "day": "20",
+      "shift": "Day",
+      "bm": "B ฐาณันตร์",
+      "fm": "A กฤษณะ",
+      "row": 33,
+      "taskKey": "PT-501-NAOH",
+      "taskTitle": "NaOH washing PT-501 to sewer and stand line purge level PD-501 (Every 5,20 of month)",
+      "time": "16:44",
+      "note": "[ทำแล้ว] 16:44",
+      "valueDetail": "",
+      "tags": [
+        "PT",
+        "PT-501",
+        "PD-501",
+        "REGULAR-WORK"
+      ]
+    },
+    {
+      "id": "rw-2026-10-21-36",
+      "date": "2026-10-21",
+      "monthKey": "2026-10",
+      "day": "21",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "A กฤษณะ",
+      "row": 36,
+      "taskKey": "PP-102",
+      "taskTitle": "Start lube oil PP-102 (Every wen. , sun. of week)",
+      "time": "18:09",
+      "note": "[ทำแล้ว] 18:09",
+      "valueDetail": "",
+      "tags": [
+        "PP",
+        "PP-102",
+        "REGULAR-WORK"
+      ]
     }
   ]
 }

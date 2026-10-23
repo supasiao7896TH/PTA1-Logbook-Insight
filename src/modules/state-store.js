@@ -3,13 +3,14 @@
  */
 
 const _state = {
-  activeTab: 'search', // 'search' | 'silo' | 'washing' | 'sap' | 'overview' | 'equipment' | 'ips'
+  activeTab: 'search', // 'search' | 'silo' | 'washing' | 'regular' | 'sap' | 'overview' | 'equipment' | 'ips'
   theme: 'light',
   months: [],
   daysSummary: [],
   entries: [],
   siloOperations: [],
   washingRoutines: [],
+  regularWorkRoutines: [],
   sapMemos: [],
   regularWork: [],
   filters: {
@@ -28,6 +29,11 @@ const _state = {
   washingFilters: {
     equipment: 'ALL',
     washNo: 'ALL',
+    monthKey: 'ALL',
+    query: ''
+  },
+  regularWorkFilters: {
+    taskKey: 'ALL',
     monthKey: 'ALL',
     query: ''
   },
@@ -75,6 +81,11 @@ export const StateStore = {
   updateWashingFilters(partial) {
     const next = { ..._state.washingFilters, ...partial };
     this.set('washingFilters', next);
+  },
+
+  updateRegularWorkFilters(partial) {
+    const next = { ..._state.regularWorkFilters, ...partial };
+    this.set('regularWorkFilters', next);
   },
 
   updateSapFilters(partial) {

@@ -80,9 +80,10 @@ Store: settings
 ## 📋 Pages & Features
 | หน้า / Feature | Status | หมายเหตุ |
 |---|---|---|
-| 🔍 ค้นหาย้อนหลัง (9 เดือน) | ✅ Done | รวม 4,454 รายการ (QC, Daily Work, Silo Switching, Washing Routine, SAP Memos), ไฮไลต์คำค้นหาทันที |
+| 🔍 ค้นหาย้อนหลัง (9 เดือน) | ✅ Done | รวม 4,541 รายการ (QC, Daily Work, Silo Switching, Washing Routine, Regular Work, SAP Memos), ไฮไลต์คำค้นหาทันที |
 | 🌾 Silo & โลจิสติกส์ขนส่งผง | ✅ Done | สรุปประวัติการสลับ Silo 800 (A/B/C) และปลายทาง PTK810A/B/C, 820A/B รวม 1,128 รายการ |
 | 🧼 PM-901 & ล้างเครื่องจักร | ✅ Done | รอบทำ High Pressure, Batch สะสม, ล้าง PP-404A/B, PJ-404, PM-901, LI-2901 รวม 113 ครั้ง พร้อม Quick Filter Chips |
+| 📋 Regular Work รอบประจำ | ✅ Done | ตรวจจับ 7 งาน Routine บำรุงรักษา (PZ-601, PT-501, PP-101, PI-2412, PP-102, PT-401, LCV-2301-3) ที่ทำจริง 87 ครั้ง ด้วย Strict Timestamp Rule พร้อมปุ่มกรอง 9 งาน |
 | 🛠️ งานแจ้งซ่อม SAP & Memo | ✅ Done | คลังใบสั่งงาน SAP No., งานค้างส่งเวร, ปัญหาไส้กรอง PM-500B, วาล์ว FCV-2412 รวม 139 รายการ |
 | 📊 ภาพรวมรายเดือน & กะพี่ A | ✅ Done | ตารางสรุป 9 เดือน, รายการตัดสินใจใน 103 กะของพี่ A |
 | 🔧 สถิติอุปกรณ์เสียซ้ำ | ✅ Done | Top 30 Chronic Equipment Tags พร้อมตัวอย่างบันทึกและปุ่มกาง Timeline |
@@ -119,7 +120,7 @@ PTA1-Logbook-Insight/
 │   └── logbook-insight.test.js  ← Vitest Unit Tests (TDD Coverage)
 ├── public/
 │   └── data/
-│       └── logbook_2026.json    ← ฐานข้อมูลสกัดแล้ว 9 เดือน (3,074 บันทึก)
+│       └── logbook_2026.json    ← ฐานข้อมูลสกัดแล้ว 9 เดือน (4,541 บันทึก, 87 Regular Work, 113 Washing, 1,128 Silo, 139 SAP)
 ├── context.md                   ← ไฟล์นี้
 ├── agents.md                    ← กฎสำหรับ AI Agent
 ├── CLAUDE.md                    ← สรุปคำสั่งและสถาปัตยกรรม

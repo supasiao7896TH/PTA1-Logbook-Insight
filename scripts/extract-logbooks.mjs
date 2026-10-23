@@ -52,6 +52,38 @@ function decodeXmlEntities(str) {
     .trim();
 }
 
+function getRegularWorkTaskKey(task, r) {
+  const t = (task || '').toUpperCase();
+  if (t.includes('PZ-601')) return 'PZ-601';
+  if (t.includes('NAOH WASHING PT-501')) return 'PT-501-NAOH';
+  if (t.includes('BLOW DOWN PT-501')) return 'PT-501-BD';
+  if (t.includes('PP-101')) return 'PP-101';
+  if (t.includes('PI-2412')) return 'PI-2412';
+  if (t.includes('PP-102')) return 'PP-102';
+  if (t.includes('PT-401')) return 'PT-401-BD';
+  if (t.includes('LCV-2301')) return 'LCV-2301-3';
+  return `RW-${r}`;
+}
+
+function extractRegularWorkValueDetail(task, taskKey) {
+  if (taskKey === 'PZ-601') {
+    const m = task.match(/=\s*[_ ]*(\d+)[_ ]*\s*Lite/i);
+    return m ? `${m[1]} Lite` : '';
+  }
+  if (taskKey === 'PP-101') {
+    const lumpM = task.match(/Have lump\s*=\s*[_ ]*(\d+(?:\.\d+)?)[_ ]*\s*kg/i);
+    const pumpM = task.match(/run\s*([A-Za-z0-9\s\-]+?)\s*,/i);
+    const lump = lumpM ? `${lumpM[1]} kg` : '0 kg';
+    const pump = pumpM ? pumpM[1].trim() : '';
+    return pump ? `สลับปั๊ม ${pump} (Lump: ${lump})` : `Lump: ${lump}`;
+  }
+  if (taskKey === 'LCV-2301-3') {
+    const m = task.match(/LCV-2301.*?$/i);
+    return m ? m[0].trim() : '';
+  }
+  return '';
+}
+
 function formatExcelTime(val) {
   const num = Number(val);
   if (!Number.isFinite(num) || num <= 0 || num >= 1) {
@@ -154,6 +186,7 @@ function parseWorkbookFile(filePath, monthMeta) {
   const sapMemos = [];
   const regularWorkList = [];
   const washingRoutines = [];
+  const regularWorkRoutines = [];
 
   const CELL_RE = /<c r="([A-Z]+)(\d+)"([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g;
 
@@ -274,8 +307,14 @@ function parseWorkbookFile(filePath, monthMeta) {
     // 2. Regular Work (PM Checklist: rows regularWorkRow + 1 .. 38)
     for (let r = regularWorkRow + 1; r <= 38; r++) {
       const task = String(cells[`B${r}`] || '').trim();
-      if (!task || task.includes('ดับเบิลคลิก') || task.startsWith('#')) continue;
+      if (!task || task.includes('ดับเบิลคลิก') || task.startsWith('#') || task.startsWith('ITEM')) continue;
       const statusNote = String(cells[`N${r}`] || '').trim();
+
+      // Check for timestamp in Note (e.g. [ทำแล้ว] 16:56) or Col A
+      const noteTimeMatch = statusNote.match(/(\d{1,2}[:.]\d{2})/);
+      const isCompleted = Boolean(noteTimeMatch);
+
+      // Raw record for backward compatibility
       regularWorkList.push({
         id: `rw-${monthMeta.monthKey}-${day}-${r}`,
         monthKey: monthMeta.monthKey,
@@ -284,8 +323,60 @@ function parseWorkbookFile(filePath, monthMeta) {
         row: r,
         task,
         statusNote,
-        isCompleted: statusNote.includes('ทำแล้ว')
+        isCompleted
       });
+
+      // STRICT TIMESTAMP RULE for Regular Work Routine tracking
+      if (noteTimeMatch) {
+        const time = noteTimeMatch[1].replace('.', ':');
+        const taskKey = getRegularWorkTaskKey(task, r);
+        const valueDetail = extractRegularWorkValueDetail(task, taskKey);
+        const tags = LogbookParser.extractTags(task);
+        const primaryTag = taskKey.split('-')[0];
+        if (!tags.includes(primaryTag)) tags.unshift(primaryTag);
+        if (!tags.includes('REGULAR-WORK')) tags.push('REGULAR-WORK');
+
+        const rwItem = {
+          id: `rw-${monthMeta.monthKey}-${day}-${r}`,
+          date: `${monthMeta.monthKey}-${day}`,
+          monthKey: monthMeta.monthKey,
+          day,
+          shift: 'Day',
+          bm: dayBm,
+          fm: dayFm,
+          row: r,
+          taskKey,
+          taskTitle: task.split('\n')[0].replace(/^- /, ''),
+          time,
+          note: statusNote,
+          valueDetail,
+          tags
+        };
+
+        regularWorkRoutines.push(rwItem);
+
+        // Also add to searchable entries under category 'RW'
+        entries.push({
+          id: `${monthMeta.monthKey}-${day}-D-RW-${r}`,
+          monthKey: monthMeta.monthKey,
+          monthLabel: monthMeta.label,
+          date: `${monthMeta.monthKey}-${day}`,
+          day,
+          shift: 'Day',
+          fm: dayFm,
+          bm: dayBm,
+          cba: dayCba,
+          pta: dayPta,
+          load: dayLoad,
+          prod,
+          dp2500,
+          category: 'RW',
+          row: r,
+          time,
+          text: `[📋 Regular Work] ${rwItem.taskTitle}${valueDetail ? ` (${valueDetail})` : ''}`,
+          tags
+        });
+      }
     }
 
     // 3. 🌾 Silo Operations & Switching (rows 50 .. 60)
@@ -720,7 +811,7 @@ function parseWorkbookFile(filePath, monthMeta) {
     });
   }
 
-  return { daysSummary, entries, siloOperations, sapMemos, regularWorkList, washingRoutines };
+  return { daysSummary, entries, siloOperations, sapMemos, regularWorkList, washingRoutines, regularWorkRoutines };
 }
 
 function main() {
@@ -736,6 +827,7 @@ function main() {
   const allSapMemos = [];
   const allRegularWork = [];
   const allWashingRoutines = [];
+  const allRegularWorkRoutines = [];
 
   for (const meta of MONTH_FILE_PATTERNS) {
     const matchedFile = searchFiles.find(
@@ -748,10 +840,10 @@ function main() {
       : path.join(WORKSPACE_DIR, matchedFile);
     const t0 = Date.now();
     try {
-      const { daysSummary, entries, siloOperations, sapMemos, regularWorkList, washingRoutines } = parseWorkbookFile(fullPath, meta);
+      const { daysSummary, entries, siloOperations, sapMemos, regularWorkList, washingRoutines, regularWorkRoutines } = parseWorkbookFile(fullPath, meta);
       const elapsed = Date.now() - t0;
       console.log(
-        `✅ [${meta.monthKey}] ${matchedFile} -> ${daysSummary.length} วัน, ${entries.length} บันทึก, Silo: ${siloOperations.length}, SAP: ${sapMemos.length}, ล้าง: ${washingRoutines.length} (${elapsed} ms)`
+        `✅ [${meta.monthKey}] ${matchedFile} -> ${daysSummary.length} วัน, ${entries.length} บันทึก, Silo: ${siloOperations.length}, SAP: ${sapMemos.length}, ล้าง: ${washingRoutines.length}, RW: ${regularWorkRoutines.length} (${elapsed} ms)`
       );
       allMonths.push({
         monthKey: meta.monthKey,
@@ -761,7 +853,8 @@ function main() {
         entriesCount: entries.length,
         siloCount: siloOperations.length,
         sapCount: sapMemos.length,
-        washingCount: washingRoutines.length
+        washingCount: washingRoutines.length,
+        regularWorkCount: regularWorkRoutines.length
       });
       allDaysSummary.push(...daysSummary);
       allEntries.push(...entries);
@@ -769,6 +862,7 @@ function main() {
       allSapMemos.push(...sapMemos);
       allRegularWork.push(...regularWorkList);
       allWashingRoutines.push(...washingRoutines);
+      allRegularWorkRoutines.push(...regularWorkRoutines);
     } catch (err) {
       console.error(`❌ Failed to parse ${matchedFile}:`, err.message);
     }
@@ -784,13 +878,15 @@ function main() {
     totalSapMemos: allSapMemos.length,
     totalRegularWork: allRegularWork.length,
     totalWashingRoutines: allWashingRoutines.length,
+    totalRegularWorkRoutines: allRegularWorkRoutines.length,
     months: allMonths,
     daysSummary: allDaysSummary,
     entries: allEntries,
     siloOperations: allSiloOperations,
     sapMemos: allSapMemos,
     regularWork: allRegularWork,
-    washingRoutines: allWashingRoutines
+    washingRoutines: allWashingRoutines,
+    regularWorkRoutines: allRegularWorkRoutines
   };
 
   fs.writeFileSync(OUTPUT_JSON, JSON.stringify(payload, null, 2), 'utf8');
@@ -801,8 +897,8 @@ function main() {
     `• รายการบันทึกหน้างานทั้งหมด: ${allEntries.length.toLocaleString('en-US')} รายการ\n` +
     `• 🌾 ข้อมูล Silo Switching & Logistics: ${allSiloOperations.length.toLocaleString('en-US')} รายการ\n` +
     `• 🧼 ข้อมูล Routine ล้าง PM-901 & สารเคมี: ${allWashingRoutines.length.toLocaleString('en-US')} รายการ\n` +
+    `• 📋 ข้อมูล Regular Work ที่ทำจริงตามรอบ: ${allRegularWorkRoutines.length.toLocaleString('en-US')} รายการ\n` +
     `• 🛠️ ข้อมูลงานแจ้งซ่อม SAP & Memo ค้างส่งเวร: ${allSapMemos.length.toLocaleString('en-US')} รายการ\n` +
-    `• 📋 งานตรวจเช็ก Regular Work / PM: ${allRegularWork.length.toLocaleString('en-US')} รายการ\n` +
     `บันทึกสู่ public/data/logbook_2026.json เรียบร้อยค่ะ!`
   );
 }

@@ -322,4 +322,77 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
       expect(text).toBe('2 ชม. 4 นาที');
     });
   });
+
+  describe('8. Regular Work Routine Tracking (filterRegularWorkRoutines)', () => {
+    const sampleRegularWork = [
+      {
+        id: 'rw-2026-10-01-38',
+        date: '2026-10-01',
+        monthKey: '2026-10',
+        time: '16:56',
+        shift: 'Day',
+        bm: 'D เพชร',
+        fm: 'B โสภณ',
+        row: 38,
+        taskKey: 'LCV-2301-3',
+        taskTitle: '- Check LCV-2301-3 (Every 1,16) LCV-2301 = 6 sec open = 40 %, LCV-2302 =14 sec open = 70 %, LCV-2303 = 14 sec open = 100 %',
+        taskSchedule: 'Every 1,16',
+        note: '[ทำแล้ว] 16:56',
+        valueDetail: 'LCV-2301 = 6 sec open = 40 %, LCV-2302 =14 sec open = 70 %, LCV-2303 = 14 sec open = 100 %',
+        tags: ['LCV-2301', 'LCV-2302', 'LCV-2303']
+      },
+      {
+        id: 'rw-2026-10-17-31',
+        date: '2026-10-17',
+        monthKey: '2026-10',
+        time: '16:10',
+        shift: 'Day',
+        bm: 'B ฐาณันตร์',
+        fm: 'A กฤษณะ',
+        row: 31,
+        taskKey: 'PZ-601',
+        taskTitle: '- Drain Light oil PZ-601 = __30__ Lite(Every sat. of week)',
+        taskSchedule: 'Every sat. of week',
+        note: '[ทำแล้ว] 16:10',
+        valueDetail: '30 Lite',
+        tags: ['PZ-601']
+      },
+      {
+        id: 'rw-2026-10-10-32',
+        date: '2026-10-10',
+        monthKey: '2026-10',
+        time: '15:55',
+        shift: 'Day',
+        bm: 'C ศุภสิทธิ์',
+        fm: 'B โสภณ',
+        row: 32,
+        taskKey: 'PT-501-BD',
+        taskTitle: '- Blow down PT-501 (Every 5,10,15,20,25,30 of month)',
+        taskSchedule: 'Every 5,10,15,20,25,30 of month',
+        note: '[ทำแล้ว] 15:55',
+        valueDetail: '',
+        tags: ['PT-501']
+      }
+    ];
+
+    it('filters regular work routines by taskKey (PZ-601, LCV-2301-3, PT-501-BD, etc.)', () => {
+      const pz = LogbookParser.filterRegularWorkRoutines(sampleRegularWork, { taskKey: 'PZ-601' });
+      expect(pz).toHaveLength(1);
+      expect(pz[0].valueDetail).toBe('30 Lite');
+
+      const lcv = LogbookParser.filterRegularWorkRoutines(sampleRegularWork, { taskKey: 'LCV-2301-3' });
+      expect(lcv).toHaveLength(1);
+      expect(lcv[0].date).toBe('2026-10-01');
+    });
+
+    it('filters regular work routines by monthKey, Boardman, and text query', () => {
+      const supasit = LogbookParser.filterRegularWorkRoutines(sampleRegularWork, { query: 'ศุภสิทธิ์' });
+      expect(supasit).toHaveLength(1);
+      expect(supasit[0].taskKey).toBe('PT-501-BD');
+
+      const byValue = LogbookParser.filterRegularWorkRoutines(sampleRegularWork, { query: '30 Lite' });
+      expect(byValue).toHaveLength(1);
+      expect(byValue[0].id).toBe('rw-2026-10-17-31');
+    });
+  });
 });

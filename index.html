@@ -637,6 +637,9 @@
         <button type="button" class="nav-pill-btn" data-tab-btn="washing" role="tab" aria-selected="false">
           🧼 PM-901 &amp; ล้างเครื่องจักร
         </button>
+        <button type="button" class="nav-pill-btn" data-tab-btn="regular" role="tab" aria-selected="false">
+          📋 Regular Work รอบประจำ
+        </button>
         <button type="button" class="nav-pill-btn" data-tab-btn="sap" role="tab" aria-selected="false">
           🛠️ งานซ่อม SAP &amp; Memo
         </button>
@@ -811,6 +814,54 @@
             </div>
           </div>
           <div id="washing-timeline-list" class="timeline-stack"></div>
+        </section>
+
+        <!-- VIEW REGULAR WORK: PM ROUTINE MAINTENANCE (STRICT TIMESTAMP) -->
+        <section data-view-panel="regular" hidden aria-label="Regular Work รอบประจำ">
+          <div class="sa-card" style="margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h2 style="font-size: 1.1rem;">📋 Regular Work &amp; PM บำรุงรักษาตามรอบ (Strict Timestamp Verification)</h2>
+              <span id="regular-results-count" class="kpi-label"></span>
+            </div>
+            <p class="kpi-sub" style="margin-bottom: 0.85rem;">
+              ติดตามประวัติงาน Routine บำรุงรักษาประจำวัน/สัปดาห์/เดือน (PZ-601, PT-501, PP-101, PI-2412, PP-102, PT-401, LCV-2301-3) ที่มีการลงเวลาเสร็จจริงย้อนหลัง 9 เดือน (รวม 87 ครั้ง)
+            </p>
+            <div class="kpi-label" style="margin-bottom: 0.4rem;">🎯 กดเลือกงาน Routine ที่ต้องการกรองทันที:</div>
+            <div id="quick-regular-chips" class="tag-chips-bar" style="margin-bottom: 0.85rem;">
+              <button type="button" class="sa-chip-btn sa-chip-active" data-regular-chip="ALL">ทั้งหมด (All)</button>
+              <button type="button" class="sa-chip-btn" data-regular-chip="PZ-601">🛢️ PZ-601 Drain</button>
+              <button type="button" class="sa-chip-btn" data-regular-chip="PT-501-BD">💨 PT-501 Blowdown</button>
+              <button type="button" class="sa-chip-btn" data-regular-chip="PT-501-NAOH">🧪 PT-501 NaOH</button>
+              <button type="button" class="sa-chip-btn" data-regular-chip="PP-101">🔄 PP-101 Switch</button>
+              <button type="button" class="sa-chip-btn" data-regular-chip="PI-2412">📡 PI-2412</button>
+              <button type="button" class="sa-chip-btn" data-regular-chip="PP-102">⚙️ PP-102 Lube</button>
+              <button type="button" class="sa-chip-btn" data-regular-chip="PT-401-BD">💨 PT-401 Blowdown</button>
+              <button type="button" class="sa-chip-btn" data-regular-chip="LCV-2301-3">⏱️ LCV-2301-3</button>
+            </div>
+            <div class="filter-toolbar">
+              <select id="filter-regular-task" class="sa-select" aria-label="เลือกประเภทงาน Regular Work">
+                <option value="ALL">📋 งานประจำ: ทั้งหมด</option>
+                <option value="PZ-601">Drain Light oil PZ-601 (ทุกวันเสาร์)</option>
+                <option value="PT-501-BD">Blow down PT-501 (ทุก 5,10,15,20,25,30)</option>
+                <option value="PT-501-NAOH">NaOH wash PT-501 / purge PD-501 (ทุก 5,20)</option>
+                <option value="PP-101">Switching PP-101 &amp; Lump (ทุก 16)</option>
+                <option value="PI-2412">Commissioning PI-2412 (ทุก 5,10,15,20,25,30)</option>
+                <option value="PP-102">Start lube oil PP-102 (ทุกพุธ, อาทิตย์)</option>
+                <option value="PT-401-BD">Blow down PT-401 (ทุกวันเสาร์)</option>
+                <option value="LCV-2301-3">Check LCV-2301-3 (ทุก 1, 16)</option>
+              </select>
+              <select id="filter-regular-month" class="sa-select" aria-label="เลือกเดือน"></select>
+              <input
+                id="search-regular-input"
+                type="search"
+                class="sa-input sa-search-pill"
+                style="flex: 1 1 240px;"
+                placeholder="🔍 ค้นหาคำกำกับ (เช่น ศุภสิทธิ์, 30 Lite, lump, % วาล์ว)..."
+                aria-label="ค้นหางานประจำ Regular Work"
+              />
+            </div>
+          </div>
+          <div id="regular-timeline-list" class="timeline-stack"></div>
         </section>
 
         <!-- VIEW SAP: MAINTENANCE & HANDOVER MEMOS -->

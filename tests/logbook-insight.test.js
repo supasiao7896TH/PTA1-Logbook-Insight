@@ -227,7 +227,7 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
         batchCount: 28,
         pp404Target: 'PP-404B',
         pp404Time: '13:43',
-        naohPj404: 'Yes',
+        naohPj404: '',
         naohMlLine: '',
         naohLi2901: true,
         naohPm901Time: '14:13',
@@ -269,7 +269,7 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
         batchCount: 27,
         pp404Target: 'PP-404B',
         pp404Time: '00:36',
-        naohPj404: 'Yes',
+        naohPj404: '',
         naohMlLine: '',
         naohLi2901: false,
         naohPm901Time: '01:03',
@@ -279,13 +279,18 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
       }
     ];
 
-    it('filters washing routines by equipment (PP-404A, PP-404B, PJ-404, PM-901, LI-2901)', () => {
+    it('filters washing routines by equipment (PP-404A, PP-404B, PJ-404, PM-901, LI-2901) strictly when time is recorded', () => {
       const pp404b = LogbookParser.filterWashingRoutines(sampleWash, { equipment: 'PP-404B' });
       expect(pp404b).toHaveLength(2);
 
       const pp404a = LogbookParser.filterWashingRoutines(sampleWash, { equipment: 'PP-404A' });
       expect(pp404a).toHaveLength(1);
       expect(pp404a[0].date).toBe('2026-10-03');
+
+      const pj404 = LogbookParser.filterWashingRoutines(sampleWash, { equipment: 'PJ-404' });
+      expect(pj404).toHaveLength(1);
+      expect(pj404[0].date).toBe('2026-10-03');
+      expect(pj404[0].naohPj404).toBe('09:25');
 
       const li2901 = LogbookParser.filterWashingRoutines(sampleWash, { equipment: 'LI-2901' });
       expect(li2901).toHaveLength(1);

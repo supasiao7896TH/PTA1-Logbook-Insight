@@ -524,22 +524,30 @@ function parseWorkbookFile(filePath, monthMeta) {
         const oVal = cells[`O${r}`] || '';
         const pVal = cells[`P${r}`] || '';
 
+        // Strict Time Rule: An activity only occurred if a valid timestamp is written in the log!
         if (lVal.includes('ML line to PD-403')) {
           const tMatch = lVal.match(/(\d{1,2}[:.]\d{2})/);
-          naohMlLine = tMatch ? tMatch[1].replace('.', ':') : 'Yes';
+          if (tMatch) naohMlLine = tMatch[1].replace('.', ':');
         }
         if (lVal.includes('PJ-404')) {
           const tMatch = lVal.match(/(\d{1,2}[:.]\d{2})/);
-          naohPj404 = tMatch ? tMatch[1].replace('.', ':') : (oVal.includes('Yes') ? 'Yes' : '');
+          if (tMatch) naohPj404 = tMatch[1].replace('.', ':');
         }
-        if (lVal.includes('PP-404 to PW-901') || lVal.includes('@ PP-404')) {
+        if (lVal.includes('PP-404 to PW-901')) {
+          const tMatch = lVal.match(/(\d{1,2}[:.]\d{2})/);
+          if (tMatch) pp404Time = tMatch[1].replace('.', ':');
+          const targetMatch = lVal.match(/PP-404\s*["']?([AB])["']?/i);
+          if (targetMatch) pp404Target = `PP-404${targetMatch[1].toUpperCase()}`;
+        }
+        if (lVal.includes('@ PP-404')) {
           const tMatch = lVal.match(/(\d{1,2}[:.]\d{2})/);
           if (tMatch && !pp404Time) pp404Time = tMatch[1].replace('.', ':');
           const targetMatch = lVal.match(/PP-404\s*["']?([AB])["']?/i);
           if (targetMatch) pp404Target = `PP-404${targetMatch[1].toUpperCase()}`;
         }
         if (lVal.includes('LI-2901')) {
-          if (lVal.match(/\d{1,2}[:.]\d{2}/) || oVal.includes('Yes')) naohLi2901 = true;
+          const tMatch = lVal.match(/(\d{1,2}[:.]\d{2})/);
+          if (tMatch) naohLi2901 = true;
         }
         if (lVal.includes('NaOH washing PM-901')) {
           const tMatch = lVal.match(/(\d{1,2}[:.]\d{2})/);
@@ -595,7 +603,8 @@ function parseWorkbookFile(filePath, monthMeta) {
         dayWash.batchCount != null ? `(${dayWash.batchCount} Batch)` : '',
         dayWash.hpTime ? `High Pressure @ ${dayWash.hpTime}` : '',
         dayWash.pp404Target !== '-' ? `ล้าง ${dayWash.pp404Target}${dayWash.pp404Time ? ` @ ${dayWash.pp404Time}` : ''}` : '',
-        dayWash.naohPj404 ? `ล้าง PJ-404 ${dayWash.naohPj404}` : '',
+        dayWash.naohPj404 ? `ล้าง PJ-404 @ ${dayWash.naohPj404}` : '',
+        dayWash.naohMlLine ? `ล้าง ML Line @ ${dayWash.naohMlLine}` : '',
         dayWash.naohPm901Time ? `ล้าง PM-901 @ ${dayWash.naohPm901Time}` : '',
         dayWash.pm901StartTime ? `Start PM-901 @ ${dayWash.pm901StartTime}` : '',
         dayWash.durationMin > 0 ? `(รวมหยุด ${LogbookParser.formatDurationMinutes(dayWash.durationMin)})` : ''
@@ -646,7 +655,8 @@ function parseWorkbookFile(filePath, monthMeta) {
         nightWash.batchCount != null ? `(${nightWash.batchCount} Batch)` : '',
         nightWash.hpTime ? `High Pressure @ ${nightWash.hpTime}` : '',
         nightWash.pp404Target !== '-' ? `ล้าง ${nightWash.pp404Target}${nightWash.pp404Time ? ` @ ${nightWash.pp404Time}` : ''}` : '',
-        nightWash.naohPj404 ? `ล้าง PJ-404 ${nightWash.naohPj404}` : '',
+        nightWash.naohPj404 ? `ล้าง PJ-404 @ ${nightWash.naohPj404}` : '',
+        nightWash.naohMlLine ? `ล้าง ML Line @ ${nightWash.naohMlLine}` : '',
         nightWash.naohPm901Time ? `ล้าง PM-901 @ ${nightWash.naohPm901Time}` : '',
         nightWash.pm901StartTime ? `Start PM-901 @ ${nightWash.pm901StartTime}` : '',
         nightWash.durationMin > 0 ? `(รวมหยุด ${LogbookParser.formatDurationMinutes(nightWash.durationMin)})` : ''

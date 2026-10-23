@@ -658,26 +658,6 @@
         <div class="kpi-label" style="margin-bottom: 0.5rem;">📂 เลือกเดือนในฐานข้อมูล (2026)</div>
         <div id="sidebar-months-list" class="month-list-scroll"></div>
       </div>
-
-      <div style="margin-top: auto; display: flex; flex-direction: column; gap: 0.5rem;">
-        <button
-          id="btn-sync-live"
-          type="button"
-          class="btn-pill-primary"
-          style="background-color: var(--brand-ink); display: flex; align-items: center; justify-content: center; gap: 0.4rem;"
-          title="ดึงข้อมูล Logbook ล่าสุดจากโฟลเดอร์ SharePoint จริงของ PTA1"
-        >
-          <span id="btn-sync-live-icon">⚡</span>
-          <span id="btn-sync-live-text">ซิงค์สดจาก SharePoint</span>
-        </button>
-        <label for="excel-upload-input" class="btn-pill-secondary" style="cursor: pointer; text-align: center;">
-          📥 อัปโหลดไฟล์ .xlsm / .xlsx เพิ่ม
-        </label>
-        <input id="excel-upload-input" type="file" accept=".xlsx,.xlsm" hidden />
-        <button id="btn-open-settings" type="button" class="btn-pill-secondary">
-          ⚙️ ตั้งค่า Gemini AI Key
-        </button>
-      </div>
     </aside>
 
     <!-- Main Area -->
@@ -693,11 +673,41 @@
             aria-label="ค้นหาข้อมูลใน Logbook"
           />
         </div>
-        <button id="btn-my-shifts" type="button" class="btn-pill-secondary" title="กรองเฉพาะกะของพี่ A (C ศุภสิทธิ์)">
-          ⭐ เฉพาะกะพี่ A (C ศุภสิทธิ์)
+        <button
+          id="btn-sync-live"
+          type="button"
+          class="btn-pill-primary"
+          style="background-color: var(--brand-ink); display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700;"
+          title="ดึงข้อมูล Logbook ล่าสุดจากโฟลเดอร์ SharePoint จริงของ PTA1"
+        >
+          <span id="btn-sync-live-icon">⚡</span>
+          <span id="btn-sync-live-text">ซิงค์สด SharePoint</span>
         </button>
-        <button id="btn-reset-filters" type="button" class="btn-pill-secondary">
+        <button id="btn-my-shifts" type="button" class="btn-pill-secondary" title="กรองเฉพาะกะของพี่ A (C ศุภสิทธิ์)">
+          ⭐ เฉพาะกะพี่ A
+        </button>
+        <button id="btn-reset-filters" type="button" class="btn-pill-secondary" title="ล้างตัวกรองทั้งหมด">
           🔄 ล้างตัวกรอง
+        </button>
+        <label
+          for="excel-upload-input"
+          class="btn-pill-secondary"
+          style="cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;"
+          title="อัปโหลดไฟล์ Excel Logbook (.xlsx/.xlsm) เพิ่มเติมจากเครื่อง"
+        >
+          <span>📥</span>
+          <span>อัปโหลด Excel</span>
+        </label>
+        <input id="excel-upload-input" type="file" accept=".xlsx,.xlsm" hidden />
+        <button
+          id="btn-open-settings"
+          type="button"
+          class="btn-pill-secondary"
+          style="display: inline-flex; align-items: center; gap: 0.35rem;"
+          title="ตั้งค่า Gemini AI API Key (AES-256)"
+        >
+          <span>⚙️</span>
+          <span>ตั้งค่า AI</span>
         </button>
       </header>
 

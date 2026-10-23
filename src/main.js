@@ -321,7 +321,7 @@ function wireEvents() {
       } finally {
         btnSyncLive.disabled = false;
         if (btnSyncIcon) btnSyncIcon.textContent = '⚡';
-        if (btnSyncText) btnSyncText.textContent = 'ซิงค์สดจาก SharePoint';
+        if (btnSyncText) btnSyncText.textContent = 'ซิงค์สด SharePoint';
       }
     });
   }

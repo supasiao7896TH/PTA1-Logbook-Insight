@@ -126,6 +126,7 @@ PTA1-Logbook-Insight/
 │       ├── logbook_2026.json    ← ฐานข้อมูลสกัดแล้ว 9 เดือน (4,541 บันทึก, 87 Regular Work, 113 Washing, 1,128 Silo, 139 SAP)
 │       └── logbook_meta.json    ← Lightweight metadata (<200 B) สำหรับ Web App Live Sync Polling
 ├── context.md                   ← ไฟล์นี้
+├── HANDOFF.md                   ← คู่มือส่งมอบระบบ บันทึกข้อควรระวัง Shared PC และ Roadmap สำหรับทีม
 ├── agents.md                    ← กฎสำหรับ AI Agent
 ├── CLAUDE.md                    ← สรุปคำสั่งและสถาปัตยกรรม
 └── README.md                    ← คู่มือเริ่มต้นใช้งาน

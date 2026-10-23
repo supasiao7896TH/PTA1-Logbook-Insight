@@ -25,11 +25,24 @@ const args = process.argv.slice(2);
 const dirArgIdx = args.findIndex((a) => a === '--dir' || a === '-d');
 const customDir = dirArgIdx !== -1 && args[dirArgIdx + 1] ? path.resolve(args[dirArgIdx + 1]) : process.env.LOGBOOK_DIR;
 
+const userProfile = process.env.USERPROFILE || 'C:\\Users\\26007294';
+const defaultOneDriveSharePoint = path.join(
+  userProfile,
+  'OneDrive - PTT Global Chemical Public Company Limited',
+  'Shortcuts',
+  'Production - PE Documents',
+  '02 - Plant 1',
+  'Log book PTA1',
+  'Report FM,BM 2026'
+);
+
 const TARGET_DIR = customDir && fs.existsSync(customDir)
   ? customDir
-  : fs.existsSync(path.join(WORKSPACE_DIR, 'logbooks'))
-    ? path.join(WORKSPACE_DIR, 'logbooks')
-    : WORKSPACE_DIR;
+  : fs.existsSync(defaultOneDriveSharePoint)
+    ? defaultOneDriveSharePoint
+    : fs.existsSync(path.join(WORKSPACE_DIR, 'logbooks'))
+      ? path.join(WORKSPACE_DIR, 'logbooks')
+      : WORKSPACE_DIR;
 
 const META_JSON = path.join(WORKSPACE_DIR, 'public', 'data', 'logbook_meta.json');
 const EXTRACT_SCRIPT = path.join(WORKSPACE_DIR, 'scripts', 'extract-logbooks.mjs');

@@ -3,8 +3,16 @@ import { fork } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 
-const SHAREPOINT_LIVE_DIR =
-  'C:\\Users\\26007294\\OneDrive - PTT Global Chemical Public Company Limited\\Shortcuts\\Production - PE Documents\\02 - Plant 1\\Log book PTA1\\Report FM,BM 2026';
+const userProfile = process.env.USERPROFILE || 'C:\\Users\\26007294';
+const SHAREPOINT_LIVE_DIR = path.join(
+  userProfile,
+  'OneDrive - PTT Global Chemical Public Company Limited',
+  'Shortcuts',
+  'Production - PE Documents',
+  '02 - Plant 1',
+  'Log book PTA1',
+  'Report FM,BM 2026'
+);
 
 function liveSyncPlugin() {
   let isRunning = false;

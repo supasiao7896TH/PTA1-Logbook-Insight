@@ -135,16 +135,6 @@
       gap: 1.15rem;
     }
 
-    @media (min-width: 961px) {
-      .app-sidebar {
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        max-height: 100vh;
-        overflow-y: auto;
-      }
-    }
-
     .brand-header {
       display: flex;
       align-items: center;
@@ -644,30 +634,28 @@
        Supasit.A Branding System (A(i)CODER Studio)
        ========================================================================== */
     .sidebar-brand-dock {
-      margin-top: 0.35rem;
-      padding: 0.65rem 0.65rem 0.5rem;
-      border-radius: 13px;
-      border: 1px solid var(--line-border);
-      background-color: var(--bg-subtle);
+      margin: 0.15rem 0 0.35rem 0;
+      padding: 0.25rem 0;
+      border: none;
+      background: transparent;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.35rem;
-      transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+      transition: opacity 0.15s ease, transform 0.15s ease;
       text-decoration: none;
     }
 
     .sidebar-brand-dock:hover {
-      border-color: var(--brand-ink);
-      background-color: var(--bg-surface);
-      box-shadow: var(--card-shadow);
+      opacity: 0.88;
+      transform: scale(1.01);
     }
 
     .sidebar-brand-dock:focus-visible {
       outline: 2px solid var(--brand-ink);
       outline-offset: 2px;
+      border-radius: 9px;
     }
 
     .sidebar-neon-wrap {
@@ -866,6 +854,14 @@
         </button>
       </div>
 
+      <!-- Neon Arcade Live Dock (จุดที่ 1: ด้านบนสุดของ Sidebar นอกโซนเลือกเดือน พื้นหลังกลมกลืน) -->
+      <div id="btn-open-about" class="sidebar-brand-dock" role="button" tabindex="0" title="คลิกเพื่อดูข้อมูล A(i)CODER Studio &amp; ข้อมูลระบบ" aria-label="A(i)CODER 2026 by Supasit.A">
+        <div class="sidebar-neon-wrap">
+          <img class="sidebar-neon-mark neon-mark-light" src="/assets/branding/d1-neon-arcade-bare.svg" alt="A(i)CODER 2026 by Supasit.A" width="1320" height="420" />
+          <img class="sidebar-neon-mark neon-mark-dark" src="/assets/branding/d2-crt-night-bare.svg" alt="A(i)CODER 2026 by Supasit.A" width="1320" height="420" />
+        </div>
+      </div>
+
       <nav class="nav-stack" role="tablist" aria-label="โหมดการทำงาน">
         <button type="button" class="nav-pill-btn active-nav-pill" data-tab-btn="search" role="tab" aria-selected="true">
           🔍 ค้นหาย้อนหลัง (9 เดือน)
@@ -899,15 +895,6 @@
       <div>
         <div class="kpi-label" style="margin-bottom: 0.5rem;">📂 เลือกเดือนในฐานข้อมูล (2026)</div>
         <div id="sidebar-months-list" class="month-list-scroll"></div>
-      </div>
-
-      <!-- Neon Arcade Live Dock (แบบ B ต่อจากรายการเดือน) -->
-      <div id="btn-open-about" class="sidebar-brand-dock" role="button" tabindex="0" title="คลิกเพื่อดูข้อมูล A(i)CODER Studio &amp; ข้อมูลระบบ" aria-label="A(i)CODER 2026 by Supasit.A">
-        <div class="sidebar-neon-wrap">
-          <img class="sidebar-neon-mark neon-mark-light" src="/assets/branding/d1-neon-arcade-bare.svg" alt="A(i)CODER 2026 by Supasit.A" width="1320" height="420" />
-          <img class="sidebar-neon-mark neon-mark-dark" src="/assets/branding/d2-crt-night-bare.svg" alt="A(i)CODER 2026 by Supasit.A" width="1320" height="420" />
-        </div>
-        <div class="sidebar-brand-sub">GC-M PTA Unit 1 · Studio Suite</div>
       </div>
     </aside>
 

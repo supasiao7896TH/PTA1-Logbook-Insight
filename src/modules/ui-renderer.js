@@ -264,8 +264,15 @@ export const UIRenderer = {
     const filters = StateStore.get('filters');
     const filtered = LogbookParser.filterEntries(entries, filters);
 
-    // Sort newest date first so recent logs appear at top
-    const sorted = [...filtered].sort((a, b) => b.date.localeCompare(a.date) || a.row - b.row);
+    const sortOrder = filters.sortOrder || 'desc';
+    const sorted = [...filtered].sort((a, b) => LogbookParser.compareLogChronology(a, b, sortOrder));
+
+    const sortBtn = document.getElementById('btn-toggle-sort');
+    if (sortBtn) {
+      sortBtn.textContent =
+        sortOrder === 'asc' ? '⏱️ เรียงตามเวลา (07:30 ➔ 07:30)' : '⏱️ ล่าสุดขึ้นก่อน';
+      sortBtn.classList.toggle('sa-chip-active', sortOrder === 'asc');
+    }
 
     if (countEl) {
       countEl.textContent = `พบ ${sorted.length.toLocaleString('en-US')} รายการ`;
@@ -294,7 +301,7 @@ export const UIRenderer = {
       const shiftBadge = el(
         'span',
         `badge-shift ${item.shift === 'Night' ? 'badge-night' : 'badge-day'}`,
-        item.shift === 'Night' ? '🌙 Night (20:00–08:00)' : '☀️ Day (08:00–20:00)'
+        item.shift === 'Night' ? '🌙 Night (19:30–07:30)' : '☀️ Day (07:30–19:30)'
       );
       const catBadge = el(
         'span',
@@ -605,8 +612,8 @@ export const UIRenderer = {
       return;
     }
 
-    // Sort newest date and time first
-    const sorted = [...filtered].sort((a, b) => b.date.localeCompare(a.date) || (b.time || '').localeCompare(a.time || ''));
+    // Sort newest date and time first using plant chronology
+    const sorted = [...filtered].sort((a, b) => LogbookParser.compareLogChronology(a, b, 'desc'));
 
     for (const item of sorted.slice(0, 300)) {
       const card = el('article', 'sa-card log-entry-card');
@@ -726,8 +733,8 @@ export const UIRenderer = {
       return;
     }
 
-    // Sort newest date first, then shift (Night after Day)
-    const sorted = [...filtered].sort((a, b) => b.date.localeCompare(a.date) || b.shift.localeCompare(a.shift));
+    // Sort newest date and time first using plant chronology
+    const sorted = [...filtered].sort((a, b) => LogbookParser.compareLogChronology(a, b, 'desc'));
 
     for (const item of sorted) {
       const card = el('article', 'sa-card log-entry-card');
@@ -915,8 +922,8 @@ export const UIRenderer = {
       return;
     }
 
-    // Sort newest date first, then time
-    const sorted = [...filtered].sort((a, b) => b.date.localeCompare(a.date) || (b.time || '').localeCompare(a.time || ''));
+    // Sort newest date and time first using plant chronology
+    const sorted = [...filtered].sort((a, b) => LogbookParser.compareLogChronology(a, b, 'desc'));
 
     for (const item of sorted) {
       const card = el('article', 'sa-card log-entry-card');

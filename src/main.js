@@ -81,8 +81,9 @@ async function loadInitialData() {
       for (const e of cm.entries || []) entriesMap.set(e.id, e);
     }
 
-    const months = Array.from(monthsMap.values()).sort((a, b) => a.monthKey.localeCompare(b.monthKey));
-    const daysSummary = Array.from(daysMap.values()).sort((a, b) => a.date.localeCompare(b.date));
+    // Sort months descending (Latest month like 2026-10 at the top)
+    const months = Array.from(monthsMap.values()).sort((a, b) => b.monthKey.localeCompare(a.monthKey));
+    const daysSummary = Array.from(daysMap.values()).sort((a, b) => b.date.localeCompare(a.date));
     const entries = Array.from(entriesMap.values());
 
     StateStore.set('months', months);
@@ -93,6 +94,12 @@ async function loadInitialData() {
     StateStore.set('regularWorkRoutines', baseData.regularWorkRoutines || []);
     StateStore.set('sapMemos', baseData.sapMemos || []);
     StateStore.set('regularWork', baseData.regularWork || []);
+
+    // Set default month to latest month (e.g. 2026-10) on initial load
+    const curFilters = StateStore.get('filters');
+    if (curFilters.monthKey === 'ALL' && months.length > 0) {
+      StateStore.updateFilters({ monthKey: months[0].monthKey });
+    }
 
     // Load IPS Drafts (Preset + Saved in IndexedDB)
     const savedDrafts = await StorageEngine.getAllIpsDrafts();
@@ -173,20 +180,37 @@ function wireEvents() {
   const btnReset = document.getElementById('btn-reset-filters');
   if (btnReset) {
     btnReset.addEventListener('click', () => {
+      const latestMonth = StateStore.get('months')[0]?.monthKey || 'ALL';
       StateStore.set('filters', {
-        monthKey: 'ALL',
+        monthKey: latestMonth,
         shift: 'ALL',
         bm: 'ALL',
         category: 'ALL',
         tag: 'ALL',
-        query: ''
+        query: '',
+        sortOrder: 'desc'
       });
       StateStore.set('siloFilters', { silo: 'ALL', monthKey: 'ALL', query: '' });
       StateStore.set('washingFilters', { equipment: 'ALL', washNo: 'ALL', monthKey: 'ALL', query: '' });
       StateStore.set('regularWorkFilters', { taskKey: 'ALL', monthKey: 'ALL', query: '' });
       StateStore.set('sapFilters', { status: 'ALL', monthKey: 'ALL', query: '' });
       UIRenderer.renderAll(handlers);
-      UIRenderer.showToast('ล้างตัวกรองทั้งหมดเรียบร้อยค่ะ');
+      UIRenderer.showToast('ล้างตัวกรองและแสดงเดือนล่าสุดเรียบร้อยค่ะ');
+    });
+  }
+
+  // Sort order toggle (Newest First vs Chronological 07:30 -> 07:30)
+  const btnToggleSort = document.getElementById('btn-toggle-sort');
+  if (btnToggleSort) {
+    btnToggleSort.addEventListener('click', () => {
+      const curOrder = StateStore.get('filters').sortOrder || 'desc';
+      const nextOrder = curOrder === 'desc' ? 'asc' : 'desc';
+      handlers.onFilterChange({ sortOrder: nextOrder });
+      UIRenderer.showToast(
+        nextOrder === 'asc'
+          ? '⏱️ สลับเรียงตามเวลาจริง (07:30 ➔ 07:30 ข้ามคืน) แล้วค่ะ'
+          : '⏱️ สลับเรียงจากล่าสุดขึ้นก่อน (Newest First) แล้วค่ะ'
+      );
     });
   }
 

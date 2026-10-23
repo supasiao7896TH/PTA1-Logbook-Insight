@@ -422,4 +422,44 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
       expect(LogbookParser.isNewerTimestamp(cur, null)).toBe(false);
     });
   });
+
+  describe('10. Plant Operational Chronology (07:30-19:30 Day / 19:30-07:30 Night)', () => {
+    it('calculates continuous 24-hr plant timeline minutes from 07:30 Day shift to 07:30 Night shift', () => {
+      // Day Shift (07:30 - 19:30)
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Day', '07:30'))).toBe(0);
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Day', '07:48'))).toBe(18);
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Day', '08:45'))).toBe(75);
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Day', '11:36'))).toBe(246);
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Day', '17:00'))).toBe(570);
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Day', '19:30'))).toBe(720);
+
+      // Night Shift (19:30 - 07:30 next morning)
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Night', '19:30'))).toBe(720);
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Night', '21:00'))).toBe(810);
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Night', '23:00'))).toBe(930);
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Night', '00:16'))).toBe(1006);
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Night', '01:28'))).toBe(1078);
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Night', '06:00'))).toBe(1350);
+      expect(Math.floor(LogbookParser.getShiftTimelineMinute('Night', '07:30'))).toBe(1440);
+    });
+
+    it('correctly sorts cross-table logbook entries (QC vs DW) without time jumping back and forth', () => {
+      const items = [
+        { id: '1', date: '2026-10-23', shift: 'Day', row: 14, time: '11:36', text: 'QC LC-2301' },
+        { id: '2', date: '2026-10-23', shift: 'Day', row: 78, time: '07:48', text: 'DW Cut transfer' },
+        { id: '3', date: '2026-10-23', shift: 'Day', row: 83, time: '08:45', text: 'DW Stop PP-404A' },
+        { id: '4', date: '2026-10-23', shift: 'Day', row: 87, time: '13:28', text: 'DW Start PP-603' },
+        { id: '5', date: '2026-10-23', shift: 'Night', row: 142, time: '21:00', text: 'DW RPF torque' },
+        { id: '6', date: '2026-10-23', shift: 'Night', row: 145, time: '00:16', text: 'DW PD-405 level' }
+      ];
+
+      // Ascending (Chronological morning to night): 07:48 -> 08:45 -> 11:36 -> 13:28 -> 21:00 -> 00:16
+      const asc = [...items].sort((a, b) => LogbookParser.compareLogChronology(a, b, 'asc'));
+      expect(asc.map((x) => x.time)).toEqual(['07:48', '08:45', '11:36', '13:28', '21:00', '00:16']);
+
+      // Descending (Newest first): 00:16 -> 21:00 -> 13:28 -> 11:36 -> 08:45 -> 07:48
+      const desc = [...items].sort((a, b) => LogbookParser.compareLogChronology(a, b, 'desc'));
+      expect(desc.map((x) => x.time)).toEqual(['00:16', '21:00', '13:28', '11:36', '08:45', '07:48']);
+    });
+  });
 });

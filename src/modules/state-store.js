@@ -19,7 +19,8 @@ const _state = {
     bm: 'ALL',
     category: 'ALL',
     tag: 'ALL',
-    query: ''
+    query: '',
+    sortOrder: 'desc'
   },
   siloFilters: {
     silo: 'ALL',

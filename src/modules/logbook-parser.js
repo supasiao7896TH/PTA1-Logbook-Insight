@@ -318,6 +318,74 @@ export const LogbookParser = {
   },
 
   /**
+   * Calculates continuous 24-hr plant operational timeline minute from the 07:30 shift start.
+   * Day Shift: 07:30 to 19:30 (minute 0 .. 720)
+   * Night Shift: 19:30 to 07:30 next morning (minute 720 .. 1440)
+   * @param {string} shift 'Day' | 'Night'
+   * @param {string} time e.g. "07:48", "11:36", "21:00", "00:16"
+   * @param {number} row optional Excel row for tie-breaking
+   * @returns {number} continuous timeline minute
+   */
+  getShiftTimelineMinute(shift, time, row = 0) {
+    const isNight = shift === 'Night';
+    const rowOffset = Number(row || 0) * 0.0001;
+    const SHIFT_START_MINUTES = 7 * 60 + 30; // 07:30 = 450 minutes from 00:00
+
+    if (!time || typeof time !== 'string' || !time.includes(':')) {
+      return isNight ? 720 + rowOffset : 0 + rowOffset;
+    }
+
+    const parts = time.trim().split(/[:.]/);
+    const h = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10);
+    if (!Number.isFinite(h) || !Number.isFinite(m)) {
+      return isNight ? 720 + rowOffset : 0 + rowOffset;
+    }
+
+    if (isNight) {
+      // Night shift: 19:30 - 23:59 (evening) or 00:00 - 07:30 (past midnight)
+      let adjustedH = h;
+      if (h < 12) {
+        adjustedH = h + 24; // e.g. 00:16 -> 24:16, 06:00 -> 30:00
+      }
+      const rawMin = adjustedH * 60 + m - SHIFT_START_MINUTES;
+      return Math.max(720, Math.min(1440, rawMin)) + rowOffset;
+    } else {
+      // Day shift: 07:30 - 19:30
+      let rawMin = h * 60 + m - SHIFT_START_MINUTES;
+      if (rawMin < 0) rawMin = 0; // Handover before 07:30
+      return Math.min(720, rawMin) + rowOffset;
+    }
+  },
+
+  /**
+   * Compares two log entries chronologically according to GC-M PTA plant shift timeline.
+   * @param {Object} a
+   * @param {Object} b
+   * @param {'desc'|'asc'} sortOrder 'desc' (newest first) or 'asc' (chronological)
+   * @returns {number}
+   */
+  compareLogChronology(a, b, sortOrder = 'desc') {
+    const dateA = a.date || '';
+    const dateB = b.date || '';
+
+    if (dateA !== dateB) {
+      return sortOrder === 'desc'
+        ? dateB.localeCompare(dateA)
+        : dateA.localeCompare(dateB);
+    }
+
+    const minA = this.getShiftTimelineMinute(a.shift, a.time, a.row);
+    const minB = this.getShiftTimelineMinute(b.shift, b.time, b.row);
+
+    if (minA !== minB) {
+      return sortOrder === 'desc' ? minB - minA : minA - minB;
+    }
+
+    return (a.row || 0) - (b.row || 0);
+  },
+
+  /**
    * Calculates duration in minutes between start time and end time (handling midnight crossing).
    * @param {string} startTime e.g. "13:40"
    * @param {string} endTime e.g. "15:44"

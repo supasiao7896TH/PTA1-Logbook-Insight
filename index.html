@@ -744,9 +744,17 @@
               <select id="filter-bm" class="sa-select" aria-label="กรองตาม Boardman"></select>
               <select id="filter-shift" class="sa-select" aria-label="กรองตามช่วงกะ">
                 <option value="ALL">🕒 กะ: ทั้งเช้าและดึก</option>
-                <option value="Day">☀️ กะเช้า (08:00 - 20:00)</option>
-                <option value="Night">🌙 กะดึก (20:00 - 08:00)</option>
+                <option value="Day">☀️ กะเช้า (07:30 - 19:30)</option>
+                <option value="Night">🌙 กะดึก (19:30 - 07:30)</option>
               </select>
+              <button
+                id="btn-toggle-sort"
+                type="button"
+                class="btn-pill-secondary"
+                title="คลิกเพื่อสลับระหว่าง 'ล่าสุดขึ้นก่อน' กับ 'เรียงตามเวลาจริง (07:30 ➔ 07:30)'"
+              >
+                ⏱️ ล่าสุดขึ้นก่อน
+              </button>
               <span id="search-results-count" class="kpi-label" style="margin-left: auto;"></span>
             </div>
             <div class="kpi-label" style="margin-bottom: 0.4rem;">🏷️ กดเลือก Tag อุปกรณ์ที่พบบ่อยเพื่อกรองทันที:</div>

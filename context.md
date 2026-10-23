@@ -80,7 +80,7 @@ Store: settings
 ## 📋 Pages & Features
 | หน้า / Feature | Status | หมายเหตุ |
 |---|---|---|
-| 🔍 ค้นหาย้อนหลัง (9 เดือน) | ✅ Done | รวม 4,541 รายการ (QC, Daily Work, Silo Switching, Washing Routine, Regular Work, SAP Memos), ไฮไลต์คำค้นหาทันที |
+| 🔍 ค้นหาย้อนหลัง (9 เดือน) | ✅ Done | รวม 4,543 รายการ (QC, Daily Work, Silo, Wash, Regular, SAP) เรียงตามแกนเวลากะโรงงานจริง (07:30–19:30 / 19:30–07:30) เปิดมาเจอเดือนล่าสุดทันที พร้อมปุ่มสลับ Newest/Chronological |
 | 🌾 Silo & โลจิสติกส์ขนส่งผง | ✅ Done | สรุปประวัติการสลับ Silo 800 (A/B/C) และปลายทาง PTK810A/B/C, 820A/B รวม 1,128 รายการ |
 | 🧼 PM-901 & ล้างเครื่องจักร | ✅ Done | รอบทำ High Pressure, Batch สะสม, ล้าง PP-404A/B, PJ-404, PM-901, LI-2901 รวม 113 ครั้ง พร้อม Quick Filter Chips |
 | 📋 Regular Work รอบประจำ | ✅ Done | ตรวจจับ 7 งาน Routine บำรุงรักษา (PZ-601, PT-501, PP-101, PI-2412, PP-102, PT-401, LCV-2301-3) ที่ทำจริง 87 ครั้ง ด้วย Strict Timestamp Rule พร้อมปุ่มกรอง 9 งาน |

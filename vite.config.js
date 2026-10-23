@@ -72,7 +72,7 @@ export default defineConfig({
   plugins: [liveSyncPlugin()],
   server: {
     watch: {
-      ignored: ['**/dist/**', '**/logbooks/**', '**/scratch/**']
+      ignored: ['**/dist/**', '**/logbooks/**', '**/scratch/**', '**/public/data/**']
     }
   }
 });

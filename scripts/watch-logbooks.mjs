@@ -94,8 +94,17 @@ function triggerExtraction() {
   child.on('close', (code) => {
     isExtracting = false;
     if (code === 0) {
-      const nowIso = new Date().toISOString();
-      updateMetaFile(filesList, nowIso);
+      // Read the exact generatedAt timestamp produced by the extractor to prevent sub-second sync drift
+      let actualGeneratedAt = new Date().toISOString();
+      try {
+        if (fs.existsSync(META_JSON)) {
+          const metaContent = JSON.parse(fs.readFileSync(META_JSON, 'utf8'));
+          if (metaContent?.generatedAt) actualGeneratedAt = metaContent.generatedAt;
+        }
+      } catch {
+        // Fallback to nowIso
+      }
+      updateMetaFile(filesList, actualGeneratedAt);
       console.log(`\n✨ [${formatNow()}] อัปเดตฐานข้อมูลสำเร็จเรียบร้อยค่ะ! (Web App พร้อมรับข้อมูลสดใหม่)`);
     } else {
       console.error(`\n❌ [${formatNow()}] การสกัดข้อมูลล้มเหลว (Exit code: ${code})`);

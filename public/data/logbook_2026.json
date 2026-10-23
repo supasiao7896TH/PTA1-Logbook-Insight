@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-10-23T10:01:59.566Z",
+  "generatedAt": "2026-10-23T11:12:20.286Z",
   "totalMonths": 9,
   "totalDays": 226,
-  "totalEntries": 4552,
-  "totalSiloOperations": 1129,
+  "totalEntries": 4554,
+  "totalSiloOperations": 1130,
   "totalSapMemos": 139,
   "totalRegularWork": 2224,
   "totalWashingRoutines": 113,
@@ -102,8 +102,8 @@
       "label": "ต.ค. 2026",
       "fileName": "10.Oct_2026 PTA1 FM Activity Report.xlsm",
       "daysCount": 23,
-      "entriesCount": 522,
-      "siloCount": 116,
+      "entriesCount": 524,
+      "siloCount": 117,
       "sapCount": 19,
       "washingCount": 12,
       "regularWorkCount": 21
@@ -6427,7 +6427,7 @@
       "nightLoad": 0,
       "prod": 0,
       "dp2500": 0.649,
-      "dayEntryCount": 12,
+      "dayEntryCount": 13,
       "nightEntryCount": 0,
       "siloMatrix": {
         "ptk810a": "PTK810A",
@@ -105932,7 +105932,7 @@
       "dp2500": 0.649,
       "category": "QC",
       "row": 18,
-      "time": "",
+      "time": "16:50",
       "text": "- Inc rinse ratio 0.65 --> 0.68, P-TA = 167 ppm",
       "tags": []
     },
@@ -105957,6 +105957,26 @@
       "tags": [
         "PTK-810A"
       ]
+    },
+    {
+      "id": "2026-10-23-D-SILO-53",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-23",
+      "day": "23",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 0,
+      "dp2500": 0.649,
+      "category": "SILO",
+      "row": 53,
+      "time": "18:00",
+      "text": "[🌾 Silo Operation] สลับ Silo: A to B | ส่ง Silo: A to 820A",
+      "tags": []
     },
     {
       "id": "2026-10-23-D-DW-78",
@@ -106121,6 +106141,29 @@
       "tags": [
         "PD-601",
         "PD-603"
+      ]
+    },
+    {
+      "id": "2026-10-23-D-DW-93",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-23",
+      "day": "23",
+      "shift": "Day",
+      "fm": "D อดุลย์",
+      "bm": "C ศุภสิทธิ์",
+      "cba": 0,
+      "pta": 0,
+      "load": 0,
+      "prod": 0,
+      "dp2500": 0.649,
+      "category": "DW",
+      "row": 93,
+      "time": "17:58",
+      "text": "- NaOH purge LI-2901 due to level PW-901 error.",
+      "tags": [
+        "LI-2901",
+        "PW-901"
       ]
     }
   ],
@@ -123058,6 +123101,21 @@
       "fm": "D อดุลย์",
       "switchText": "B to A",
       "destination": "B to PTK810A",
+      "description": ""
+    },
+    {
+      "id": "silo-2026-10-23-53",
+      "monthKey": "2026-10",
+      "monthLabel": "ต.ค. 2026",
+      "date": "2026-10-23",
+      "day": "23",
+      "row": 53,
+      "time": "18:00",
+      "shift": "Day",
+      "bm": "C ศุภสิทธิ์",
+      "fm": "D อดุลย์",
+      "switchText": "A to B",
+      "destination": "A to 820A",
       "description": ""
     }
   ],

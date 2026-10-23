@@ -421,6 +421,13 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
       expect(LogbookParser.isNewerTimestamp(null, newer)).toBe(true);
       expect(LogbookParser.isNewerTimestamp(cur, null)).toBe(false);
     });
+
+    it('returns false when incoming timestamp is identical, older, or invalid', () => {
+      const cur = '2026-10-23T11:12:20.286Z';
+      expect(LogbookParser.isNewerTimestamp(cur, cur)).toBe(false);
+      expect(LogbookParser.isNewerTimestamp(cur, 'invalid-date')).toBe(false);
+      expect(LogbookParser.isNewerTimestamp(cur, '2026-10-23T11:12:19.000Z')).toBe(false);
+    });
   });
 
   describe('10. Plant Operational Chronology (07:30-19:30 Day / 19:30-07:30 Night)', () => {

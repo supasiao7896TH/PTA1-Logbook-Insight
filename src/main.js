@@ -106,9 +106,11 @@ const handlers = {
 };
 
 let lastLoadedTimestamp = null;
+let lastProcessedMetaTimestamp = null;
 let syncCheckTimer = null;
+let isInitialBoot = true;
 
-async function loadInitialData() {
+async function loadInitialData(options = {}) {
   try {
     const res = await fetch(AppConfig.DATA_URL);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -144,10 +146,14 @@ async function loadInitialData() {
     StateStore.set('sapMemos', baseData.sapMemos || []);
     StateStore.set('regularWork', baseData.regularWork || []);
 
-    // Set default month to latest month (e.g. 2026-10) on initial load
-    const curFilters = StateStore.get('filters');
-    if (curFilters.monthKey === 'ALL' && months.length > 0) {
-      StateStore.updateFilters({ monthKey: months[0].monthKey });
+    // Set default month to latest month ONLY on the very first initial boot!
+    // NEVER overwrite the user's active month if they selected another month or "ALL"
+    if (isInitialBoot) {
+      const curFilters = StateStore.get('filters');
+      if (curFilters.monthKey === 'ALL' && months.length > 0) {
+        StateStore.updateFilters({ monthKey: months[0].monthKey });
+      }
+      isInitialBoot = false;
     }
 
     // Load IPS Drafts (Preset + Saved in IndexedDB)
@@ -162,7 +168,30 @@ async function loadInitialData() {
       'INIT',
       `Loaded ${entries.length} entries, ${baseData.siloOperations?.length || 0} silo ops, ${baseData.sapMemos?.length || 0} sap memos across ${months.length} months`
     );
-    UIRenderer.renderAll(handlers);
+
+    // If this is a background sync update, preserve the user's scroll position and active search state!
+    if (options.isSyncUpdate) {
+      const prevScrollY = window.scrollY;
+      const searchInput = document.getElementById('global-search-input');
+      const isSearchFocused = document.activeElement === searchInput;
+      const selectionStart = searchInput?.selectionStart;
+      const selectionEnd = searchInput?.selectionEnd;
+
+      UIRenderer.renderAll(handlers);
+
+      // Restore scroll position
+      window.scrollTo({ top: prevScrollY, behavior: 'instant' });
+
+      // Restore search focus & selection if user was typing
+      if (isSearchFocused && searchInput) {
+        searchInput.focus();
+        if (selectionStart !== null && selectionEnd !== null) {
+          searchInput.setSelectionRange(selectionStart, selectionEnd);
+        }
+      }
+    } else {
+      UIRenderer.renderAll(handlers);
+    }
   } catch (err) {
     DebugModule.log('ERR_LOAD', err.message);
     UIRenderer.showToast(`โหลดฐานข้อมูลตั้งต้นไม่สำเร็จ: ${err.message}`, 'error');
@@ -490,8 +519,8 @@ function wireEvents() {
           const errData = await res.json().catch(() => ({}));
           throw new Error(errData.error || `HTTP ${res.status}`);
         }
-        await loadInitialData();
-        UIRenderer.showToast('✨ ซิงค์ข้อมูล Logbook สดจาก SharePoint สำเร็จเรียบร้อยแล้วค่ะ!', 'success');
+        await loadInitialData({ isSyncUpdate: true });
+        UIRenderer.showToast('✨ ซิงค์ข้อมูล Logbook สดจาก SharePoint สำเร็จเรียบร้อยแล้วค่ะ! (คงหน้าจอและคำค้นหาปัจจุบันไว้)', 'success');
       } catch (err) {
         UIRenderer.showToast(`ซิงค์ข้อมูลไม่สำเร็จ: ${err.message}`, 'error');
       } finally {
@@ -753,11 +782,19 @@ async function checkSharePointDataSync() {
     const res = await fetch(metaUrl, { cache: 'no-store' });
     if (!res.ok) return;
     const meta = await res.json();
-    if (meta?.generatedAt && LogbookParser.isNewerTimestamp(lastLoadedTimestamp, meta.generatedAt)) {
+    if (!meta?.generatedAt) return;
+
+    // Prevent redundant sync if we already processed this exact meta timestamp
+    if (meta.generatedAt === lastProcessedMetaTimestamp) return;
+
+    if (LogbookParser.isNewerTimestamp(lastLoadedTimestamp, meta.generatedAt)) {
+      lastProcessedMetaTimestamp = meta.generatedAt;
       lastLoadedTimestamp = meta.generatedAt;
-      await loadInitialData();
+
+      await loadInitialData({ isSyncUpdate: true });
+
       const fileName = meta.lastChangedFile ? ` (${meta.lastChangedFile})` : '';
-      UIRenderer.showToast(`🔄 ข้อมูล Logbook ซิงค์ล่าสุดจาก SharePoint${fileName} เรียบร้อยแล้วค่ะ!`, 'success');
+      UIRenderer.showToast(`🔄 ข้อมูล Logbook ซิงค์ล่าสุดจาก SharePoint${fileName} เรียบร้อยแล้วค่ะ! (คงหน้าจอและคำค้นหาปัจจุบันไว้)`, 'success');
     }
   } catch {
     // Silent on network error or offline mode

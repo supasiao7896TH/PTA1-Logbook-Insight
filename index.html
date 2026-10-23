@@ -631,6 +631,12 @@
         <button type="button" class="nav-pill-btn active-nav-pill" data-tab-btn="search" role="tab" aria-selected="true">
           🔍 ค้นหาย้อนหลัง (9 เดือน)
         </button>
+        <button type="button" class="nav-pill-btn" data-tab-btn="silo" role="tab" aria-selected="false">
+          🌾 Silo &amp; โลจิสติกส์ขนส่ง
+        </button>
+        <button type="button" class="nav-pill-btn" data-tab-btn="sap" role="tab" aria-selected="false">
+          🛠️ งานซ่อม SAP &amp; Memo
+        </button>
         <button type="button" class="nav-pill-btn" data-tab-btn="overview" role="tab" aria-selected="false">
           📊 ภาพรวมรายเดือน &amp; กะพี่ A
         </button>
@@ -722,6 +728,75 @@
           </div>
 
           <div id="search-results-list" class="timeline-stack"></div>
+        </section>
+
+        <!-- VIEW SILO: SILO OPERATIONS & LOGISTICS -->
+        <section data-view-panel="silo" hidden aria-label="การจัดการ Silo และโลจิสติกส์">
+          <div class="sa-card" style="margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h2 style="font-size: 1.1rem;">🌾 ไทม์ไลน์การสลับ Silo &amp; การส่งผง PTA (Silo 800 / 810 / 820)</h2>
+              <span id="silo-results-count" class="kpi-label"></span>
+            </div>
+            <p class="kpi-sub" style="margin-bottom: 0.85rem;">
+              ติดตามประวัติการสลับถัง Silo 800 (A/B/C) และปลายทางการลำเลียงผง (PTK810A/B/C, 820A/B) พร้อมเหตุผลหน้างานย้อนหลัง 9 เดือน (รวม 1,128 เหตุการณ์)
+            </p>
+            <div class="filter-toolbar">
+              <select id="filter-silo-target" class="sa-select" aria-label="เลือก Silo เป้าหมาย">
+                <option value="ALL">📦 Silo: ทั้งหมด</option>
+                <option value="810A">Silo PTK810A</option>
+                <option value="810B">Silo PTK810B</option>
+                <option value="810C">Silo PTK810C</option>
+                <option value="820A">Silo 820A</option>
+                <option value="820B">Silo 820B</option>
+                <option value="A">Silo 800 A</option>
+                <option value="B">Silo 800 B</option>
+                <option value="C">Silo 800 C</option>
+                <option value="TTK-401">TTK-401</option>
+              </select>
+              <select id="filter-silo-month" class="sa-select" aria-label="เลือกเดือน"></select>
+              <input
+                id="search-silo-input"
+                type="search"
+                class="sa-input sa-search-pill"
+                style="flex: 1 1 240px;"
+                placeholder="🔍 ค้นหาคำกำกับ (เช่น 810A full, transfer empty, B to A)..."
+                aria-label="ค้นหาข้อมูล Silo"
+              />
+            </div>
+          </div>
+          <div id="silo-timeline-list" class="timeline-stack"></div>
+        </section>
+
+        <!-- VIEW SAP: MAINTENANCE & HANDOVER MEMOS -->
+        <section data-view-panel="sap" hidden aria-label="งานซ่อมบำรุง SAP และบันทึกส่งเวร">
+          <div class="sa-card" style="margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h2 style="font-size: 1.1rem;">🛠️ งานแจ้งซ่อม SAP &amp; Memo ค้างส่งเวร (Maintenance &amp; Handover)</h2>
+              <span id="sap-results-count" class="kpi-label"></span>
+            </div>
+            <p class="kpi-sub" style="margin-bottom: 0.85rem;">
+              บันทึกหมายเลข SAP No., รายละเอียดงานซ่อมบำรุง, อุปกรณ์ที่ผิดปกติ (เช่น PM-500B, FCV-2412) และสถานะงานที่ส่งต่อระหว่างกะ
+            </p>
+            <div class="filter-toolbar">
+              <select id="filter-sap-status" class="sa-select" aria-label="เลือกสถานะงาน">
+                <option value="ALL">📌 สถานะงาน: ทั้งหมด</option>
+                <option value="REL">REL (Released)</option>
+                <option value="Completed">Completed (เสร็จแล้ว)</option>
+                <option value="Not yet">Not yet (ยังไม่เสร็จ)</option>
+                <option value="closed">Closed</option>
+              </select>
+              <select id="filter-sap-month" class="sa-select" aria-label="เลือกเดือน"></select>
+              <input
+                id="search-sap-input"
+                type="search"
+                class="sa-input sa-search-pill"
+                style="flex: 1 1 240px;"
+                placeholder="🔍 ค้นหารายละเอียดงาน / รหัส SAP / อุปกรณ์ (เช่น PM-500B, filter, valve)..."
+                aria-label="ค้นหางานซ่อม SAP"
+              />
+            </div>
+          </div>
+          <div id="sap-timeline-list" class="timeline-stack"></div>
         </section>
 
         <!-- VIEW 2: MONTHLY OVERVIEW & SUPASIT HIGHLIGHTS -->

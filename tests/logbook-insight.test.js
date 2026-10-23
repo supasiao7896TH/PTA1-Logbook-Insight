@@ -98,19 +98,18 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
   describe('4. IPS Benefit Formula 1.1 & HCL Notes Formatting', () => {
     it('calculates total monthly benefit strictly by formula (1) + (2) - (4/12) - (5)', () => {
       const calc = LogbookParser.calculateIpsBenefit({
-        costSaving: 1500,       // (1) 1,500 THB/month
-        manHours: 4,            // (2) 4 hrs/month
-        hourlyRate: 300,        //     x 300 THB/hr = 1,200 THB/month
-        oppLossTons: 10,        // (3) 10 Tons (tracked separately, not in 1+2-4-5 sum)
-        tonRate: 2000,          //     x 2,000 = 20,000 THB/month
-        investYear: 1200,       // (4) 1,200 THB/year -> 100 THB/month
-        extraCost: 200          // (5) 200 THB/month
+        costSaving: 1500,
+        manHours: 4,
+        hourlyRate: 300,
+        oppLossTons: 10,
+        tonRate: 2000,
+        investYear: 1200,
+        extraCost: 200
       });
 
       expect(calc.manHourSaving).toBe(1200);
       expect(calc.oppLossSaving).toBe(20000);
       expect(calc.investMonthly).toBe(100);
-      // Total = 1500 + 1200 - 100 - 200 = 2400
       expect(calc.totalMonthly).toBe(2400);
     });
 
@@ -130,6 +129,86 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
       expect(text).toContain('❌ ก่อนการปรับปรุง (Before improvement)');
       expect(text).toContain('✅ หลังการปรับปรุง (After improvement)');
       expect(text).toContain('📈 ประสิทธิภาพหลังการปฏิบัติ (Effectiveness after improvement)');
+    });
+  });
+
+  describe('5. Silo Operations & Switching Tracking (filterSiloOperations)', () => {
+    const sampleSiloOps = [
+      {
+        id: 'silo-2026-10-01-52',
+        date: '2026-10-01',
+        monthKey: '2026-10',
+        time: '12:00',
+        shift: 'Day',
+        switchText: 'B to A',
+        destination: 'B to PTK810A',
+        description: ''
+      },
+      {
+        id: 'silo-2026-10-03-51',
+        date: '2026-10-03',
+        monthKey: '2026-10',
+        time: '07:50',
+        shift: 'Day',
+        switchText: '',
+        destination: 'A to 820A',
+        description: '810A full'
+      },
+      {
+        id: 'silo-2026-10-03-53',
+        date: '2026-10-03',
+        monthKey: '2026-10',
+        time: '16:10',
+        shift: 'Day',
+        switchText: 'A to B',
+        destination: 'A to PTK810A',
+        description: ''
+      }
+    ];
+
+    it('filters Silo operations by target silo, destination, and text query', () => {
+      const for820A = LogbookParser.filterSiloOperations(sampleSiloOps, { silo: '820A' });
+      expect(for820A).toHaveLength(1);
+      expect(for820A[0].description).toBe('810A full');
+
+      const forSiloB = LogbookParser.filterSiloOperations(sampleSiloOps, { silo: 'B' });
+      expect(forSiloB).toHaveLength(2);
+
+      const byQuery = LogbookParser.filterSiloOperations(sampleSiloOps, { query: 'full' });
+      expect(byQuery).toHaveLength(1);
+    });
+  });
+
+  describe('6. SAP & Maintenance Handover Memos (filterSapMemos)', () => {
+    const sampleMemos = [
+      {
+        id: 'sap-2026-10-03-65',
+        date: '2026-10-03',
+        monthKey: '2026-10',
+        sapNo: '',
+        detail: 'PD-2500 = 1.82 kg/cm2 pls replace filter of PM-500B.',
+        status: 'REL',
+        remark: ''
+      },
+      {
+        id: 'sap-2026-10-05-62',
+        date: '2026-10-05',
+        monthKey: '2026-10',
+        sapNo: '10045621',
+        detail: 'Check PP-503A mech seal leak',
+        status: 'Completed',
+        remark: 'F/O check'
+      }
+    ];
+
+    it('filters SAP memos by equipment tag, status, and query', () => {
+      const pm500 = LogbookParser.filterSapMemos(sampleMemos, { query: 'PM-500B' });
+      expect(pm500).toHaveLength(1);
+      expect(pm500[0].date).toBe('2026-10-03');
+
+      const completed = LogbookParser.filterSapMemos(sampleMemos, { status: 'Completed' });
+      expect(completed).toHaveLength(1);
+      expect(completed[0].sapNo).toBe('10045621');
     });
   });
 });

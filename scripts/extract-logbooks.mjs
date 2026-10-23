@@ -3,6 +3,13 @@
  * High-speed stream-based Excel (.xlsx / .xlsm) Logbook Extractor for PTA Unit 1
  * Reads only XML worksheet/sharedStrings entries from the ZIP central directory,
  * skipping 400+ MB of embedded media/drawings to extract all 9 months (Jan–Oct 2026) in seconds.
+ *
+ * Full Extraction Scope:
+ * 1. QC & Shift Daily Work logs
+ * 2. 🌾 Silo Operations & Switching Timeline (Silo 800 A/B/C -> PTK810A/B/C / 820A/B + Reasons)
+ * 3. 🛠️ SAP Work Orders & Pending Handover Memos
+ * 4. 📋 Regular Work & PM Routine Checklist (LCV-2301-3 timings & %, blowdowns, oil draining)
+ * 5. 🎯 Silo Destination Matrix & Daily Plan Loading
  */
 
 import fs from 'fs';
@@ -47,7 +54,10 @@ function decodeXmlEntities(str) {
 
 function formatExcelTime(val) {
   const num = Number(val);
-  if (!Number.isFinite(num) || num <= 0 || num >= 1) return '';
+  if (!Number.isFinite(num) || num <= 0 || num >= 1) {
+    if (typeof val === 'string' && /^\d{1,2}:\d{2}/.test(val.trim())) return val.trim();
+    return '';
+  }
   const totalMinutes = Math.round(num * 24 * 60);
   const hh = String(Math.floor(totalMinutes / 60) % 24).padStart(2, '0');
   const mm = String(totalMinutes % 60).padStart(2, '0');
@@ -55,7 +65,6 @@ function formatExcelTime(val) {
 }
 
 function openZipIndex(buf) {
-  // Locate End of Central Directory (EOCD) signature 0x06054b50
   let eocd = buf.length - 22;
   const minSearch = Math.max(0, buf.length - 65557);
   while (eocd >= minSearch && buf.readUInt32LE(eocd) !== 0x06054b50) {
@@ -113,7 +122,7 @@ function parseWorkbookFile(filePath, monthMeta) {
     sst.push(decodeXmlEntities(text));
   }
 
-  // 2. Map sheet name ("01".."31") -> target XML path via workbook.xml and workbook.xml.rels
+  // 2. Map sheet name ("01".."31") -> target XML path
   const wbXml = zip.readText('xl/workbook.xml');
   const relsXml = zip.readText('xl/_rels/workbook.xml.rels');
 
@@ -124,7 +133,6 @@ function parseWorkbookFile(filePath, monthMeta) {
     relMap[m[1]] = target;
   }
 
-  // Also capture state="hidden" if any
   const daySheets = [];
   for (const m of wbXml.matchAll(/<sheet [^>]*name="([^"]+)"[^>]*r:id="([^"]+)"([^>]*)\/>/g)) {
     const sheetName = m[1].trim();
@@ -142,6 +150,10 @@ function parseWorkbookFile(filePath, monthMeta) {
 
   const daysSummary = [];
   const entries = [];
+  const siloOperations = [];
+  const sapMemos = [];
+  const regularWorkList = [];
+
   const CELL_RE = /<c r="([A-Z]+)(\d+)"([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g;
 
   for (const { day, xmlPath } of daySheets) {
@@ -154,10 +166,7 @@ function parseWorkbookFile(filePath, monthMeta) {
       const row = parseInt(m[2], 10);
       const attr = m[3];
       const body = m[4];
-      if (!body) continue;
-
-      if (!['A', 'B', 'C', 'D', 'E', 'G', 'H', 'I', 'L', 'M', 'N', 'R'].includes(col)) continue;
-      if (row > 175) continue;
+      if (!body || row > 175) continue;
 
       let val = '';
       const ism = body.match(/<is>[\s\S]*?<t[^>]*>([\s\S]*?)<\/t>[\s\S]*?<\/is>/);
@@ -193,11 +202,10 @@ function parseWorkbookFile(filePath, monthMeta) {
     const prod = toNum(cells.N22, 1);
     const dp2500 = toNum(cells.R48 || cells.M48, 3);
 
-    // Skip unpopulated future template sheets (where neither FM/BM nor production/load is filled properly)
     const hasActivity = Boolean(dayFm || dayBm || nightFm || nightBm);
     if (!hasActivity) continue;
 
-    // Locate dynamic row boundaries for QC and Daily Work
+    // Locate dynamic row boundaries
     let qcNightHeaderRow = 20;
     let regularWorkRow = 27;
     let dailyWorkStartRow = 77;
@@ -208,21 +216,11 @@ function parseWorkbookFile(filePath, monthMeta) {
     for (let r = 12; r <= 170; r++) {
       const aVal = String(cells[`A${r}`] || '').trim();
       const bVal = String(cells[`B${r}`] || '').trim();
-      if (r >= 16 && r <= 25 && bVal.toLowerCase() === 'night shift') {
-        qcNightHeaderRow = r;
-      }
-      if (r >= 24 && r <= 35 && aVal.toLowerCase().includes('regular work')) {
-        regularWorkRow = r;
-      }
-      if (r >= 70 && r <= 85 && aVal.toLowerCase() === 'daily work') {
-        dailyWorkStartRow = r + 2;
-      }
-      if (r >= 100 && r <= 130 && bVal.toLowerCase().includes('steam 10s generate')) {
-        steamSepRow = r;
-      }
-      if (r > steamSepRow && r <= steamSepRow + 20 && bVal.includes('K:Link to --> IOW')) {
-        nightDwStartRow = r + 1;
-      }
+      if (r >= 16 && r <= 25 && bVal.toLowerCase() === 'night shift') qcNightHeaderRow = r;
+      if (r >= 24 && r <= 35 && aVal.toLowerCase().includes('regular work')) regularWorkRow = r;
+      if (r >= 70 && r <= 85 && aVal.toLowerCase() === 'daily work') dailyWorkStartRow = r + 2;
+      if (r >= 100 && r <= 130 && bVal.toLowerCase().includes('steam 10s generate')) steamSepRow = r;
+      if (r > steamSepRow && r <= steamSepRow + 20 && bVal.includes('K:Link to --> IOW')) nightDwStartRow = r + 1;
       if (r >= nightDwStartRow + 5 && bVal.includes('K:Link to --> IOW')) {
         nightDwEndRow = r - 1;
         break;
@@ -232,7 +230,7 @@ function parseWorkbookFile(filePath, monthMeta) {
     let dayEntryCount = 0;
     let nightEntryCount = 0;
 
-    // Extract QC rows (14 .. regularWorkRow - 1)
+    // 1. QC Rows (14 .. regularWorkRow - 1)
     for (let r = 14; r < regularWorkRow; r++) {
       if (r === qcNightHeaderRow) continue;
       const text = String(cells[`B${r}`] || '').trim();
@@ -272,7 +270,150 @@ function parseWorkbookFile(filePath, monthMeta) {
       });
     }
 
-    // Extract Day Shift Daily Work (dailyWorkStartRow .. steamSepRow - 1)
+    // 2. Regular Work (PM Checklist: rows regularWorkRow + 1 .. 38)
+    for (let r = regularWorkRow + 1; r <= 38; r++) {
+      const task = String(cells[`B${r}`] || '').trim();
+      if (!task || task.includes('ดับเบิลคลิก') || task.startsWith('#')) continue;
+      const statusNote = String(cells[`N${r}`] || '').trim();
+      regularWorkList.push({
+        id: `rw-${monthMeta.monthKey}-${day}-${r}`,
+        monthKey: monthMeta.monthKey,
+        date: `${monthMeta.monthKey}-${day}`,
+        day,
+        row: r,
+        task,
+        statusNote,
+        isCompleted: statusNote.includes('ทำแล้ว')
+      });
+    }
+
+    // 3. 🌾 Silo Operations & Switching (rows 50 .. 60)
+    for (let r = 50; r <= 60; r++) {
+      const timeRaw = cells[`A${r}`];
+      const time = formatExcelTime(timeRaw);
+
+      // Silo switching (Cols B, C, D) e.g. "B to A" or "A to B"
+      const bPart = String(cells[`B${r}`] || '').trim();
+      const cPart = String(cells[`C${r}`] || '').trim();
+      const dPart = String(cells[`D${r}`] || '').trim();
+      let switchText = '';
+      if (bPart && bPart !== 'Silo switching') {
+        switchText = [bPart, cPart, dPart].filter(Boolean).join(' ');
+      }
+
+      // Destination (Cols E, G, J) e.g. "B to PTK810A" or "A to 820A"
+      const ePart = String(cells[`E${r}`] || '').trim();
+      const gPart = String(cells[`G${r}`] || '').trim();
+      const jPart = String(cells[`J${r}`] || '').trim();
+      let destination = '';
+      if (ePart && ePart !== 'Destination of silo') {
+        destination = [ePart, gPart, jPart].filter(Boolean).join(' ');
+      }
+
+      const description = String(cells[`L${r}`] || '').trim();
+      if (!switchText && !destination && (!description || description === 'Description')) continue;
+
+      const timeHour = time ? parseInt(time.split(':')[0], 10) : 12;
+      const isNight = timeHour >= 20 || timeHour < 8;
+      const shift = isNight ? 'Night' : 'Day';
+      const bm = isNight ? nightBm : dayBm;
+      const fm = isNight ? nightFm : dayFm;
+
+      const siloEvent = {
+        id: `silo-${monthMeta.monthKey}-${day}-${r}`,
+        monthKey: monthMeta.monthKey,
+        monthLabel: monthMeta.label,
+        date: `${monthMeta.monthKey}-${day}`,
+        day,
+        row: r,
+        time,
+        shift,
+        bm,
+        fm,
+        switchText,
+        destination,
+        description: description === 'Description' ? '' : description
+      };
+
+      siloOperations.push(siloEvent);
+
+      // Make Silo event directly searchable in Timeline
+      const summaryText = [
+        switchText ? `สลับ Silo: ${switchText}` : '',
+        destination ? `ส่ง Silo: ${destination}` : '',
+        description && description !== 'Description' ? `(${description})` : ''
+      ].filter(Boolean).join(' | ');
+
+      entries.push({
+        id: `${monthMeta.monthKey}-${day}-${isNight ? 'N' : 'D'}-SILO-${r}`,
+        monthKey: monthMeta.monthKey,
+        monthLabel: monthMeta.label,
+        date: `${monthMeta.monthKey}-${day}`,
+        day,
+        shift,
+        fm,
+        bm,
+        cba: isNight ? nightCba : dayCba,
+        pta: isNight ? nightPta : dayPta,
+        load: isNight ? nightLoad : dayLoad,
+        prod,
+        dp2500,
+        category: 'SILO',
+        row: r,
+        time,
+        text: `[🌾 Silo Operation] ${summaryText}`,
+        tags: LogbookParser.extractTags(summaryText)
+      });
+    }
+
+    // 4. 🛠️ SAP / MT Work & Handover Memos (rows 62 .. 74)
+    for (let r = 62; r <= 74; r++) {
+      const sapNo = String(cells[`A${r}`] || '').trim();
+      const detail = String(cells[`C${r}`] || cells[`B${r}`] || '').trim();
+      const status = String(cells[`N${r}`] || cells[`O${r}`] || '').trim();
+      const remark = String(cells[`Q${r}`] || cells[`R${r}`] || '').trim();
+
+      if (!detail && !sapNo) continue;
+      if (sapNo === 'SAP No.' || detail === 'Detail' || detail.startsWith('Total')) continue;
+
+      const sapItem = {
+        id: `sap-${monthMeta.monthKey}-${day}-${r}`,
+        monthKey: monthMeta.monthKey,
+        date: `${monthMeta.monthKey}-${day}`,
+        day,
+        row: r,
+        sapNo: sapNo === 'SAP No.' ? '' : sapNo,
+        detail,
+        status,
+        remark
+      };
+
+      sapMemos.push(sapItem);
+
+      // Also make SAP Memos directly searchable in Timeline
+      entries.push({
+        id: `${monthMeta.monthKey}-${day}-D-SAP-${r}`,
+        monthKey: monthMeta.monthKey,
+        monthLabel: monthMeta.label,
+        date: `${monthMeta.monthKey}-${day}`,
+        day,
+        shift: 'Day',
+        fm: dayFm,
+        bm: dayBm,
+        cba: dayCba,
+        pta: dayPta,
+        load: dayLoad,
+        prod,
+        dp2500,
+        category: 'SAP',
+        row: r,
+        time: '',
+        text: `[🛠️ SAP/Handover] ${sapNo ? `SAP #${sapNo} ` : ''}${detail} ${status ? `[สถานะ: ${status}]` : ''}`,
+        tags: LogbookParser.extractTags(detail)
+      });
+    }
+
+    // 5. Day Shift Daily Work (dailyWorkStartRow .. steamSepRow - 1)
     for (let r = dailyWorkStartRow; r < steamSepRow; r++) {
       const text = String(cells[`B${r}`] || '').trim();
       if (!text || text === '0' || text.startsWith('#') || text.startsWith('Argument is not')) continue;
@@ -301,7 +442,7 @@ function parseWorkbookFile(filePath, monthMeta) {
       });
     }
 
-    // Extract Night Shift Daily Work (nightDwStartRow .. nightDwEndRow)
+    // 6. Night Shift Daily Work (nightDwStartRow .. nightDwEndRow)
     for (let r = nightDwStartRow; r <= nightDwEndRow; r++) {
       const text = String(cells[`B${r}`] || '').trim();
       if (!text || text === '0' || text.startsWith('#') || text.startsWith('Argument is not')) continue;
@@ -330,43 +471,52 @@ function parseWorkbookFile(filePath, monthMeta) {
       });
     }
 
-    // Only include days that actually have shift logs or real production values
-    if (dayEntryCount > 0 || nightEntryCount > 0) {
-      daysSummary.push({
-        monthKey: monthMeta.monthKey,
-        monthLabel: monthMeta.label,
-        date: `${monthMeta.monthKey}-${day}`,
-        day,
-        dayFm,
-        dayBm,
-        nightFm,
-        nightBm,
-        dayCba,
-        nightCba,
-        dayPta,
-        nightPta,
-        dayLoad,
-        nightLoad,
-        prod,
-        dp2500,
-        dayEntryCount,
-        nightEntryCount
-      });
-    }
+    // Days summary record
+    daysSummary.push({
+      monthKey: monthMeta.monthKey,
+      monthLabel: monthMeta.label,
+      date: `${monthMeta.monthKey}-${day}`,
+      day,
+      dayFm,
+      dayBm,
+      nightFm,
+      nightBm,
+      dayCba,
+      nightCba,
+      dayPta,
+      nightPta,
+      dayLoad,
+      nightLoad,
+      prod,
+      dp2500,
+      dayEntryCount,
+      nightEntryCount,
+      siloMatrix: {
+        ptk810a: cells.AB17 || '',
+        ptk810b: cells.AB18 || '',
+        ptk810c: cells.AB19 || '',
+        ttk401: cells.AB20 || '',
+        planLoading810A: cells.P28 || '',
+        planLoading820A: cells.P30 || ''
+      }
+    });
   }
 
-  return { daysSummary, entries };
+  return { daysSummary, entries, siloOperations, sapMemos, regularWorkList };
 }
 
 function main() {
   const startTime = Date.now();
-  const filesInLogbooks = fs.readdirSync(LOGBOOKS_DIR);
+  const filesInLogbooks = fs.existsSync(LOGBOOKS_DIR) ? fs.readdirSync(LOGBOOKS_DIR) : [];
   const filesInWorkspace = fs.existsSync(WORKSPACE_DIR) ? fs.readdirSync(WORKSPACE_DIR) : [];
   const searchFiles = [...new Set([...filesInLogbooks, ...filesInWorkspace])];
 
   const allMonths = [];
   const allDaysSummary = [];
   const allEntries = [];
+  const allSiloOperations = [];
+  const allSapMemos = [];
+  const allRegularWork = [];
 
   for (const meta of MONTH_FILE_PATTERNS) {
     const matchedFile = searchFiles.find(
@@ -379,20 +529,25 @@ function main() {
       : path.join(WORKSPACE_DIR, matchedFile);
     const t0 = Date.now();
     try {
-      const { daysSummary, entries } = parseWorkbookFile(fullPath, meta);
+      const { daysSummary, entries, siloOperations, sapMemos, regularWorkList } = parseWorkbookFile(fullPath, meta);
       const elapsed = Date.now() - t0;
       console.log(
-        `✅ [${meta.monthKey}] ${matchedFile} -> ${daysSummary.length} days, ${entries.length} log entries (${elapsed} ms)`
+        `✅ [${meta.monthKey}] ${matchedFile} -> ${daysSummary.length} วัน, ${entries.length} บันทึก, Silo: ${siloOperations.length}, SAP: ${sapMemos.length} (${elapsed} ms)`
       );
       allMonths.push({
         monthKey: meta.monthKey,
         label: meta.label,
         fileName: matchedFile,
         daysCount: daysSummary.length,
-        entriesCount: entries.length
+        entriesCount: entries.length,
+        siloCount: siloOperations.length,
+        sapCount: sapMemos.length
       });
       allDaysSummary.push(...daysSummary);
       allEntries.push(...entries);
+      allSiloOperations.push(...siloOperations);
+      allSapMemos.push(...sapMemos);
+      allRegularWork.push(...regularWorkList);
     } catch (err) {
       console.error(`❌ Failed to parse ${matchedFile}:`, err.message);
     }
@@ -404,15 +559,27 @@ function main() {
     totalMonths: allMonths.length,
     totalDays: allDaysSummary.length,
     totalEntries: allEntries.length,
+    totalSiloOperations: allSiloOperations.length,
+    totalSapMemos: allSapMemos.length,
+    totalRegularWork: allRegularWork.length,
     months: allMonths,
     daysSummary: allDaysSummary,
-    entries: allEntries
+    entries: allEntries,
+    siloOperations: allSiloOperations,
+    sapMemos: allSapMemos,
+    regularWork: allRegularWork
   };
 
   fs.writeFileSync(OUTPUT_JSON, JSON.stringify(payload, null, 2), 'utf8');
   const totalMs = Date.now() - startTime;
   console.log(
-    `\n🎉 Extraction complete in ${totalMs} ms! Saved ${allEntries.length} entries across ${allMonths.length} months to public/data/logbook_2026.json`
+    `\n🎉 Comprehensive Extraction complete in ${totalMs} ms!\n` +
+    `• รวม ${allMonths.length} เดือน (${allDaysSummary.length} วันทำการ)\n` +
+    `• รายการบันทึกหน้างานทั้งหมด: ${allEntries.length.toLocaleString('en-US')} รายการ\n` +
+    `• 🌾 ข้อมูล Silo Switching & Logistics: ${allSiloOperations.length.toLocaleString('en-US')} รายการ\n` +
+    `• 🛠️ ข้อมูลงานแจ้งซ่อม SAP & Memo ค้างส่งเวร: ${allSapMemos.length.toLocaleString('en-US')} รายการ\n` +
+    `• 📋 งานตรวจเช็ก Regular Work / PM: ${allRegularWork.length.toLocaleString('en-US')} รายการ\n` +
+    `บันทึกสู่ public/data/logbook_2026.json เรียบร้อยค่ะ!`
   );
 }
 

@@ -138,6 +138,67 @@ export const LogbookParser = {
   },
 
   /**
+   * Filters Silo Operation events (switching & transfer destination).
+   * @param {Array<Object>} siloOps
+   * @param {Object} filters
+   * @returns {Array<Object>}
+   */
+  filterSiloOperations(siloOps, filters = {}) {
+    if (!Array.isArray(siloOps)) return [];
+    const { silo = 'ALL', monthKey = 'ALL', query = '' } = filters;
+    const q = query.trim().toLowerCase();
+
+    return siloOps.filter((item) => {
+      if (monthKey && monthKey !== 'ALL' && item.monthKey !== monthKey) return false;
+
+      if (silo && silo !== 'ALL') {
+        const siloUpper = silo.toUpperCase();
+        const inSwitch = (item.switchText || '').toUpperCase().includes(siloUpper);
+        const inDest = (item.destination || '').toUpperCase().includes(siloUpper);
+        const inDesc = (item.description || '').toUpperCase().includes(siloUpper);
+        if (!inSwitch && !inDest && !inDesc) return false;
+      }
+
+      if (q) {
+        const matchSwitch = (item.switchText || '').toLowerCase().includes(q);
+        const matchDest = (item.destination || '').toLowerCase().includes(q);
+        const matchDesc = (item.description || '').toLowerCase().includes(q);
+        const matchDate = (item.date || '').toLowerCase().includes(q);
+        if (!matchSwitch && !matchDest && !matchDesc && !matchDate) return false;
+      }
+
+      return true;
+    });
+  },
+
+  /**
+   * Filters SAP Work Orders & Handover Memos.
+   * @param {Array<Object>} memos
+   * @param {Object} filters
+   * @returns {Array<Object>}
+   */
+  filterSapMemos(memos, filters = {}) {
+    if (!Array.isArray(memos)) return [];
+    const { status = 'ALL', monthKey = 'ALL', query = '' } = filters;
+    const q = query.trim().toLowerCase();
+
+    return memos.filter((item) => {
+      if (monthKey && monthKey !== 'ALL' && item.monthKey !== monthKey) return false;
+      if (status && status !== 'ALL' && (item.status || '').toLowerCase() !== status.toLowerCase()) return false;
+
+      if (q) {
+        const matchDetail = (item.detail || '').toLowerCase().includes(q);
+        const matchSap = (item.sapNo || '').toLowerCase().includes(q);
+        const matchRemark = (item.remark || '').toLowerCase().includes(q);
+        const matchDate = (item.date || '').toLowerCase().includes(q);
+        if (!matchDetail && !matchSap && !matchRemark && !matchDate) return false;
+      }
+
+      return true;
+    });
+  },
+
+  /**
    * Computes statistical insights from filtered entries and daily summary metrics.
    * @param {Array<Object>} entries
    * @param {Array<Object>} daysSummary

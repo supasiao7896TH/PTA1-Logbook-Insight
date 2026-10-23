@@ -70,6 +70,10 @@ export const UIRenderer = {
 
     if (activeTab === 'search') {
       this.renderSearchTimeline(handlers);
+    } else if (activeTab === 'silo') {
+      this.renderSiloView(handlers);
+    } else if (activeTab === 'sap') {
+      this.renderSapView(handlers);
     } else if (activeTab === 'overview') {
       this.renderMonthlyOverview(handlers);
     } else if (activeTab === 'equipment') {
@@ -551,5 +555,203 @@ export const UIRenderer = {
       b.classList.toggle('btn-pill-primary', b.getAttribute('data-ips-mode') === mode);
       b.classList.toggle('btn-pill-secondary', b.getAttribute('data-ips-mode') !== mode);
     });
+  },
+
+  renderSiloView(handlers) {
+    const listEl = document.getElementById('silo-timeline-list');
+    const countEl = document.getElementById('silo-results-count');
+    if (!listEl) return;
+    listEl.textContent = '';
+
+    const allSiloOps = StateStore.get('siloOperations') || [];
+    const siloFilters = StateStore.get('siloFilters') || {};
+    const filtered = LogbookParser.filterSiloOperations(allSiloOps, siloFilters);
+
+    // Sync filter selects
+    const monthSelect = document.getElementById('filter-silo-month');
+    const months = StateStore.get('months') || [];
+    if (monthSelect && monthSelect.options.length !== months.length + 1) {
+      monthSelect.textContent = '';
+      monthSelect.appendChild(new Option('📅 เดือน: ทั้งหมด', 'ALL'));
+      for (const m of months) {
+        monthSelect.appendChild(new Option(`${m.label} (${m.siloCount || 0})`, m.monthKey));
+      }
+    }
+    if (monthSelect) monthSelect.value = siloFilters.monthKey || 'ALL';
+
+    const targetSelect = document.getElementById('filter-silo-target');
+    if (targetSelect) targetSelect.value = siloFilters.silo || 'ALL';
+
+    const searchInput = document.getElementById('search-silo-input');
+    if (searchInput && document.activeElement !== searchInput) {
+      searchInput.value = siloFilters.query || '';
+    }
+
+    if (countEl) {
+      countEl.textContent = `พบ ${filtered.length.toLocaleString('en-US')} รายการ (จากทั้งหมด ${allSiloOps.length.toLocaleString('en-US')} รายการ)`;
+    }
+
+    if (filtered.length === 0) {
+      const empty = el(
+        'div',
+        'sa-card p-8 text-center',
+        'ไม่พบประวัติการสลับ Silo ตามเงื่อนไขที่เลือกค่ะ'
+      );
+      listEl.appendChild(empty);
+      return;
+    }
+
+    // Sort newest date and time first
+    const sorted = [...filtered].sort((a, b) => b.date.localeCompare(a.date) || (b.time || '').localeCompare(a.time || ''));
+
+    for (const item of sorted.slice(0, 300)) {
+      const card = el('article', 'sa-card log-entry-card');
+      const head = el('div', 'log-entry-header');
+      const leftMeta = el('div', 'log-entry-meta');
+
+      const dateBadge = el('span', 'badge-date', `📅 ${item.date} [${item.time || '-'}]`);
+      const shiftBadge = el(
+        'span',
+        `badge-shift ${item.shift === 'Night' ? 'badge-night' : 'badge-day'}`,
+        item.shift === 'Night' ? '🌙 Night' : '☀️ Day'
+      );
+      const isSupasit = (item.bm || '').includes('ศุภสิทธิ์');
+      const bmBadge = el(
+        'span',
+        `badge-person ${isSupasit ? 'badge-person-highlight' : ''}`,
+        `BM: ${item.bm || '-'}`
+      );
+
+      leftMeta.append(dateBadge, shiftBadge, bmBadge);
+
+      const draftBtn = el('button', 'btn-pill-secondary', '✨ ร่าง IPS จากเคสนี้');
+      draftBtn.type = 'button';
+      draftBtn.addEventListener('click', () => {
+        handlers.onCreateDraftFromEntry({
+          id: item.id,
+          date: item.date,
+          shift: item.shift,
+          bm: item.bm,
+          fm: item.fm,
+          tags: ['SILO-OPERATION', 'TTK-400', 'PTK-101'],
+          text: `การสลับและส่ง Silo: ${item.switchText ? `สลับ ${item.switchText}` : ''} ${item.destination ? `ส่ง ${item.destination}` : ''} ${item.description ? `(${item.description})` : ''}`
+        });
+      });
+
+      head.append(leftMeta, draftBtn);
+
+      const bodyText = el('div', 'flex flex-col gap-1 mt-1');
+      if (item.switchText) {
+        const switchRow = el('div', 'flex items-center gap-2');
+        const badge = el('span', 'c-ref-tag', '🔄 สลับ Silo 800');
+        const txt = el('strong', 'text-base', item.switchText);
+        switchRow.append(badge, txt);
+        bodyText.appendChild(switchRow);
+      }
+
+      if (item.destination) {
+        const destRow = el('div', 'flex items-center gap-2');
+        const badge = el('span', 'c-ref-tag', '📦 ปลายทางส่งผง');
+        const txt = el('span', 'font-semibold', item.destination);
+        destRow.append(badge, txt);
+        bodyText.appendChild(destRow);
+      }
+
+      if (item.description) {
+        const descRow = el('div', 'mt-1 text-sm');
+        const badge = el('span', 'badge-metric badge-metric-warn mr-2', 'เหตุผล/หมายเหตุ');
+        descRow.append(badge, createHighlightedText(item.description, siloFilters.query));
+        bodyText.appendChild(descRow);
+      }
+
+      card.append(head, bodyText);
+      listEl.appendChild(card);
+    }
+  },
+
+  renderSapView(handlers) {
+    const listEl = document.getElementById('sap-timeline-list');
+    const countEl = document.getElementById('sap-results-count');
+    if (!listEl) return;
+    listEl.textContent = '';
+
+    const allMemos = StateStore.get('sapMemos') || [];
+    const sapFilters = StateStore.get('sapFilters') || {};
+    const filtered = LogbookParser.filterSapMemos(allMemos, sapFilters);
+
+    const monthSelect = document.getElementById('filter-sap-month');
+    const months = StateStore.get('months') || [];
+    if (monthSelect && monthSelect.options.length !== months.length + 1) {
+      monthSelect.textContent = '';
+      monthSelect.appendChild(new Option('📅 เดือน: ทั้งหมด', 'ALL'));
+      for (const m of months) {
+        monthSelect.appendChild(new Option(`${m.label} (${m.sapCount || 0})`, m.monthKey));
+      }
+    }
+    if (monthSelect) monthSelect.value = sapFilters.monthKey || 'ALL';
+
+    const statusSelect = document.getElementById('filter-sap-status');
+    if (statusSelect) statusSelect.value = sapFilters.status || 'ALL';
+
+    const searchInput = document.getElementById('search-sap-input');
+    if (searchInput && document.activeElement !== searchInput) {
+      searchInput.value = sapFilters.query || '';
+    }
+
+    if (countEl) {
+      countEl.textContent = `พบ ${filtered.length.toLocaleString('en-US')} รายการ`;
+    }
+
+    if (filtered.length === 0) {
+      const empty = el('div', 'sa-card p-8 text-center', 'ไม่พบรายการใบแจ้งซ่อม SAP หรือ Memo ตามเงื่อนไขค่ะ');
+      listEl.appendChild(empty);
+      return;
+    }
+
+    const sorted = [...filtered].sort((a, b) => b.date.localeCompare(a.date));
+
+    for (const item of sorted) {
+      const card = el('article', 'sa-card log-entry-card');
+      const head = el('div', 'log-entry-header');
+      const left = el('div', 'log-entry-meta');
+
+      const dateBadge = el('span', 'badge-date', `📅 ${item.date}`);
+      if (item.sapNo) {
+        const sapBadge = el('span', 'c-ref-tag', `SAP #${item.sapNo}`);
+        left.appendChild(sapBadge);
+      }
+      if (item.status) {
+        const stBadge = el('span', 'badge-shift badge-night', `สถานะ: ${item.status}`);
+        left.appendChild(stBadge);
+      }
+      left.prepend(dateBadge);
+
+      const draftBtn = el('button', 'btn-pill-secondary', '✨ ร่าง IPS จากปัญหานี้');
+      draftBtn.type = 'button';
+      draftBtn.addEventListener('click', () => {
+        handlers.onCreateDraftFromEntry({
+          id: item.id,
+          date: item.date,
+          shift: 'Day',
+          bm: AppConfig.DEFAULT_BM,
+          tags: LogbookParser.extractTags(item.detail),
+          text: `[งานแจ้งซ่อม SAP #${item.sapNo || '-'}] ${item.detail}`
+        });
+      });
+
+      head.append(left, draftBtn);
+
+      const bodyText = el('p', 'log-entry-text mt-1');
+      bodyText.appendChild(createHighlightedText(item.detail, sapFilters.query));
+
+      if (item.remark) {
+        const rem = el('p', 'text-xs opacity-75 mt-1', `หมายเหตุเพิ่มเติม: ${item.remark}`);
+        card.append(head, bodyText, rem);
+      } else {
+        card.append(head, bodyText);
+      }
+
+      listEl.appendChild(card);
+    }
   }
 };

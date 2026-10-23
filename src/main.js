@@ -21,6 +21,16 @@ const handlers = {
     UIRenderer.renderAll(handlers);
   },
 
+  onSiloFilterChange(partial) {
+    StateStore.updateSiloFilters(partial);
+    UIRenderer.renderAll(handlers);
+  },
+
+  onSapFilterChange(partial) {
+    StateStore.updateSapFilters(partial);
+    UIRenderer.renderAll(handlers);
+  },
+
   async onCreateDraftFromEntry(entry) {
     const allEntries = StateStore.get('entries') || [];
     const newDraft = LogbookParser.createDraftFromEntry(entry, allEntries);
@@ -51,7 +61,6 @@ async function loadInitialData() {
     for (const d of baseData.daysSummary || []) daysMap.set(d.date, d);
     for (const e of baseData.entries || []) entriesMap.set(e.id, e);
 
-    // Overlay any user-uploaded custom months from IndexedDB
     for (const cm of customMonths) {
       if (cm.monthMeta) monthsMap.set(cm.monthMeta.monthKey, cm.monthMeta);
       for (const d of cm.daysSummary || []) daysMap.set(d.date, d);
@@ -65,6 +74,9 @@ async function loadInitialData() {
     StateStore.set('months', months);
     StateStore.set('daysSummary', daysSummary);
     StateStore.set('entries', entries);
+    StateStore.set('siloOperations', baseData.siloOperations || []);
+    StateStore.set('sapMemos', baseData.sapMemos || []);
+    StateStore.set('regularWork', baseData.regularWork || []);
 
     // Load IPS Drafts (Preset + Saved in IndexedDB)
     const savedDrafts = await StorageEngine.getAllIpsDrafts();
@@ -74,7 +86,10 @@ async function loadInitialData() {
 
     StateStore.set('ipsDrafts', Array.from(draftMap.values()));
 
-    DebugModule.log('INIT', `Loaded ${entries.length} entries across ${months.length} months`);
+    DebugModule.log(
+      'INIT',
+      `Loaded ${entries.length} entries, ${baseData.siloOperations?.length || 0} silo ops, ${baseData.sapMemos?.length || 0} sap memos across ${months.length} months`
+    );
     UIRenderer.renderAll(handlers);
   } catch (err) {
     DebugModule.log('ERR_LOAD', err.message);
@@ -91,12 +106,12 @@ function wireEvents() {
     });
   });
 
-  // Search box
+  // Global Search box
   const searchInput = document.getElementById('global-search-input');
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       StateStore.updateFilters({ query: e.target.value });
-      if (StateStore.get('activeTab') !== 'search') {
+      if (StateStore.get('activeTab') !== 'search' && StateStore.get('activeTab') !== 'silo' && StateStore.get('activeTab') !== 'sap') {
         StateStore.set('activeTab', 'search');
       }
       UIRenderer.renderAll(handlers);
@@ -150,8 +165,54 @@ function wireEvents() {
         tag: 'ALL',
         query: ''
       });
+      StateStore.set('siloFilters', { silo: 'ALL', monthKey: 'ALL', query: '' });
+      StateStore.set('sapFilters', { status: 'ALL', monthKey: 'ALL', query: '' });
       UIRenderer.renderAll(handlers);
       UIRenderer.showToast('ล้างตัวกรองทั้งหมดเรียบร้อยค่ะ');
+    });
+  }
+
+  // Silo filters
+  const siloFilterSelect = document.getElementById('filter-silo-target');
+  if (siloFilterSelect) {
+    siloFilterSelect.addEventListener('change', (e) => {
+      handlers.onSiloFilterChange({ silo: e.target.value });
+    });
+  }
+
+  const siloMonthSelect = document.getElementById('filter-silo-month');
+  if (siloMonthSelect) {
+    siloMonthSelect.addEventListener('change', (e) => {
+      handlers.onSiloFilterChange({ monthKey: e.target.value });
+    });
+  }
+
+  const siloSearchInput = document.getElementById('search-silo-input');
+  if (siloSearchInput) {
+    siloSearchInput.addEventListener('input', (e) => {
+      handlers.onSiloFilterChange({ query: e.target.value });
+    });
+  }
+
+  // SAP Memo filters
+  const sapStatusSelect = document.getElementById('filter-sap-status');
+  if (sapStatusSelect) {
+    sapStatusSelect.addEventListener('change', (e) => {
+      handlers.onSapFilterChange({ status: e.target.value });
+    });
+  }
+
+  const sapMonthSelect = document.getElementById('filter-sap-month');
+  if (sapMonthSelect) {
+    sapMonthSelect.addEventListener('change', (e) => {
+      handlers.onSapFilterChange({ monthKey: e.target.value });
+    });
+  }
+
+  const sapSearchInput = document.getElementById('search-sap-input');
+  if (sapSearchInput) {
+    sapSearchInput.addEventListener('input', (e) => {
+      handlers.onSapFilterChange({ query: e.target.value });
     });
   }
 

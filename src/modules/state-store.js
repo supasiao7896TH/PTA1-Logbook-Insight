@@ -3,17 +3,30 @@
  */
 
 const _state = {
-  activeTab: 'search', // 'search' | 'overview' | 'equipment' | 'ips'
+  activeTab: 'search', // 'search' | 'silo' | 'sap' | 'overview' | 'equipment' | 'ips'
   theme: 'light',
   months: [],
   daysSummary: [],
   entries: [],
+  siloOperations: [],
+  sapMemos: [],
+  regularWork: [],
   filters: {
     monthKey: 'ALL',
     shift: 'ALL',
     bm: 'ALL',
     category: 'ALL',
     tag: 'ALL',
+    query: ''
+  },
+  siloFilters: {
+    silo: 'ALL',
+    monthKey: 'ALL',
+    query: ''
+  },
+  sapFilters: {
+    status: 'ALL',
+    monthKey: 'ALL',
     query: ''
   },
   ipsDrafts: [],
@@ -45,6 +58,16 @@ export const StateStore = {
   updateFilters(partial) {
     const next = { ..._state.filters, ...partial };
     this.set('filters', next);
+  },
+
+  updateSiloFilters(partial) {
+    const next = { ..._state.siloFilters, ...partial };
+    this.set('siloFilters', next);
+  },
+
+  updateSapFilters(partial) {
+    const next = { ..._state.sapFilters, ...partial };
+    this.set('sapFilters', next);
   },
 
   on(key, fn) {

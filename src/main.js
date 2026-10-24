@@ -149,17 +149,25 @@ const handlers = {
     const nextSymptom = cur.activeSymptom === symptomKey ? 'ALL' : symptomKey;
     StateStore.updateCopilotState({
       activeSymptom: nextSymptom,
-      isCopilotMode: true
+      isCopilotMode: nextSymptom !== 'ALL'
     });
     UIRenderer.renderSearchTimeline(handlers);
+    const cat = (AppConfig.SYMPTOM_CATEGORIES || []).find((c) => c.key === nextSymptom);
+    if (nextSymptom !== 'ALL' && cat) {
+      UIRenderer.showToast(`กรองวิเคราะห์อาการ: "${cat.label}" แล้วค่ะ`, 'info');
+    } else {
+      UIRenderer.showToast('แสดงรายการบันทึกทุกอาการตามปกติค่ะ', 'info');
+    }
   },
 
   onToggleCopilotMode() {
     const cur = StateStore.get('copilotState') || {};
+    const nextMode = !cur.isCopilotMode;
     StateStore.updateCopilotState({
-      isCopilotMode: !cur.isCopilotMode
+      isCopilotMode: nextMode
     });
     UIRenderer.renderSearchTimeline(handlers);
+    UIRenderer.showToast(nextMode ? '🩺 เปิดโหมดวิเคราะห์วิธีแก้ปัญหา (Copilot Guide) แล้วค่ะ' : 'ปิดโหมด Copilot Guide แล้วค่ะ', 'info');
   }
 };
 
@@ -347,6 +355,14 @@ function wireEvents() {
           ? '⏱️ สลับเรียงตามเวลาจริง (07:30 ➔ 07:30 ข้ามคืน) แล้วค่ะ'
           : '⏱️ สลับเรียงจากล่าสุดขึ้นก่อน (Newest First) แล้วค่ะ'
       );
+    });
+  }
+
+  // Copilot guide toggle
+  const btnToggleCopilot = document.getElementById('btn-toggle-copilot-mode');
+  if (btnToggleCopilot) {
+    btnToggleCopilot.addEventListener('click', () => {
+      handlers.onToggleCopilotMode();
     });
   }
 

@@ -291,12 +291,23 @@ export const UIRenderer = {
 
     guidanceCard.textContent = '';
 
-    const analysis = LogbookParser.analyzeTroubleshootingCases(entries, {
+    let analysis = LogbookParser.analyzeTroubleshootingCases(entries, {
       query: filters.query,
       symptomCategory: copilotState.activeSymptom,
       tag: filters.tag !== 'ALL' ? filters.tag : '',
       monthKey: filters.monthKey !== 'ALL' ? filters.monthKey : 'ALL'
     });
+
+    let scopeLabel = filters.monthKey !== 'ALL' ? `เดือน ${filters.monthKey}` : '9 เดือนย้อนหลัง';
+    if (analysis.totalCases === 0 && filters.monthKey !== 'ALL') {
+      analysis = LogbookParser.analyzeTroubleshootingCases(entries, {
+        query: filters.query,
+        symptomCategory: copilotState.activeSymptom,
+        tag: filters.tag !== 'ALL' ? filters.tag : '',
+        monthKey: 'ALL'
+      });
+      scopeLabel = 'ไม่พบในเดือนนี้ แต่พบในประวัติ 9 เดือนย้อนหลัง';
+    }
 
     const activeCatObj = categories.find((c) => c.key === copilotState.activeSymptom) || categories[0];
 
@@ -304,11 +315,11 @@ export const UIRenderer = {
 
     // Header
     const header = el('div', 'flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-border');
-    const title = el('div', 'flex items-center gap-2');
+    const title = el('div', 'flex items-center gap-2 flex-wrap');
     title.append(
       el('span', 'text-lg', activeCatObj.icon),
-      el('h4', 'font-bold text-sm text-text-primary', `ผลการวิเคราะห์วิธีแก้ปัญหา: "${activeCatObj.label}"`),
-      el('span', 'badge-metric text-xs font-semibold text-brand', `พบ ${analysis.totalCases} เคส`)
+      el('h4', 'font-bold text-sm text-text-primary', `วิเคราะห์วิธีแก้ปัญหา: "${activeCatObj.label}"`),
+      el('span', 'badge-metric text-xs font-semibold text-brand', `${analysis.totalCases} เคส (${scopeLabel})`)
     );
     header.appendChild(title);
 
@@ -372,8 +383,15 @@ export const UIRenderer = {
     listEl.textContent = '';
 
     const entries = StateStore.get('entries') || [];
-    const filters = StateStore.get('filters');
-    const filtered = LogbookParser.filterEntries(entries, filters);
+    const filters = StateStore.get('filters') || {};
+    const copilotState = StateStore.get('copilotState') || {};
+
+    const effectiveFilters = {
+      ...filters,
+      symptomCategory: copilotState.activeSymptom || 'ALL'
+    };
+
+    const filtered = LogbookParser.filterEntries(entries, effectiveFilters);
 
     const sortOrder = filters.sortOrder || 'desc';
     const sorted = [...filtered].sort((a, b) => LogbookParser.compareLogChronology(a, b, sortOrder));
@@ -386,7 +404,9 @@ export const UIRenderer = {
     }
 
     if (countEl) {
-      countEl.textContent = `พบ ${sorted.length.toLocaleString('en-US')} รายการ`;
+      const activeSymptomObj = (AppConfig.SYMPTOM_CATEGORIES || []).find((c) => c.key === copilotState.activeSymptom && c.key !== 'ALL');
+      const symptomSuffix = activeSymptomObj ? ` (อาการ: ${activeSymptomObj.label})` : '';
+      countEl.textContent = `พบ ${sorted.length.toLocaleString('en-US')} รายการ${symptomSuffix}`;
     }
 
     if (sorted.length === 0) {

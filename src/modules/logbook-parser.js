@@ -25,6 +25,15 @@ const NOISE_EXACT = new Set([
   'Data EXAPLOG for P#1'
 ]);
 
+export const SYMPTOM_MATCHERS = {
+  HUNTING: [/\bhunting\b/i, /\bswing\b/i, /\boscillat\b/i, /mv\s*(up|100%|high)/i, /แกว่ง/i, /ไม่นิ่ง/i],
+  CLOGGED: [/high\s*dp/i, /dp\s*high/i, /\bclog\b/i, /\bfoul\b/i, /\bblock\b/i, /\bwash/i, /\bnaoh\b/i, /ตัน/i, /ล้าง/i, /ตะกรัน/i],
+  ALARM: [/\balarm\b/i, /\bhigh\b/i, /\blow\b/i, /\bexceed\b/i, /\bspike\b/i, /เตือน/i, /สูง/i, /ต่ำ/i],
+  TRIP: [/\btrip\b/i, /\bcut\b/i, /\binterlock\b/i, /\bstop\b/i, /\bshutdown\b/i, /\bfail\b/i, /ตัด/i, /หยุด/i],
+  LEAK: [/\bleak\b/i, /\bpassing\b/i, /\bgland\b/i, /\bpacking\b/i, /\bseal\b/i, /\bdrain\b/i, /\bblowdown\b/i, /รั่ว/i, /ซึม/i],
+  EXAPILOT: [/\bexapilot\b/i, /\bsequence\b/i, /\bauto\b/i]
+};
+
 export const LogbookParser = {
   /**
    * Checks if a raw worksheet row text is boilerplate template noise
@@ -97,7 +106,8 @@ export const LogbookParser = {
       fm = 'ALL',
       category = 'ALL',
       tag = 'ALL',
-      query = ''
+      query = '',
+      symptomCategory = 'ALL'
     } = filters;
 
     const q = query.trim().toLowerCase();
@@ -116,6 +126,13 @@ export const LogbookParser = {
       }
       if (tag && tag !== 'ALL') {
         if (!Array.isArray(item.tags) || !item.tags.includes(tag.toUpperCase())) return false;
+      }
+
+      if (symptomCategory && symptomCategory !== 'ALL') {
+        const patterns = SYMPTOM_MATCHERS[symptomCategory];
+        if (patterns && !patterns.some((p) => p.test(item.text || ''))) {
+          return false;
+        }
       }
 
       if (q) {
@@ -1530,7 +1547,7 @@ export const LogbookParser = {
     const actionCounts = new Map();
 
     for (const entry of entries) {
-      if (monthKey && monthKey !== 'ALL' && e.monthKey !== monthKey) continue;
+      if (monthKey && monthKey !== 'ALL' && entry.monthKey !== monthKey) continue;
       const tags = Array.isArray(entry.tags) ? entry.tags : [];
       if (tagUpper && !tags.some((t) => t.toUpperCase() === tagUpper)) continue;
 

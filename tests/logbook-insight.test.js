@@ -72,6 +72,12 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
       });
       expect(byQuery).toHaveLength(1);
       expect(byQuery[0].day).toBe('13');
+
+      const bySymptom = LogbookParser.filterEntries(sampleEntries, {
+        symptomCategory: 'HUNTING'
+      });
+      expect(bySymptom).toHaveLength(1);
+      expect(bySymptom[0].id).toBe('2026-10-13-N-136');
     });
   });
 

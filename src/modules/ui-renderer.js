@@ -270,7 +270,6 @@ export const UIRenderer = {
     toggleBtn.textContent = copilotState.isCopilotMode ? '❌ ปิดโหมด Copilot Guide' : '🩺 โหมดวิเคราะห์วิธีแก้ปัญหา (Copilot Guide)';
     toggleBtn.classList.toggle('btn-pill-primary', copilotState.isCopilotMode);
     toggleBtn.classList.toggle('btn-pill-secondary', !copilotState.isCopilotMode);
-    toggleBtn.onclick = () => handlers.onToggleCopilotMode();
 
     // Symptom chips
     chipsEl.textContent = '';
@@ -285,7 +284,7 @@ export const UIRenderer = {
       chipsEl.appendChild(chip);
     }
 
-    const shouldShow = copilotState.isCopilotMode || copilotState.activeSymptom !== 'ALL';
+    const shouldShow = Boolean(copilotState.isCopilotMode);
     guidanceCard.style.display = shouldShow ? 'block' : 'none';
     if (!shouldShow) return;
 
@@ -310,6 +309,7 @@ export const UIRenderer = {
     }
 
     const activeCatObj = categories.find((c) => c.key === copilotState.activeSymptom) || categories[0];
+    const isAllSymptoms = copilotState.activeSymptom === 'ALL';
 
     const guideWrapper = el('div', 'sa-card p-4 bg-ground border border-ref-amber-border rounded-xl flex flex-col gap-3');
 
@@ -318,10 +318,41 @@ export const UIRenderer = {
     const title = el('div', 'flex items-center gap-2 flex-wrap');
     title.append(
       el('span', 'text-lg', activeCatObj.icon),
-      el('h4', 'font-bold text-sm text-text-primary', `วิเคราะห์วิธีแก้ปัญหา: "${activeCatObj.label}"`),
+      el('h4', 'font-bold text-sm text-text-primary', isAllSymptoms ? 'ภาพรวมวิธีแก้ปัญหาทุกอาการผิดปกติในโรงงาน (PTA1 Overview)' : `วิเคราะห์วิธีแก้ปัญหา: "${activeCatObj.label}"`),
       el('span', 'badge-metric text-xs font-semibold text-brand', `${analysis.totalCases} เคส (${scopeLabel})`)
     );
     header.appendChild(title);
+
+    // If ALL symptoms, render the 6 symptom breakdown cards
+    if (isAllSymptoms) {
+      const distSection = el('div', 'flex flex-col gap-1.5');
+      distSection.appendChild(el('div', 'text-xs font-bold text-muted flex items-center gap-1.5', '📊 สรุปความถี่ปัญหาหน้างานแยกตามกลุ่มอาการ (คลิกเพื่อเจาะลึกเฉพาะอาการ):'));
+
+      const distGrid = el('div', 'grid grid-cols-2 md:grid-cols-3 gap-2');
+      const distItems = [
+        { key: 'HUNTING', label: 'Hunting / แกว่ง', icon: '🌀', count: analysis.symptomDistribution.HUNTING || 0 },
+        { key: 'ALARM', label: 'High / Low Alarm', icon: '🚨', count: analysis.symptomDistribution.ALARM || 0 },
+        { key: 'TRIP', label: 'Trip / Cut Feed', icon: '🛑', count: analysis.symptomDistribution.TRIP || 0 },
+        { key: 'CLOGGED', label: 'Clogged / High DP', icon: '🧼', count: analysis.symptomDistribution.CLOGGED || 0 },
+        { key: 'LEAK', label: 'Leak / Passing', icon: '💧', count: analysis.symptomDistribution.LEAK || 0 },
+        { key: 'EXAPILOT', label: 'Exapilot / Sequence', icon: '⚡', count: analysis.symptomDistribution.EXAPILOT || 0 }
+      ];
+
+      for (const d of distItems) {
+        const dBtn = el('button', 'sa-card p-2 text-left hover:border-brand-ink transition-colors flex items-center justify-between text-xs cursor-pointer');
+        dBtn.type = 'button';
+        const dLeft = el('div', 'flex items-center gap-1.5');
+        dLeft.append(el('span', '', d.icon), el('span', 'font-semibold', d.label));
+        const dRight = el('span', 'badge-metric tabular-nums font-bold text-brand', `${d.count} เคส`);
+        dBtn.append(dLeft, dRight);
+        dBtn.addEventListener('click', () => {
+          handlers.onCopilotSymptomSelect(d.key);
+        });
+        distGrid.appendChild(dBtn);
+      }
+      distSection.appendChild(distGrid);
+      guideWrapper.appendChild(distSection);
+    }
 
     // Top Proven Actions
     const solSection = el('div', 'flex flex-col gap-1.5');

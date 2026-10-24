@@ -1546,6 +1546,56 @@ export const LogbookParser = {
     };
     const actionCounts = new Map();
 
+    const classifyAction = (actionText, rawText) => {
+      const combined = `${actionText} ${rawText}`.toLowerCase();
+      if (combined.includes('naoh') || combined.includes('washing') || combined.includes('wash') || combined.includes('ล้าง')) {
+        return {
+          title: '🧼 ล้างสารเคมีด้วย NaOH / High Pressure (Chemical Washing)',
+          description: 'หยุดปั๊มหรืออุปกรณ์เพื่อชะล้างคราบตะกรัน Slurry (เช่น PP-404A/B, PM-901, LI-2901)'
+        };
+      }
+      if (combined.includes('flush') || combined.includes('purge') || combined.includes('open/close') || combined.includes('ชะล้าง') || combined.includes('เป่า')) {
+        return {
+          title: '🚿 ชะล้างวาล์วและสายท่อ Slurry (Line & Valve Flush)',
+          description: 'ฉีดน้ำ Flush หรือขยับเปิด-ปิดวาล์วเพื่อไล่ผงตกค้างที่บ่าวาล์ว (เช่น LC-2301, LC-2401)'
+        };
+      }
+      if (combined.includes('silo') || combined.includes('switch ptk') || combined.includes('สลับ silo')) {
+        return {
+          title: '🌾 สลับถัง Silo & ปลายทางลำเลียง (Silo Switching & Logistics)',
+          description: 'สลับถัง Silo 800 (A/B/C) เพื่อกระจายผงและคุมแรงดัน PS-2425 ให้นิ่ง'
+        };
+      }
+      if (combined.includes('speed') || combined.includes('rpm') || combined.includes('pz-403') || combined.includes('pz-601')) {
+        return {
+          title: '⚙️ ปรับความเร็วรอบ Rotary Feeder (Speed Adjust)',
+          description: 'ปรับลดหรือเพิ่มความเร็วรอบของ PZ-403 / PZ-601 เพื่อรักษาเสถียรภาพแรงดัน'
+        };
+      }
+      if (combined.includes('cut transfer') || combined.includes('cut feed') || combined.includes('stop loop') || combined.includes('ตัด')) {
+        return {
+          title: '🛑 ตัดการจ่ายผงหรือการลำเลียงชั่วคราว (Temporary Transfer Cut)',
+          description: 'สั่ง Cut Transfer FC-1401 ชั่วคราว 5-10 นาที เพื่อระบายความดันก่อนเกิด Interlock'
+        };
+      }
+      if (combined.includes('adjust') || combined.includes('dec') || combined.includes('inc') || combined.includes('tm-') || combined.includes('sv') || combined.includes('setpoint') || combined.includes('ปรับ')) {
+        return {
+          title: '🎛️ ปรับจูนพารามิเตอร์ควบคุม / Sequence Timer (Control Tuning)',
+          description: 'ปรับจูนค่า Setpoint (SV), ตำแหน่งวาล์ว (MV) หรือรอบเวลา Sequence (เช่น TM-2302F/D)'
+        };
+      }
+      if (combined.includes('inform me') || combined.includes('f/o') || combined.includes('tighten') || combined.includes('retighten') || combined.includes('แจ้ง')) {
+        return {
+          title: '🛠️ ประสานงาน Field Operator / ช่างกลเข้าตรวจสอบ (F/O & Mechanical Check)',
+          description: 'แจ้งช่างกลขันกวดน็อต (Retighten), ตรวจเช็ก Gland Packing หรือเปลี่ยน Seal หน้างาน'
+        };
+      }
+      return {
+        title: '👁️ ตรวจสอบสภาพและเฝ้าระวังอย่างใกล้ชิด (Monitor & Follow-up)',
+        description: 'บันทึกติดตามค่าพารามิเตอร์และประสานงานตรวจสอบสภาพหน้างาน'
+      };
+    };
+
     for (const entry of entries) {
       if (monthKey && monthKey !== 'ALL' && entry.monthKey !== monthKey) continue;
       const tags = Array.isArray(entry.tags) ? entry.tags : [];
@@ -1553,6 +1603,9 @@ export const LogbookParser = {
 
       const text = entry.text || '';
       if (!text.trim()) continue;
+
+      // Skip template file paths or alarm sheet links
+      if (text.includes('K:\\') || text.includes('.xlsx') || text.includes('Alarm report')) continue;
 
       if (q) {
         const textMatch = text.toLowerCase().includes(q);
@@ -1575,7 +1628,7 @@ export const LogbookParser = {
         continue;
       }
 
-      // Split text into Symptom, Action, and Outcome
+      // Smart Split into Symptom, Action, and Outcome
       let symptomSummary = text;
       let actionTaken = '';
       let outcome = '';
@@ -1584,6 +1637,19 @@ export const LogbookParser = {
         const parts = text.split('->');
         symptomSummary = parts[0].trim();
         actionTaken = parts.slice(1).join('->').trim();
+      } else if (/due\s+to\s+/i.test(text)) {
+        const parts = text.split(/due\s+to\s+/i);
+        actionTaken = parts[0].trim();
+        symptomSummary = parts[1].trim();
+      } else if (/then\s+b\/m\s+/i.test(text)) {
+        const parts = text.split(/then\s+b\/m\s+/i);
+        symptomSummary = parts[0].trim();
+        actionTaken = parts[1].trim();
+      } else if (/found\s+/i.test(text) && /\s+and\s+/i.test(text)) {
+        const afterFound = text.replace(/^.*?found\s+/i, '');
+        const parts = afterFound.split(/\s+and\s+/i);
+        symptomSummary = parts[0].trim();
+        actionTaken = parts.slice(1).join(' and ').trim();
       } else {
         const lower = text.toLowerCase();
         let bestIdx = -1;
@@ -1601,14 +1667,35 @@ export const LogbookParser = {
         }
       }
 
-      const outcomeMatch = actionTaken.match(/\(([^)]+)\)$/) || text.match(/(normal|recovered|นิ่งขึ้น|ใช้งานได้|ปกติ)/i);
+      const outcomeMatch = actionTaken.match(/\(([^)]+)\)$/) || text.match(/(normal|recovered|recover|นิ่งขึ้น|ใช้งานได้|ปกติ|complete)/i);
       if (outcomeMatch) {
-        outcome = outcomeMatch[1] || outcomeMatch[0];
+        const rawOut = (outcomeMatch[1] || outcomeMatch[0]).toLowerCase();
+        if (rawOut.includes('normal')) {
+          outcome = 'ฟื้นตัวกลับสู่สภาวะปกติ (recovered to normal)';
+        } else if (rawOut.includes('recover')) {
+          outcome = 'ระบบฟื้นตัวกลับสู่สภาวะเสถียร (recovered)';
+        } else if (rawOut.includes('complete')) {
+          outcome = 'ดำเนินการเสร็จสิ้น (Completed)';
+        } else {
+          outcome = outcomeMatch[1] || outcomeMatch[0];
+        }
+      } else {
+        outcome = 'เฝ้าระวังติดตามอย่างใกล้ชิด (Monitoring)';
       }
 
-      const cleanActionKey = actionTaken.split(';')[0].split(',')[0].slice(0, 50).trim();
-      if (cleanActionKey) {
-        actionCounts.set(cleanActionKey, (actionCounts.get(cleanActionKey) || 0) + 1);
+      const classified = classifyAction(actionTaken, text);
+      if (!actionCounts.has(classified.title)) {
+        actionCounts.set(classified.title, {
+          action: classified.title,
+          description: classified.description,
+          example: text,
+          count: 0
+        });
+      }
+      const actObj = actionCounts.get(classified.title);
+      actObj.count++;
+      if (text.length > 25 && (!actObj.example || actObj.example.length < text.length)) {
+        actObj.example = text;
       }
 
       cases.push({
@@ -1619,16 +1706,15 @@ export const LogbookParser = {
         tags,
         rawText: text,
         symptomCategory: detectedCategory,
-        symptomSummary,
-        actionTaken: actionTaken || 'บันทึกติดตามอาการ',
-        outcome: outcome || 'เฝ้าระวังต่อเนื่อง'
+        symptomSummary: symptomSummary || text,
+        actionTaken: actionTaken || 'ตรวจสอบสภาพหน้างานและเฝ้าระวังต่อเนื่อง (Monitor Condition)',
+        outcome
       });
     }
 
-    const topActions = Array.from(actionCounts.entries())
-      .map(([action, count]) => ({ action, count }))
+    const topActions = Array.from(actionCounts.values())
       .sort((a, b) => b.count - a.count)
-      .slice(0, 5);
+      .slice(0, 6);
 
     return {
       totalCases: cases.length,

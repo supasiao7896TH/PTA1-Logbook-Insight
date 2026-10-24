@@ -360,18 +360,35 @@ export const UIRenderer = {
     solSection.appendChild(solTitle);
 
     if (analysis.topActions && analysis.topActions.length > 0) {
-      const solList = el('div', 'grid grid-cols-1 md:grid-cols-2 gap-2');
+      const solList = el('div', 'grid grid-cols-1 md:grid-cols-2 gap-2.5');
       for (let i = 0; i < analysis.topActions.length; i++) {
         const item = analysis.topActions[i];
         const pct = analysis.totalCases > 0 ? Math.round((item.count / analysis.totalCases) * 100) : 0;
-        const solCard = el('div', 'bg-surface p-2.5 rounded-lg border border-line-border flex items-center justify-between text-xs');
-        const solLeft = el('div', 'flex items-center gap-2 flex-1 min-w-0 pr-2');
-        solLeft.append(
+        const solCard = el('div', 'bg-surface p-3 rounded-xl border border-line-border flex flex-col gap-1.5 shadow-sm');
+
+        // Header
+        const solHead = el('div', 'flex items-center justify-between gap-2');
+        const solTitleEl = el('div', 'flex items-center gap-1.5 font-bold text-text-primary text-xs');
+        solTitleEl.append(
           el('span', 'font-bold text-brand tabular-nums', `#${i + 1}`),
-          el('span', 'font-medium truncate', item.action)
+          el('span', '', item.action)
         );
-        const solRight = el('span', 'badge-metric tabular-nums font-semibold shrink-0', `${item.count} ครั้ง (${pct}%)`);
-        solCard.append(solLeft, solRight);
+        const solBadge = el('span', 'badge-metric tabular-nums font-bold text-brand text-[11px] shrink-0', `${item.count} ครั้ง (${pct}%)`);
+        solHead.append(solTitleEl, solBadge);
+
+        // Description
+        if (item.description) {
+          const solDesc = el('p', 'text-xs text-muted leading-relaxed', item.description);
+          solCard.appendChild(solDesc);
+        }
+
+        // Real logbook example without truncation
+        if (item.example) {
+          const solEx = el('div', 'text-[11px] bg-subtle p-2 rounded-lg text-secondary border border-line-border italic leading-relaxed');
+          solEx.textContent = `💡 ตัวอย่างจริงใน Logbook: "${item.example}"`;
+          solCard.appendChild(solEx);
+        }
+
         solList.appendChild(solCard);
       }
       solSection.appendChild(solList);
@@ -385,17 +402,64 @@ export const UIRenderer = {
 
     const displayCases = analysis.cases.slice(0, 3);
     if (displayCases.length > 0) {
-      const caseList = el('div', 'flex flex-col gap-2');
+      const caseList = el('div', 'flex flex-col gap-2.5');
       for (const cs of displayCases) {
-        const cRow = el('div', 'p-2.5 rounded-lg bg-surface border border-line-border text-xs flex flex-col gap-1');
-        const cHead = el('div', 'flex items-center justify-between text-muted text-[11px]');
-        cHead.append(
-          el('span', '', `📅 ${cs.date} (${cs.shift}) · BM: ${cs.bm || '-'}`),
-          el('span', 'badge-tag text-[10px]', (cs.tags || []).join(', ') || 'PTA1')
+        const cRow = el('div', 'p-3 rounded-xl bg-surface border border-line-border text-xs flex flex-col gap-2 shadow-sm');
+
+        // Header with Meta & Tags
+        const cHead = el('div', 'flex items-center justify-between flex-wrap gap-1 pb-1.5 border-b border-border text-muted text-[11px]');
+        const metaText = `📅 วันที่ ${cs.date} (${cs.shift}) · Boardman: ${cs.bm || '-'}`;
+        const tagBadges = el('div', 'flex items-center gap-1 flex-wrap');
+        for (const t of cs.tags || []) {
+          tagBadges.appendChild(el('span', 'badge-tag text-[10px]', t));
+        }
+        cHead.append(el('span', 'font-medium', metaText), tagBadges);
+
+        // Structured Breakdown: Symptom -> Action -> Outcome
+        const cBody = el('div', 'grid grid-cols-1 gap-1 text-xs');
+
+        const symEl = el('div', 'flex items-start gap-1.5');
+        symEl.append(
+          el('span', 'font-bold text-status-crit shrink-0', '⚠️ อาการผิดปกติ:'),
+          el('span', 'text-text-primary leading-relaxed font-medium', cs.symptomSummary)
         );
-        const cDetail = el('div', 'text-text-primary', `⚠️ อาการ: "${cs.symptomSummary}"`);
-        const cAction = el('div', 'text-brand font-medium', `🔧 สิ่งที่ทำ: "${cs.actionTaken}" ➔ ผล: ${cs.outcome}`);
-        cRow.append(cHead, cDetail, cAction);
+
+        const actEl = el('div', 'flex items-start gap-1.5');
+        actEl.append(
+          el('span', 'font-bold text-brand shrink-0', '🔧 วิธีการแก้ไข:'),
+          el('span', 'text-brand leading-relaxed font-semibold', cs.actionTaken)
+        );
+
+        const outEl = el('div', 'flex items-start gap-1.5');
+        outEl.append(
+          el('span', 'font-bold text-status-ok shrink-0', '✅ ผลลัพธ์:'),
+          el('span', 'text-status-ok leading-relaxed font-medium', cs.outcome)
+        );
+
+        cBody.append(symEl, actEl, outEl);
+
+        // Full Raw Logbook Quote Box (Un-truncated Original Entry)
+        const fullLogBox = el('div', 'bg-subtle p-2.5 rounded-lg border border-line-border flex items-start justify-between gap-2 mt-1');
+        const quoteContent = el('div', 'flex flex-col gap-0.5 flex-1 min-w-0');
+        quoteContent.append(
+          el('span', 'text-[10px] font-bold text-muted uppercase tracking-wider', '📜 ข้อความบันทึกเต็มฉบับเดิมจาก Logbook:'),
+          el('p', 'text-xs text-secondary italic leading-relaxed select-all', `"${cs.rawText}"`)
+        );
+
+        const copyBtn = el('button', 'btn-pill-secondary text-[11px] px-2.5 py-1 shrink-0', '📋 คัดลอก');
+        copyBtn.type = 'button';
+        copyBtn.title = 'คัดลอกบันทึกฉบับเต็ม';
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(cs.rawText);
+            UIRenderer.showToast('คัดลอกข้อความบันทึกเต็มฉบับเดิมเรียบร้อยค่ะ', 'success');
+          } catch (err) {
+            UIRenderer.showToast('ไม่สามารถคัดลอกได้ค่ะ', 'error');
+          }
+        });
+
+        fullLogBox.append(quoteContent, copyBtn);
+        cRow.append(cHead, cBody, fullLogBox);
         caseList.appendChild(cRow);
       }
       caseSection.appendChild(caseList);

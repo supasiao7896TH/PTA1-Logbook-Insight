@@ -96,6 +96,7 @@ Store: settings
 | 🚀 One-Click Desktop Launcher | ✅ Done | ไฟล์ `🚀 เปิด PTA1 Logbook (Auto-Sync).bat` บน Desktop สำหรับดับเบิลคลิกสกัดข้อมูลสด + เปิด Web App + เฝ้าไฟล์ SharePoint อัตโนมัติ |
 | ⏰ Shift Auto-Sync Task Scheduler | ✅ Done | Windows Task Scheduler รัน `scripts/auto-deploy-shift.mjs` ทุก 07:20 และ 19:20 น. สกัดข้อมูลและ deploy ขึ้น Cloudflare ก่อนส่งเวร 10 นาที ($0 ตลอดชีพ) |
 | ⚙️ Gemini AI Key (BYOK) | ✅ Done | เข้ารหัส AES-GCM 256-bit เก็บในเครื่อง |
+| 🌐 Universal Multi-PC Expansion | 📋 Planned | แผนขยายระบบสู่เครื่อง PC และหน่วยผลิตอื่น (ดูรายละเอียดใน `docs/UNIVERSAL_LOGBOOK_ROADMAP.md`) |
 
 ---
 
@@ -104,6 +105,7 @@ Store: settings
 PTA1-Logbook-Insight/
 ├── logbooks/                    ← จัดเก็บไฟล์ Excel Logbook (.xlsx / .xlsm) ประจำเดือนทั้งหมด (ignore ไม่ขึ้น git)
 ├── docs/                        ← รวบรวมเอกสารวิเคราะห์และรายงานสรุป
+│   ├── UNIVERSAL_LOGBOOK_ROADMAP.md ← พิมพ์เขียวและสถาปัตยกรรมขยายระบบสู่เครื่อง PC/โรงงานอื่น
 │   ├── 01_IPS_Kaizen_Candidates_Oct2026.md
 │   ├── 02_Monthly_Shift_Insight_Oct2026.md
 │   └── oct2026_raw_extracted.txt

@@ -40,36 +40,35 @@
 เปิด **PowerShell** หรือ **Command Prompt** แล้วรันคำสั่งเหล่านี้ตามลำดับ:
 
 ```powershell
-# 1. ไปยังโฟลเดอร์ที่ต้องการเก็บงาน (เช่น หน้า Desktop หรือโฟลเดอร์โปรเจกต์)
-cd C:\Users\26007294
+# 1. ไปยังโฟลเดอร์ที่ต้องการเก็บงาน
+cd C:\Users\26007294\A(i)CODER2025TH
 
 # 2. ดึงโปรเจกต์จาก GitHub
 git clone https://github.com/supasiao7896TH/PTA1-Logbook-Insight.git
 
 # 3. เข้าสู่โฟลเดอร์โปรเจกต์
 cd PTA1-Logbook-Insight
-
-# 4. ติดตั้งไลบรารีที่จำเป็นทั้งหมด (ใช้เวลา ~15 วินาที)
-npm install
 ```
 
-### ขั้นตอนที่ 3: เปิดใช้งานและทดสอบระบบ
+### ขั้นตอนที่ 3: รันคำสั่ง One-Click Setup (จัดการให้ครบทุกอย่างในคำสั่งเดียว! ⭐)
+ดับเบิลคลิกไฟล์ **`scripts\setup-new-pc.bat`** หรือรันคำสั่ง:
+
 ```powershell
-# เปิด Web App Dashboard ในเครื่อง
-npm run dev
+.\scripts\setup-new-pc.ps1
 ```
-เปิดเบราว์เซอร์ไปที่ `http://localhost:5173/` จะเห็นหน้าเว็บ PTA1 Logbook Insight พร้อมข้อมูล 9 เดือนทันที!
+
+**สิ่งที่สคริปต์นี้จะจัดการให้ทันทีแบบอัตโนมัติ 100%:**
+1. ติดตั้ง dependencies ด้วย `npm install`
+2. อัปเดต `open-logbook.ps1` (ครบ 9 รายการ) ลง `C:\ProgramData\PTA1-Workspace`
+3. ติดตั้ง Shortcut ลง Windows Startup ให้เปิดเว็บแอปและไฟล์งานทั้ง 9 รายการอัตโนมัติตอน Login
+4. ลงทะเบียน Windows Task Scheduler (กะเช้า 07:20 น. และ กะดึก 19:20 น.) สำหรับ Auto-Deploy ขึ้น Cloudflare
+5. วางไอคอน **`🚀 เปิด PTA1 Logbook (Auto-Sync).bat`** ไว้บน Desktop ของพี่ A
+6. สกัดข้อมูลสดจาก SharePoint และ Build Production Bundle พร้อมใช้งานทันที!
 
 ### ขั้นตอนที่ 4: กู้คืนข้อมูลร่าง IPS (Restore)
 1. เปิดหน้าเว็บ `http://localhost:5173/` บนเครื่องใหม่
-2. คลิกปุ่ม **"📥 นำเข้าข้อมูล (Restore)"**
+2. คลิกปุ่ม **"⚙️ ตั้งค่า & ย้ายเครื่อง"** -> **"📥 กู้คืนข้อมูล (Restore)"**
 3. เลือกไฟล์ `pta1_logbook_backup_*.json` ที่พี่ A สำรองไว้ ร่าง IPS ทั้งหมดจะกลับคืนมาเหมือนเดิม 100% ค่ะ!
-
-### ขั้นตอนที่ 5: เปิดตัวดึงข้อมูลอัตโนมัติจาก SharePoint (Auto-Sync)
-```powershell
-npm run sync:live
-```
-สคริปต์จะเริ่มจับตาดูโฟลเดอร์ SharePoint บนเครื่องใหม่ทันที เมื่อมีคนเซฟไฟล์ Excel ข้อมูลจะไหลเข้าเว็บแอปอัตโนมัติเหมือนเดิมทุกประการค่ะ!
 
 ---
 

@@ -42,10 +42,10 @@
   - กดปุ่ม **`Windows + L` (Lock Screen)** หรือ
   - กดปุ่ม **"Switch User"** สลับไปให้เพื่อนล็อกอินเข้า User ของเขา
   - *ข้อดี:* โปรเซส Local Server ของพี่ A จะยังคงรันอยู่เบื้องหลังได้ตามปกติ
-- **การเปิดใช้งาน:**
-  1. เปิด Terminal ในโฟลเดอร์โปรเจกต์ รัน `npm run dev`
-  2. เปิดเบราว์เซอร์ไปที่ [http://localhost:5173/](http://localhost:5173/)
-  3. หากต้องการดึงข้อมูลล่าสุดจาก SharePoint ให้กดปุ่ม **`⚡ ซิงค์สด SharePoint`** บนแถบ Sticky Topbar ด้านบนสุดได้ทันที
+- **การเปิดใช้งาน (Auto-Launch on Login):**
+  1. เมื่อพี่ A ล็อกอินเข้า Windows สคริปต์ `C:\ProgramData\PTA1-Workspace\open-logbook.ps1` (รายการที่ 9) จะสั่งรันสกัดข้อมูล SharePoint สดทันที พร้อมเปิด Local Server และตัวเฝ้าไฟล์ (Auto-Sync Watcher) แบบ Minimized ลง Taskbar ให้อัตโนมัติ 100%
+  2. หน้าเว็บ [http://localhost:5173/](http://localhost:5173/) จะเปิดขึ้นมาบนเบราว์เซอร์ให้เองพร้อมใช้งานทันทีโดยไม่ต้องคลิกอะไร
+  3. หากต้องการเปิดเองด้วยตนเอง สามารถดับเบิลคลิกไอคอน **`🚀 เปิด PTA1 Logbook (Auto-Sync).bat`** บน Desktop ได้เช่นกันค่ะ
 
 ---
 

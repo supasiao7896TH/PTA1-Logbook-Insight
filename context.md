@@ -20,7 +20,8 @@
 - **Crypto:** Web Crypto AES-GCM 256-bit สำหรับเก็บ Gemini API Key ปลอดภัยในเครื่อง
 - **AI:** Gemini 2.5 Flash (BYOK Optional สำหรับช่วยเกลาสำนวนและวิเคราะห์ Why-Why)
 - **Deploy:** GitHub Pages / Cloudflare Workers
-- **Test/CI:** Vitest 3 (`npm test` / `npm run check`)
+- **Test/CI:** Vitest 3 (`npm test` / `npm run check`) — ปัจจุบัน 26/26 Tests เขียว 100%
+- **Architecture Blueprint:** ดูแผนผังและคำอธิบายสถาปัตยกรรมฉบับเต็มได้ที่ [`docs/SYSTEM_ARCHITECTURE.md`](./docs/SYSTEM_ARCHITECTURE.md)
 - **Repo:** https://github.com/supasiao7896TH/PTA1-Logbook-Insight
 - **Branch:** main
 
@@ -105,6 +106,7 @@ Store: settings
 PTA1-Logbook-Insight/
 ├── logbooks/                    ← จัดเก็บไฟล์ Excel Logbook (.xlsx / .xlsm) ประจำเดือนทั้งหมด (ignore ไม่ขึ้น git)
 ├── docs/                        ← รวบรวมเอกสารวิเคราะห์และรายงานสรุป
+│   ├── SYSTEM_ARCHITECTURE.md   ← แผนผังและสถาปัตยกรรมการทำงานระบบฉบับสมบูรณ์
 │   ├── UNIVERSAL_LOGBOOK_ROADMAP.md ← พิมพ์เขียวและสถาปัตยกรรมขยายระบบสู่เครื่อง PC/โรงงานอื่น
 │   ├── 01_IPS_Kaizen_Candidates_Oct2026.md
 │   ├── 02_Monthly_Shift_Insight_Oct2026.md

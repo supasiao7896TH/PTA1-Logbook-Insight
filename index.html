@@ -1019,6 +1019,28 @@
             <div id="quick-tag-chips" class="tag-chips-bar"></div>
           </div>
 
+          <!-- TROUBLESHOOTING COPILOT PANEL -->
+          <div class="sa-card" style="margin-bottom: 1rem; border-left: 4px solid var(--ref-amber-border); background: var(--bg-surface);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.25rem;">🩺</span>
+                <div>
+                  <h3 style="font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--text-primary);">
+                    Boardman Troubleshooting Copilot (ผู้ช่วยกู้วิกฤตหน้างาน)
+                  </h3>
+                  <p class="kpi-sub" style="margin: 0;">
+                    คัดกรองอาการผิดปกติหน้างาน เพื่อดูวิธีแก้ไขที่ Boardman ในอดีตใช้ได้ผลจริง
+                  </p>
+                </div>
+              </div>
+              <button id="btn-toggle-copilot-mode" type="button" class="btn-pill-secondary text-xs" style="min-height: 38px;">
+                🩺 โหมดวิเคราะห์วิธีแก้ปัญหา (Copilot Guide)
+              </button>
+            </div>
+            <div id="copilot-symptom-chips" class="tag-chips-bar" style="margin-top: 0.5rem;"></div>
+            <div id="copilot-guidance-card" style="display: none; margin-top: 0.75rem;"></div>
+          </div>
+
           <div id="search-results-list" class="timeline-stack"></div>
         </section>
 
@@ -1356,6 +1378,27 @@
 
         <!-- VIEW 4: IPS & KAIZEN STUDIO -->
         <section data-view-panel="ips" hidden aria-label="สตูดิโอร่าง IPS และ Kaizen">
+          <!-- AUTO KAIZEN & IPS OPPORTUNITY HUNTER PANEL -->
+          <div class="sa-card" style="margin-bottom: 1.25rem; border-left: 4px solid var(--brand-ink);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.65rem; flex-wrap: wrap; gap: 0.5rem;">
+              <div>
+                <h2 style="font-size: 1.05rem; display: flex; align-items: center; gap: 0.45rem; margin: 0;">
+                  <span>🎯</span> เครื่องตรวจจับและแนะนำหัวข้อ IPS/Kaizen อัตโนมัติ (IPS Hunter)
+                </h2>
+                <p class="kpi-sub" style="margin: 0.25rem 0 0 0;">
+                  วิเคราะห์ Logbook 4,500+ รายการ: คำนวณความถี่, ลิงก์ใบสั่งซ่อม SAP, และคำนวณผลตอบแทนสูตร 1.1 ให้พร้อมโหลดใส่ฟอร์มในคลิกเดียว
+                </p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <select id="filter-hunter-month" class="sa-select" aria-label="เลือกรอบเดือนสำหรับสกัดโอกาส IPS">
+                  <!-- Populated dynamically -->
+                </select>
+                <span id="hunter-candidates-count" class="badge-metric font-semibold text-brand"></span>
+              </div>
+            </div>
+            <div id="hunter-candidates-grid" class="chronic-grid" style="grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));"></div>
+          </div>
+
           <div class="ips-studio-grid">
             <!-- Left column: Draft selector -->
             <div class="sa-card">

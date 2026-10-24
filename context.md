@@ -88,6 +88,8 @@ Store: settings
 | 📊 ภาพรวมรายเดือน & กะพี่ A | ✅ Done | ตารางสรุป 9 เดือน, รายการตัดสินใจใน 103 กะของพี่ A |
 | 🔧 สถิติอุปกรณ์เสียซ้ำ | ✅ Done | Top 30 Chronic Equipment Tags พร้อมตัวอย่างบันทึกและปุ่มกาง Timeline |
 | 📋 สตูดิโอร่าง IPS & Kaizen | ✅ Done | 4 เคสเด่น, คำนวณผลตอบแทนข้อ 1.1 (`1+2-4-5`), ปุ่ม Copy วาง HCL Notes |
+| 🎯 Auto IPS Opportunity Hunter | ✅ Done | เครื่องตรวจจับและจัดอันดับหัวข้อ IPS ประจำเดือนอัตโนมัติจาก Logbook 4,500+ รายการ พร้อมคำนวณสูตร 1.1 และโหลดใส่ฟอร์มในคลิกเดียว |
+| 🩺 Boardman Troubleshooting Copilot | ✅ Done | ผู้ช่วยกู้วิกฤตหน้างาน DCS สกัดประวัติ 6 กลุ่มอาการ (Hunting, Alarm, Trip, Clogged, Leak, Exapilot) พร้อมสรุปวิธีแก้ไขที่ได้ผลบ่อยที่สุด (Top Proven Actions) |
 | 📥 นำเข้าไฟล์ .xlsm/.xlsx หน้าเว็บ | ✅ Done | แตก XML ผ่าน DecompressionStream บนเบราว์เซอร์ ไม่เปลือง RAM |
 | 🔄 SharePoint Auto-Sync Watcher | ✅ Done | สคริปต์เฝ้าตรวจจับโฟลเดอร์ SharePoint / OneDrive ด้วย Debounce 8s และกรองไฟล์ล็อก `~$*`, พร้อม Live Polling Meta ใน Web App ทุก 30s |
 | ⚡ ปุ่มคลิกซิงค์สด (One-Click Live Sync) | ✅ Done | ปุ่ม `⚡ ซิงค์สดจาก SharePoint` บนหน้าเว็บ พร้อม Auto-Fallback เปิด File Picker บน Cloudflare และสั่งสกัดอัตโนมัติบน Localhost |

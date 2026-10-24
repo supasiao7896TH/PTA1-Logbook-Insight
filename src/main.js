@@ -102,6 +102,64 @@ const handlers = {
     StateStore.set('activeTab', 'ips');
     UIRenderer.renderAll(handlers);
     UIRenderer.showToast(`สร้างร่าง IPS/Kaizen จากบันทึกวันที่ ${entry.date} เรียบร้อยค่ะ`, 'success');
+  },
+
+  onHunterFilterChange(partial) {
+    StateStore.updateHunterFilters(partial);
+    UIRenderer.renderIpsStudio(handlers);
+  },
+
+  async onLoadHunterCandidate(candidate) {
+    const newDraft = {
+      id: `ips-hunter-${candidate.tag.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}`,
+      jobName: candidate.suggestedJobName,
+      caseName: candidate.suggestedCaseName,
+      tags: [candidate.tag, candidate.unit.toUpperCase()],
+      date: candidate.lastSeen || '2026-10-24',
+      objective: candidate.suggestedObjective,
+      kaizenWay: candidate.suggestedKaizenWay,
+      beforeText: candidate.suggestedBefore,
+      afterText: candidate.suggestedAfter,
+      effectText: candidate.suggestedEffect,
+      rootCauseText: (candidate.suggested5Why || []).join('\n'),
+      benefitCalc: {
+        costSaving: candidate.benefitCalc?.costSaving || 0,
+        manHours: candidate.benefitCalc?.manHours || 0,
+        hourlyRate: candidate.benefitCalc?.hourlyRate || 350,
+        oppLossTons: 0,
+        tonRate: 0,
+        investYear: 0,
+        extraCost: 0
+      }
+    };
+
+    const currentDrafts = StateStore.get('ipsDrafts') || [];
+    const nextDrafts = [newDraft, ...currentDrafts];
+    StateStore.set('ipsDrafts', nextDrafts);
+    StateStore.set('selectedDraftId', newDraft.id);
+    await StorageEngine.saveIpsDraft(newDraft);
+
+    StateStore.set('activeTab', 'ips');
+    UIRenderer.renderAll(handlers);
+    UIRenderer.showToast(`โหลดเคส IPS Hunter "${candidate.tag}" (${candidate.incidentCount} ครั้ง) ใส่ฟอร์มเรียบร้อยค่ะ!`, 'success');
+  },
+
+  onCopilotSymptomSelect(symptomKey) {
+    const cur = StateStore.get('copilotState') || {};
+    const nextSymptom = cur.activeSymptom === symptomKey ? 'ALL' : symptomKey;
+    StateStore.updateCopilotState({
+      activeSymptom: nextSymptom,
+      isCopilotMode: true
+    });
+    UIRenderer.renderSearchTimeline(handlers);
+  },
+
+  onToggleCopilotMode() {
+    const cur = StateStore.get('copilotState') || {};
+    StateStore.updateCopilotState({
+      isCopilotMode: !cur.isCopilotMode
+    });
+    UIRenderer.renderSearchTimeline(handlers);
   }
 };
 

@@ -49,6 +49,16 @@ const _state = {
     monthKey: 'ALL',
     query: ''
   },
+  hunterFilters: {
+    monthKey: 'ALL',
+    minIncidents: 1,
+    query: ''
+  },
+  copilotState: {
+    isCopilotMode: false,
+    activeSymptom: 'ALL',
+    activeTag: ''
+  },
   handoverState: {
     selectedDate: '',
     selectedShift: 'Day',
@@ -108,6 +118,16 @@ export const StateStore = {
   updateBadActorFilters(partial) {
     const next = { ..._state.badActorFilters, ...partial };
     this.set('badActorFilters', next);
+  },
+
+  updateHunterFilters(partial) {
+    const next = { ..._state.hunterFilters, ...partial };
+    this.set('hunterFilters', next);
+  },
+
+  updateCopilotState(partial) {
+    const next = { ..._state.copilotState, ...partial };
+    this.set('copilotState', next);
   },
 
   updateHandoverState(partial) {

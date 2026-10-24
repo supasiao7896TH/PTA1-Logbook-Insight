@@ -1290,5 +1290,334 @@ export const LogbookParser = {
     out += `A-Class WebCraft • Supasit.A Studio • PTA1 Logbook Insight`;
 
     return out;
+  },
+
+  /**
+   * 14. Auto Kaizen & IPS Opportunity Hunter
+   * Evaluates logbook entries, groups chronic tags, computes formula 1.1 financial benefit,
+   * and auto-drafts complete 5-Why analysis and HCL Notes text.
+   * @param {Array} entries
+   * @param {Object} options
+   * @returns {Object}
+   */
+  huntIpsOpportunities(entries = [], options = {}) {
+    if (!Array.isArray(entries)) entries = [];
+    const {
+      monthKey = 'ALL',
+      sapMemos = [],
+      minIncidents = options.minIncidents !== undefined ? Number(options.minIncidents) : (AppConfig.HUNTER_CONFIG?.DEFAULT_MIN_INCIDENTS ?? 1),
+      categoryFilter = 'ALL',
+      query = ''
+    } = options;
+
+    const q = query.trim().toLowerCase();
+
+    // 1. Filter entries
+    let filtered = entries.filter((e) => {
+      if (monthKey && monthKey !== 'ALL' && e.monthKey !== monthKey) return false;
+      if (categoryFilter && categoryFilter !== 'ALL' && e.category !== categoryFilter) return false;
+      if (q) {
+        const textMatch = (e.text || '').toLowerCase().includes(q);
+        const tagMatch = Array.isArray(e.tags) && e.tags.some((t) => t.toLowerCase().includes(q));
+        if (!textMatch && !tagMatch) return false;
+      }
+      return true;
+    });
+
+    // 2. Group by equipment tag
+    const tagMap = new Map();
+    for (const entry of filtered) {
+      if (!Array.isArray(entry.tags) || entry.tags.length === 0) continue;
+      for (const rawTag of entry.tags) {
+        const tag = rawTag.trim();
+        if (!tag || tag === 'EXAPILOT' || tag === 'FC-2302' || tag === 'FC-2602') continue;
+        if (IGNORED_PREFIXES.has(tag)) continue;
+
+        if (!tagMap.has(tag)) {
+          tagMap.set(tag, {
+            tag,
+            unit: this.detectPlantUnit ? this.detectPlantUnit(tag) : 'Oxidation / Purification',
+            entries: [],
+            categories: new Set(),
+            dates: [],
+            bms: new Set()
+          });
+        }
+        const rec = tagMap.get(tag);
+        rec.entries.push(entry);
+        if (entry.category) rec.categories.add(entry.category);
+        if (entry.date) rec.dates.push(entry.date);
+        if (entry.bm) rec.bms.add(entry.bm);
+      }
+    }
+
+    // 3. Map SAP Memos by tag
+    const sapByTag = new Map();
+    for (const memo of sapMemos || []) {
+      const memoText = `${memo.sapNo || ''} ${memo.detail || ''} ${(memo.tags || []).join(' ')} ${memo.tag || ''}`.toUpperCase();
+      for (const tag of tagMap.keys()) {
+        if (memoText.includes(tag.toUpperCase())) {
+          if (!sapByTag.has(tag)) sapByTag.set(tag, []);
+          sapByTag.get(tag).push(memo);
+        }
+      }
+    }
+
+    const hourlyRate = AppConfig.HUNTER_CONFIG?.DEFAULT_HOURLY_RATE || 350;
+    const hoursPerFix = AppConfig.HUNTER_CONFIG?.HOURS_PER_INCIDENT || 2.5;
+
+    const candidates = [];
+
+    for (const [tag, data] of tagMap.entries()) {
+      const count = data.entries.length;
+      if (count < minIncidents) continue;
+
+      const relatedSap = sapByTag.get(tag) || [];
+      const sapCount = relatedSap.length;
+      const isWashing = data.categories.has('WASH');
+      const isChronic = count >= 3;
+
+      // Priority Score
+      const priorityScore = (count * 3) + (sapCount * 5) + (isWashing ? 4 : 0) + (isChronic ? 10 : 0);
+
+      // Financial Benefit Calculation (Formula 1.1)
+      const manHours = Number((count * hoursPerFix).toFixed(1));
+      const manHourSaving = Number((manHours * hourlyRate).toFixed(2));
+      const costSaving = sapCount > 0 ? (sapCount * 5000) : (count >= 3 ? 3000 : 1500);
+      const totalMonthly = Number((costSaving + manHourSaving).toFixed(2));
+
+      // Calculate intervals
+      const sortedDates = [...data.dates].sort();
+      const firstSeen = sortedDates[0] || '';
+      const lastSeen = sortedDates[sortedDates.length - 1] || '';
+      let avgDaysBetween = 0;
+      if (count > 1 && firstSeen && lastSeen) {
+        const diffDays = Math.max(1, Math.round((new Date(lastSeen) - new Date(firstSeen)) / (1000 * 60 * 60 * 24)));
+        avgDaysBetween = Number((diffDays / (count - 1)).toFixed(1));
+      }
+
+      const sampleLines = data.entries.slice(-3).map((e) => e.text).filter(Boolean);
+      const sampleText = sampleLines[sampleLines.length - 1] || '';
+
+      // Auto-draft suggestions
+      const suggestedJobName = `การปรับปรุงความเสถียรและลดการขัดข้องซ้ำซ้อนของ ${tag} (${data.unit})`;
+      const suggestedCaseName = `ลดปัญหาการทำงานผิดปกติและ Chattering/Alarm ของ ${tag}`;
+      const suggestedObjective = `เพิ่ม Reliability / ลด Downtime และลดชั่วโมงทำงานซ่อมบำรุงของ ${tag}`;
+      const suggestedKaizenWay = '3.Modification / 5.Minimize';
+
+      const suggestedBefore = `ในระหว่างการเดินเครื่องหน่วยผลิต PTA Unit 1 พบปัญหาเกี่ยวกับอุปกรณ์/เครื่องมือวัด ${tag} (${data.unit}) ถูกบันทึกใน Logbook รวม ${count} ครั้ง โดยมีระยะห่างการเกิดปัญหาเฉลี่ยทุกๆ ${avgDaysBetween > 0 ? `${avgDaysBetween} วัน` : 'ไม่กี่วัน'} ${sapCount > 0 ? `และมีการเปิดใบสั่งงาน SAP เพื่อแก้ไขรวม ${sapCount} รายการ` : ''} ซึ่งส่งผลให้ Boardman ต้องคอยแก้ไขหน้างานและปรับชดเชยค่าพารามิเตอร์ซ้ำซ้อน (เช่น "${sampleText}")`;
+
+      const suggestedAfter = `ดำเนินการวิเคราะห์หาสาเหตุที่แท้จริง (Root Cause) และปรับปรุงแก้ไขเชิงวิศวกรรมที่ ${tag} เช่น ปรับตั้งรอบการตรวจเช็ก/ทำความสะอาด (Preventive Maintenance) หรือปรับจูน Control Parameter/Timer Sequence ให้เหมาะสมกับสภาวะการผลิตจริง เพื่อป้องกันปัญหาเกิดซ้ำ`;
+
+      const suggestedEffect = `ลดความถี่การเกิดปัญหาของ ${tag} จากเดิมที่พบ ${count} ครั้ง ให้ทำงานได้อย่างต่อเนื่อง มั่นคง และช่วยประหยัดเวลาการแก้ไขปัญหาหน้างานของ Boardman รวมกว่า ${manHours} ชั่วโมง`;
+
+      const suggested5Why = [
+        `อาการที่พบ: ${tag} เกิดปัญหาขัดข้องและแจ้งเตือนใน Logbook บ่อยครั้ง (${count} ครั้ง)`,
+        `Why 1: มีการทำงานผิดปกติหรือคราบตะกรัน/การสึกหรอสะสมในการเดินเครื่องต่อเนื่อง`,
+        `Why 2: ยังขาดการปรับจูนพารามิเตอร์หรือรอบการทำความสะอาดเชิงป้องกันที่สอดคล้องกับพฤติกรรมจริง`,
+        `Why 3: ในอดีตมักแก้ปัญหาเฉพาะหน้าเป็นรายกะ (เช่น ปรับค่า SV/MV หรือเปิดล้างฉุกเฉิน)`,
+        `Root Cause: ขาดการวิเคราะห์สถิติประวัติย้อนหลังของ ${tag} เพื่อวางมาตรการป้องกันเชิงรุก (Preventive / Modification)`
+      ];
+
+      candidates.push({
+        id: `hunter-${tag.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
+        tag,
+        unit: data.unit,
+        incidentCount: count,
+        sapCount,
+        isWashing,
+        isChronic,
+        priorityScore,
+        firstSeen,
+        lastSeen,
+        avgDaysBetween,
+        sampleText,
+        sampleLines,
+        bms: Array.from(data.bms),
+        suggestedJobName,
+        suggestedCaseName,
+        suggestedObjective,
+        suggestedKaizenWay,
+        suggestedBefore,
+        suggestedAfter,
+        suggestedEffect,
+        suggested5Why,
+        benefitCalc: {
+          costSaving,
+          manHours,
+          hourlyRate,
+          oppLossTons: 0,
+          tonRate: 0,
+          investYear: 0,
+          extraCost: 0,
+          manHourSaving,
+          totalMonthly
+        }
+      });
+    }
+
+    candidates.sort((a, b) => b.priorityScore - a.priorityScore || b.incidentCount - a.incidentCount);
+
+    return {
+      totalFound: candidates.length,
+      monthKey,
+      candidates
+    };
+  },
+
+  /**
+   * 15. Boardman Symptom & Troubleshooting Copilot
+   * Classifies past shift logs into symptom categories, parses actions and outcomes,
+   * and aggregates proven historical solutions for DCS operators.
+   * @param {Array} entries
+   * @param {Object} options
+   * @returns {Object}
+   */
+  analyzeTroubleshootingCases(entries = [], options = {}) {
+    if (!Array.isArray(entries)) entries = [];
+    const {
+      query = '',
+      symptomCategory = 'ALL',
+      monthKey = 'ALL',
+      tag = ''
+    } = options;
+
+    const q = query.trim().toLowerCase();
+    const tagUpper = tag.trim().toUpperCase();
+
+    // Priority Category Matchers
+    const categoryMatchers = [
+      {
+        key: 'HUNTING',
+        patterns: [/\bhunting\b/i, /\bswing\b/i, /\boscillat\b/i, /mv\s*(up|100%|high)/i, /แกว่ง/i, /ไม่นิ่ง/i]
+      },
+      {
+        key: 'CLOGGED',
+        patterns: [/high\s*dp/i, /dp\s*high/i, /\bclog\b/i, /\bfoul\b/i, /\bblock\b/i, /\bwash/i, /\bnaoh\b/i, /ตัน/i, /ล้าง/i, /ตะกรัน/i]
+      },
+      {
+        key: 'ALARM',
+        patterns: [/\balarm\b/i, /\bhigh\b/i, /\blow\b/i, /\bexceed\b/i, /\bspike\b/i, /เตือน/i, /สูง/i, /ต่ำ/i]
+      },
+      {
+        key: 'TRIP',
+        patterns: [/\btrip\b/i, /\bcut\b/i, /\binterlock\b/i, /\bstop\b/i, /\bshutdown\b/i, /\bfail\b/i, /ตัด/i, /หยุด/i]
+      },
+      {
+        key: 'LEAK',
+        patterns: [/\bleak\b/i, /\bpassing\b/i, /\bgland\b/i, /\bpacking\b/i, /\bseal\b/i, /\bdrain\b/i, /\bblowdown\b/i, /รั่ว/i, /ซึม/i]
+      },
+      {
+        key: 'EXAPILOT',
+        patterns: [/\bexapilot\b/i, /\bsequence\b/i, /\bauto\b/i]
+      }
+    ];
+
+    const actionKeywords = [
+      'adjust', 'dec', 'inc', 'cut transfer', 'cut feed', 'stop', 'start', 'switch', 'swap', 'line up', 'flush', 'wash', 'clean', 'blowdown', 'reset', 'bypass', 'check', 'inspect', 'close', 'open', 'change', 'เคาะ', 'เป่า', 'ปรับ', 'ล้าง', 'สลับ', 'ตัด'
+    ];
+
+    const cases = [];
+    const symptomDistribution = {
+      HUNTING: 0,
+      ALARM: 0,
+      TRIP: 0,
+      CLOGGED: 0,
+      LEAK: 0,
+      EXAPILOT: 0,
+      OTHER: 0
+    };
+    const actionCounts = new Map();
+
+    for (const entry of entries) {
+      if (monthKey && monthKey !== 'ALL' && e.monthKey !== monthKey) continue;
+      const tags = Array.isArray(entry.tags) ? entry.tags : [];
+      if (tagUpper && !tags.some((t) => t.toUpperCase() === tagUpper)) continue;
+
+      const text = entry.text || '';
+      if (!text.trim()) continue;
+
+      if (q) {
+        const textMatch = text.toLowerCase().includes(q);
+        const tagMatch = tags.some((t) => t.toLowerCase().includes(q));
+        if (!textMatch && !tagMatch) continue;
+      }
+
+      // Detect Category
+      let detectedCategory = 'OTHER';
+      for (const matcher of categoryMatchers) {
+        if (matcher.patterns.some((p) => p.test(text))) {
+          detectedCategory = matcher.key;
+          break;
+        }
+      }
+
+      symptomDistribution[detectedCategory] = (symptomDistribution[detectedCategory] || 0) + 1;
+
+      if (symptomCategory !== 'ALL' && detectedCategory !== symptomCategory) {
+        continue;
+      }
+
+      // Split text into Symptom, Action, and Outcome
+      let symptomSummary = text;
+      let actionTaken = '';
+      let outcome = '';
+
+      if (text.includes('->')) {
+        const parts = text.split('->');
+        symptomSummary = parts[0].trim();
+        actionTaken = parts.slice(1).join('->').trim();
+      } else {
+        const lower = text.toLowerCase();
+        let bestIdx = -1;
+        for (const kw of actionKeywords) {
+          const idx = lower.indexOf(kw);
+          if (idx !== -1 && (bestIdx === -1 || idx < bestIdx)) {
+            bestIdx = idx;
+          }
+        }
+        if (bestIdx > 0) {
+          symptomSummary = text.substring(0, bestIdx).trim();
+          actionTaken = text.substring(bestIdx).trim();
+        } else {
+          actionTaken = text;
+        }
+      }
+
+      const outcomeMatch = actionTaken.match(/\(([^)]+)\)$/) || text.match(/(normal|recovered|นิ่งขึ้น|ใช้งานได้|ปกติ)/i);
+      if (outcomeMatch) {
+        outcome = outcomeMatch[1] || outcomeMatch[0];
+      }
+
+      const cleanActionKey = actionTaken.split(';')[0].split(',')[0].slice(0, 50).trim();
+      if (cleanActionKey) {
+        actionCounts.set(cleanActionKey, (actionCounts.get(cleanActionKey) || 0) + 1);
+      }
+
+      cases.push({
+        id: entry.id,
+        date: entry.date,
+        shift: entry.shift,
+        bm: entry.bm,
+        tags,
+        rawText: text,
+        symptomCategory: detectedCategory,
+        symptomSummary,
+        actionTaken: actionTaken || 'บันทึกติดตามอาการ',
+        outcome: outcome || 'เฝ้าระวังต่อเนื่อง'
+      });
+    }
+
+    const topActions = Array.from(actionCounts.entries())
+      .map(([action, count]) => ({ action, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+
+    return {
+      totalCases: cases.length,
+      symptomDistribution,
+      topActions,
+      cases
+    };
   }
 };

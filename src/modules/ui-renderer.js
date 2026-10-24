@@ -256,7 +256,116 @@ export const UIRenderer = {
     }
   },
 
+  renderTroubleshootingCopilot(handlers) {
+    const chipsEl = document.getElementById('copilot-symptom-chips');
+    const toggleBtn = document.getElementById('btn-toggle-copilot-mode');
+    const guidanceCard = document.getElementById('copilot-guidance-card');
+    if (!chipsEl || !toggleBtn || !guidanceCard) return;
+
+    const copilotState = StateStore.get('copilotState') || { isCopilotMode: false, activeSymptom: 'ALL' };
+    const filters = StateStore.get('filters') || {};
+    const entries = StateStore.get('entries') || [];
+
+    // Toggle button
+    toggleBtn.textContent = copilotState.isCopilotMode ? '❌ ปิดโหมด Copilot Guide' : '🩺 โหมดวิเคราะห์วิธีแก้ปัญหา (Copilot Guide)';
+    toggleBtn.classList.toggle('btn-pill-primary', copilotState.isCopilotMode);
+    toggleBtn.classList.toggle('btn-pill-secondary', !copilotState.isCopilotMode);
+    toggleBtn.onclick = () => handlers.onToggleCopilotMode();
+
+    // Symptom chips
+    chipsEl.textContent = '';
+    const categories = AppConfig.SYMPTOM_CATEGORIES || [];
+    for (const cat of categories) {
+      const isAct = copilotState.activeSymptom === cat.key;
+      const chip = el('button', `sa-chip-btn text-xs ${isAct ? 'sa-chip-active' : ''}`, `${cat.icon} ${cat.label}`);
+      chip.type = 'button';
+      chip.addEventListener('click', () => {
+        handlers.onCopilotSymptomSelect(cat.key);
+      });
+      chipsEl.appendChild(chip);
+    }
+
+    const shouldShow = copilotState.isCopilotMode || copilotState.activeSymptom !== 'ALL';
+    guidanceCard.style.display = shouldShow ? 'block' : 'none';
+    if (!shouldShow) return;
+
+    guidanceCard.textContent = '';
+
+    const analysis = LogbookParser.analyzeTroubleshootingCases(entries, {
+      query: filters.query,
+      symptomCategory: copilotState.activeSymptom,
+      tag: filters.tag !== 'ALL' ? filters.tag : '',
+      monthKey: filters.monthKey !== 'ALL' ? filters.monthKey : 'ALL'
+    });
+
+    const activeCatObj = categories.find((c) => c.key === copilotState.activeSymptom) || categories[0];
+
+    const guideWrapper = el('div', 'sa-card p-4 bg-ground border border-ref-amber-border rounded-xl flex flex-col gap-3');
+
+    // Header
+    const header = el('div', 'flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-border');
+    const title = el('div', 'flex items-center gap-2');
+    title.append(
+      el('span', 'text-lg', activeCatObj.icon),
+      el('h4', 'font-bold text-sm text-text-primary', `ผลการวิเคราะห์วิธีแก้ปัญหา: "${activeCatObj.label}"`),
+      el('span', 'badge-metric text-xs font-semibold text-brand', `พบ ${analysis.totalCases} เคส`)
+    );
+    header.appendChild(title);
+
+    // Top Proven Actions
+    const solSection = el('div', 'flex flex-col gap-1.5');
+    const solTitle = el('div', 'text-xs font-bold text-muted flex items-center gap-1.5', '💡 วิธีที่ Boardman ในอดีตใช้แก้ไขบ่อยที่สุด (Top Proven Actions):');
+    solSection.appendChild(solTitle);
+
+    if (analysis.topActions && analysis.topActions.length > 0) {
+      const solList = el('div', 'grid grid-cols-1 md:grid-cols-2 gap-2');
+      for (let i = 0; i < analysis.topActions.length; i++) {
+        const item = analysis.topActions[i];
+        const pct = analysis.totalCases > 0 ? Math.round((item.count / analysis.totalCases) * 100) : 0;
+        const solCard = el('div', 'bg-surface p-2.5 rounded-lg border border-line-border flex items-center justify-between text-xs');
+        const solLeft = el('div', 'flex items-center gap-2 flex-1 min-w-0 pr-2');
+        solLeft.append(
+          el('span', 'font-bold text-brand tabular-nums', `#${i + 1}`),
+          el('span', 'font-medium truncate', item.action)
+        );
+        const solRight = el('span', 'badge-metric tabular-nums font-semibold shrink-0', `${item.count} ครั้ง (${pct}%)`);
+        solCard.append(solLeft, solRight);
+        solList.appendChild(solCard);
+      }
+      solSection.appendChild(solList);
+    } else {
+      solSection.appendChild(el('p', 'text-xs text-muted italic', 'ยังไม่มีการสรุปวิธีแก้ไขในเงื่อนไขนี้'));
+    }
+
+    // Recent resolved cases
+    const caseSection = el('div', 'flex flex-col gap-1.5 pt-2 border-t border-border');
+    caseSection.appendChild(el('div', 'text-xs font-bold text-muted', '📋 ตัวอย่างประวัติเหตุการณ์จริงและการแก้ไขของ Boardman (Precedents):'));
+
+    const displayCases = analysis.cases.slice(0, 3);
+    if (displayCases.length > 0) {
+      const caseList = el('div', 'flex flex-col gap-2');
+      for (const cs of displayCases) {
+        const cRow = el('div', 'p-2.5 rounded-lg bg-surface border border-line-border text-xs flex flex-col gap-1');
+        const cHead = el('div', 'flex items-center justify-between text-muted text-[11px]');
+        cHead.append(
+          el('span', '', `📅 ${cs.date} (${cs.shift}) · BM: ${cs.bm || '-'}`),
+          el('span', 'badge-tag text-[10px]', (cs.tags || []).join(', ') || 'PTA1')
+        );
+        const cDetail = el('div', 'text-text-primary', `⚠️ อาการ: "${cs.symptomSummary}"`);
+        const cAction = el('div', 'text-brand font-medium', `🔧 สิ่งที่ทำ: "${cs.actionTaken}" ➔ ผล: ${cs.outcome}`);
+        cRow.append(cHead, cDetail, cAction);
+        caseList.appendChild(cRow);
+      }
+      caseSection.appendChild(caseList);
+    }
+
+    guideWrapper.append(header, solSection, caseSection);
+    guidanceCard.appendChild(guideWrapper);
+  },
+
   renderSearchTimeline(handlers) {
+    this.renderTroubleshootingCopilot(handlers);
+
     const listEl = document.getElementById('search-results-list');
     const countEl = document.getElementById('search-results-count');
     if (!listEl) return;
@@ -643,7 +752,122 @@ export const UIRenderer = {
     }
   },
 
+  renderIpsHunterPanel(handlers) {
+    const gridEl = document.getElementById('hunter-candidates-grid');
+    const countEl = document.getElementById('hunter-candidates-count');
+    const monthSelect = document.getElementById('filter-hunter-month');
+    if (!gridEl) return;
+    gridEl.textContent = '';
+
+    const entries = StateStore.get('entries') || [];
+    const sapMemos = StateStore.get('sapMemos') || [];
+    const months = StateStore.get('months') || [];
+    const hunterFilters = StateStore.get('hunterFilters') || { monthKey: 'ALL' };
+
+    // Sync month select options
+    if (monthSelect && monthSelect.options.length !== months.length + 1) {
+      monthSelect.textContent = '';
+      monthSelect.appendChild(new Option('📅 ทุกรอบเดือน (9 เดือน)', 'ALL'));
+      for (const m of months) {
+        monthSelect.appendChild(new Option(m.label, m.monthKey));
+      }
+      monthSelect.addEventListener('change', (e) => {
+        handlers.onHunterFilterChange({ monthKey: e.target.value });
+      });
+    }
+    if (monthSelect) {
+      monthSelect.value = hunterFilters.monthKey || 'ALL';
+    }
+
+    const huntResult = LogbookParser.huntIpsOpportunities(entries, {
+      monthKey: hunterFilters.monthKey,
+      sapMemos,
+      minIncidents: 1
+    });
+
+    const candidates = huntResult.candidates || [];
+    if (countEl) {
+      countEl.textContent = `พบ ${candidates.length} โอกาสปรับปรุง`;
+    }
+
+    if (candidates.length === 0) {
+      const empty = el('div', 'sa-card p-6 text-center text-muted col-span-full', 'ไม่พบโอกาสปรับปรุงในรอบเดือนที่เลือกค่ะ ลองเลือก "ทุกรอบเดือน" ดูนะคะ');
+      gridEl.appendChild(empty);
+      return;
+    }
+
+    const displayCandidates = candidates.slice(0, 8);
+
+    for (const cand of displayCandidates) {
+      const card = el('div', 'sa-card flex flex-col justify-between gap-2.5 p-3.5 border border-line-border hover:border-brand-ink transition-colors');
+      card.style.borderRadius = '13px';
+
+      // 1. Header
+      const head = el('div', 'flex items-center justify-between gap-1 pb-1.5 border-b border-border');
+      const leftTag = el('div', 'flex items-center gap-1.5');
+      const tagBadge = el('span', 'badge-tag text-xs font-bold', cand.tag);
+      const unitBadge = el('span', 'text-xs text-muted font-medium', `(${cand.unit})`);
+      leftTag.append(tagBadge, unitBadge);
+
+      const scoreBadge = el('span', 'badge-metric text-xs font-bold text-brand', `⭐ Score: ${cand.priorityScore}`);
+      head.append(leftTag, scoreBadge);
+
+      // 2. Metrics
+      const metricsRow = el('div', 'grid grid-cols-2 gap-1.5 text-xs bg-subtle p-2 rounded-lg');
+      const m1 = el('div', 'flex flex-col');
+      m1.append(
+        el('span', 'text-muted text-[11px]', 'พบใน Logbook:'),
+        el('strong', 'tabular-nums text-brand font-semibold', `${cand.incidentCount} ครั้ง`)
+      );
+
+      const m2 = el('div', 'flex flex-col');
+      m2.append(
+        el('span', 'text-muted text-[11px]', 'ระยะห่างเฉลี่ย:'),
+        el('strong', 'tabular-nums font-semibold', cand.avgDaysBetween > 0 ? `ทุก ${cand.avgDaysBetween} วัน` : 'พบล่าสุด')
+      );
+
+      const m3 = el('div', 'flex flex-col');
+      m3.append(
+        el('span', 'text-muted text-[11px]', 'ใบสั่งซ่อม SAP:'),
+        el('strong', 'tabular-nums font-semibold', cand.sapCount > 0 ? `${cand.sapCount} รายการ` : 'ยังไม่มี')
+      );
+
+      const m4 = el('div', 'flex flex-col');
+      m4.append(
+        el('span', 'text-muted text-[11px]', 'ผลตอบแทนสูตร 1.1:'),
+        el('strong', 'tabular-nums text-status-ok font-semibold', `~${cand.benefitCalc.totalMonthly.toLocaleString('en-US')} ฿/ด.`)
+      );
+      metricsRow.append(m1, m2, m3, m4);
+
+      // 3. Sample
+      const sample = el('p', 'text-xs text-muted italic line-clamp-2', cand.sampleText ? `"${cand.sampleText}"` : cand.suggestedCaseName);
+
+      // 4. Action buttons
+      const actions = el('div', 'flex items-center gap-2 pt-1 border-t border-border');
+      const loadBtn = el('button', 'btn-pill-primary flex-1 text-xs font-semibold', '⚡ โหลดใส่ฟอร์ม IPS');
+      loadBtn.type = 'button';
+      loadBtn.title = 'โหลดข้อมูลและสูตร 1.1 เข้าสู่ฟอร์มและจัดหน้า HCL Notes อัตโนมัติ';
+      loadBtn.addEventListener('click', () => {
+        handlers.onLoadHunterCandidate(cand);
+      });
+
+      const inspectBtn = el('button', 'btn-pill-secondary text-xs font-semibold px-2', '🔍 ดูประวัติ');
+      inspectBtn.type = 'button';
+      inspectBtn.title = 'ไปที่หน้าค้นหาเพื่อดู Logbook ของ Tag นี้';
+      inspectBtn.addEventListener('click', () => {
+        handlers.onFilterChange({ tag: cand.tag, query: '' });
+        handlers.onTabChange('search');
+      });
+
+      actions.append(loadBtn, inspectBtn);
+      card.append(head, metricsRow, sample, actions);
+      gridEl.appendChild(card);
+    }
+  },
+
   renderIpsStudio(handlers) {
+    this.renderIpsHunterPanel(handlers);
+
     const draftListEl = document.getElementById('ips-draft-selector');
     if (!draftListEl) return;
     draftListEl.textContent = '';

@@ -708,4 +708,140 @@ describe('PTA1 Logbook Insight — Business Logic Suite', () => {
       expect(formatted).toContain('LCV-2302');
     });
   });
+
+  describe('11. Auto Kaizen & IPS Opportunity Hunter (huntIpsOpportunities)', () => {
+    const mockHunterEntries = [
+      {
+        id: 'e1',
+        monthKey: '2026-10',
+        date: '2026-10-01',
+        shift: 'Day',
+        bm: 'C ศุภสิทธิ์',
+        category: 'DW',
+        text: 'Found LCV-2302 hunting MV up to 100% -> adjust TM-2302F 17->18 sec',
+        tags: ['LCV-2302']
+      },
+      {
+        id: 'e2',
+        monthKey: '2026-10',
+        date: '2026-10-08',
+        shift: 'Night',
+        bm: 'A สถิตย์',
+        category: 'DW',
+        text: 'LCV-2302 hunting again MV 95% -> dec sequence time TM-2302D',
+        tags: ['LCV-2302']
+      },
+      {
+        id: 'e3',
+        monthKey: '2026-10',
+        date: '2026-10-15',
+        shift: 'Day',
+        bm: 'B วุฒิชาติ',
+        category: 'DW',
+        text: 'LCV-2302 alarm high level in vessel -> adjust SV 20->22%',
+        tags: ['LCV-2302']
+      },
+      {
+        id: 'e4',
+        monthKey: '2026-10',
+        date: '2026-10-05',
+        shift: 'Night',
+        bm: 'C ศุภสิทธิ์',
+        category: 'WASH',
+        text: 'Stop PP-404A for NaOH washing due to high DP across filter',
+        tags: ['PP-404A']
+      }
+    ];
+
+    const mockSapMemos = [
+      {
+        id: 'sap-1',
+        sapNo: '10045688',
+        tag: 'LCV-2302',
+        detail: 'Check LCV-2302 gland packing and valve positioner',
+        status: 'REL'
+      }
+    ];
+
+    it('identifies top IPS candidates, computes priority score and formula 1.1 benefit', () => {
+      const result = LogbookParser.huntIpsOpportunities(mockHunterEntries, {
+        sapMemos: mockSapMemos,
+        minIncidents: 1
+      });
+
+      expect(result.candidates).toBeDefined();
+      expect(result.candidates.length).toBeGreaterThanOrEqual(2);
+
+      const topCandidate = result.candidates[0];
+      expect(topCandidate.tag).toBe('LCV-2302');
+      expect(topCandidate.incidentCount).toBe(3);
+      expect(topCandidate.priorityScore).toBeGreaterThan(0);
+      expect(topCandidate.benefitCalc.manHours).toBeGreaterThan(0);
+      expect(topCandidate.benefitCalc.totalMonthly).toBeGreaterThan(0);
+      expect(topCandidate.suggestedJobName).toContain('LCV-2302');
+      expect(topCandidate.suggested5Why).toBeDefined();
+      expect(topCandidate.suggested5Why.length).toBe(5);
+    });
+
+    it('filters opportunities by monthKey correctly', () => {
+      const result = LogbookParser.huntIpsOpportunities(mockHunterEntries, {
+        monthKey: '2026-10',
+        sapMemos: mockSapMemos
+      });
+      expect(result.totalFound).toBe(2);
+    });
+  });
+
+  describe('12. Symptom & Troubleshooting Copilot (analyzeTroubleshootingCases)', () => {
+    const mockCases = [
+      {
+        id: 'c1',
+        monthKey: '2026-10',
+        date: '2026-10-10',
+        shift: 'Day',
+        bm: 'C ศุภสิทธิ์',
+        text: 'Found LCV-2302 alarm MV up to 100% -> adjust TM-2302F 17->18 sec (LCV-2302 normal)',
+        tags: ['LCV-2302']
+      },
+      {
+        id: 'c2',
+        monthKey: '2026-10',
+        date: '2026-10-12',
+        shift: 'Night',
+        bm: 'D เพชร',
+        text: 'Found PI-2105 high 280 mmH2O cut transfer FC-1401 5 min -> pressure normal',
+        tags: ['PI-2105', 'FC-1401']
+      },
+      {
+        id: 'c3',
+        monthKey: '2026-10',
+        date: '2026-10-14',
+        shift: 'Day',
+        bm: 'A สถิตย์',
+        text: 'Stop PP-404A for NaOH washing by Exapilot due to high DP 1.8 bar',
+        tags: ['PP-404A', 'EXAPILOT']
+      }
+    ];
+
+    it('classifies symptoms into categories and extracts action & result', () => {
+      const analysis = LogbookParser.analyzeTroubleshootingCases(mockCases, {
+        query: 'LCV-2302'
+      });
+
+      expect(analysis.totalCases).toBe(1);
+      const c = analysis.cases[0];
+      expect(c.symptomCategory).toBe('HUNTING');
+      expect(c.symptomSummary).toContain('MV up');
+      expect(c.actionTaken).toContain('adjust TM-2302F');
+      expect(c.outcome).toContain('normal');
+    });
+
+    it('aggregates proven past solutions and symptom distribution', () => {
+      const analysis = LogbookParser.analyzeTroubleshootingCases(mockCases);
+      expect(analysis.symptomDistribution.HUNTING).toBe(1);
+      expect(analysis.symptomDistribution.ALARM).toBe(1);
+      expect(analysis.symptomDistribution.CLOGGED).toBe(1);
+      expect(analysis.topActions.length).toBeGreaterThan(0);
+    });
+  });
 });

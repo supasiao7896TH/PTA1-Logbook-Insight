@@ -18,6 +18,59 @@ export const AppConfig = {
     PTA_MAX: 175,
     LOAD_NORMAL: 100
   },
+  SYMPTOM_CATEGORIES: [
+    {
+      key: 'ALL',
+      label: 'ทุกอาการผิดปกติ',
+      icon: '🔍',
+      keywords: []
+    },
+    {
+      key: 'HUNTING',
+      label: 'Hunting / แกว่ง / MV สูง',
+      icon: '🌀',
+      keywords: ['hunting', 'swing', 'oscillat', 'mv 100', 'mv up', 'แกว่ง', 'ไม่นิ่ง', 'chattering']
+    },
+    {
+      key: 'ALARM',
+      label: 'High / Low Alarm',
+      icon: '🚨',
+      keywords: ['alarm', 'high', 'low', 'exceed', 'over', 'spike', 'drop', 'เตือน', 'สูง', 'ต่ำ']
+    },
+    {
+      key: 'TRIP',
+      label: 'Trip / Cut / Interlock',
+      icon: '🛑',
+      keywords: ['trip', 'cut', 'interlock', 'shutdown', 'stop', 'fail', 'emergency', 'หยุด', 'ตัด']
+    },
+    {
+      key: 'CLOGGED',
+      label: 'Clogged / High DP อุดตัน',
+      icon: '🧼',
+      keywords: ['clog', 'foul', 'block', 'dp high', 'high dp', 'dirty', 'stain', 'ตัน', 'คราบ', 'ตะกรัน']
+    },
+    {
+      key: 'LEAK',
+      label: 'Leak / Passing รั่วซึม',
+      icon: '💧',
+      keywords: ['leak', 'passing', 'gland', 'packing', 'seal', 'drain', 'blowdown', 'รั่ว', 'ซึม']
+    },
+    {
+      key: 'EXAPILOT',
+      label: 'Exapilot / Auto Sequence',
+      icon: '⚡',
+      keywords: ['exapilot', 'auto', 'sequence', 'recipe']
+    }
+  ],
+  HUNTER_CONFIG: {
+    DEFAULT_MIN_INCIDENTS: 1,
+    DEFAULT_HOURLY_RATE: 350,
+    HOURS_PER_INCIDENT: 2.5,
+    WEIGHT_INCIDENT: 3,
+    WEIGHT_SAP: 5,
+    WEIGHT_WASH: 4,
+    WEIGHT_CHRONIC: 10
+  },
   PRESET_IPS_DRAFTS: [
     {
       id: 'ips-oct-lcv2302',

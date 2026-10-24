@@ -90,7 +90,9 @@ Store: settings
 | 📋 สตูดิโอร่าง IPS & Kaizen | ✅ Done | 4 เคสเด่น, คำนวณผลตอบแทนข้อ 1.1 (`1+2-4-5`), ปุ่ม Copy วาง HCL Notes |
 | 📥 นำเข้าไฟล์ .xlsm/.xlsx หน้าเว็บ | ✅ Done | แตก XML ผ่าน DecompressionStream บนเบราว์เซอร์ ไม่เปลือง RAM |
 | 🔄 SharePoint Auto-Sync Watcher | ✅ Done | สคริปต์เฝ้าตรวจจับโฟลเดอร์ SharePoint / OneDrive ด้วย Debounce 8s และกรองไฟล์ล็อก `~$*`, พร้อม Live Polling Meta ใน Web App ทุก 30s |
-| ⚡ ปุ่มคลิกซิงค์สด (One-Click Live Sync) | ✅ Done | ปุ่ม `⚡ ซิงค์สดจาก SharePoint` บนหน้าเว็บ สั่งสกัดข้อมูลจากโฟลเดอร์จริงผ่าน `/api/sync-live` Middleware อัปเดตหน้าจอทันที |
+| ⚡ ปุ่มคลิกซิงค์สด (One-Click Live Sync) | ✅ Done | ปุ่ม `⚡ ซิงค์สดจาก SharePoint` บนหน้าเว็บ พร้อม Auto-Fallback เปิด File Picker บน Cloudflare และสั่งสกัดอัตโนมัติบน Localhost |
+| 🚀 One-Click Desktop Launcher | ✅ Done | ไฟล์ `🚀 เปิด PTA1 Logbook (Auto-Sync).bat` บน Desktop สำหรับดับเบิลคลิกสกัดข้อมูลสด + เปิด Web App + เฝ้าไฟล์ SharePoint อัตโนมัติ |
+| ⏰ Shift Auto-Sync Task Scheduler | ✅ Done | Windows Task Scheduler รัน `scripts/auto-deploy-shift.mjs` ทุก 07:20 และ 19:20 น. สกัดข้อมูลและ deploy ขึ้น Cloudflare ก่อนส่งเวร 10 นาที ($0 ตลอดชีพ) |
 | ⚙️ Gemini AI Key (BYOK) | ✅ Done | เข้ารหัส AES-GCM 256-bit เก็บในเครื่อง |
 
 ---

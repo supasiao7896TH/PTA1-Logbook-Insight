@@ -508,6 +508,16 @@ function wireEvents() {
     btnSyncLive.addEventListener('click', async () => {
       if (btnSyncLive.disabled) return;
 
+      const fileInput = document.getElementById('excel-upload-input');
+      const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+      // On Cloudflare Workers / Mobile Web (no direct C: drive access): Auto-open Excel file picker
+      if (!isLocalHost) {
+        UIRenderer.showToast('☁️ ทำงานบน Cloudflare: กำลังเปิดหน้าต่างให้เลือกไฟล์ Logbook (.xlsm) ล่าสุดเพื่ออัปเดตค่ะ', 'info');
+        if (fileInput) fileInput.click();
+        return;
+      }
+
       btnSyncLive.disabled = true;
       if (btnSyncIcon) btnSyncIcon.textContent = '⏳';
       if (btnSyncText) btnSyncText.textContent = 'กำลังดึงข้อมูลสด...';
@@ -516,6 +526,11 @@ function wireEvents() {
       try {
         const res = await fetch('/api/sync-live', { method: 'POST' });
         if (!res.ok) {
+          if (res.status === 404) {
+            UIRenderer.showToast('⚠️ ไม่พบ Local Sync Server (Vite) กำลังเปิดหน้าต่างเลือกไฟล์เพื่ออัปเดตแทนค่ะ', 'info');
+            if (fileInput) fileInput.click();
+            return;
+          }
           const errData = await res.json().catch(() => ({}));
           throw new Error(errData.error || `HTTP ${res.status}`);
         }

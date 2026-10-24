@@ -104,6 +104,10 @@ Store: settings
 ## 📁 โครงสร้างไฟล์
 ```text
 PTA1-Logbook-Insight/
+├── .agents/
+│   └── skills/
+│       └── pta1-logbook-engineering/ ← Project-Level Antigravity Skill สำหรับรันระบบ PTA1
+│           └── SKILL.md
 ├── logbooks/                    ← จัดเก็บไฟล์ Excel Logbook (.xlsx / .xlsm) ประจำเดือนทั้งหมด (ignore ไม่ขึ้น git)
 ├── docs/                        ← รวบรวมเอกสารวิเคราะห์และรายงานสรุป
 │   ├── SYSTEM_ARCHITECTURE.md   ← แผนผังและสถาปัตยกรรมการทำงานระบบฉบับสมบูรณ์
